@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#B121D0</color>
+    <color name="colorPrimaryDark">#B121D0</color>
+    <color name="colorAccent">#E580FC</color>
+
+
+
+    <color name="purple">#9400D3</color>
+    <color name="statusBarColor">#4169E1</color>
+
+    <color name="toolBarColor">#4682B4</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="background">#e7e7e7</color>
+    <color name="list_bottom_strip">#F2000000</color>
+    <color name="status_bar_bg">#40000000</color>
+
+
+    <color name="black">#000000</color>
+    <color name="white_transparent">#00FFFFFF</color>
+    <color name="black_transparent">#00000000</color>
+    <color name="light_transparent">#40000000</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="divider_line">#D6D6D6</color>
+
+    <color name="text_enabled">#FFFFFFFF</color>
+    <color name="text_disabled">#4DFFFFFF</color>
+
+</resources>

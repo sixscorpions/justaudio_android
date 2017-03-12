@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+ THE SERVER LIST MUST INCLUDE ALL URLS BELOW:
+-->
+
+<resources>
+    <string name="REST_PREFIX">http://nas01.atnoc.com:7080/</string>
+    <string name="REST_GET_MOVIES_CODE">audioapp/movies</string>
+    <string name="REST_GET_MOVIE_DETAILS_CODE">audioapp/movie/%s/details</string>
+    <string name="REST_GET_MOVIE_AUDIOS_LIST">audioapp/movie/%s/audios</string>
+
+</resources>

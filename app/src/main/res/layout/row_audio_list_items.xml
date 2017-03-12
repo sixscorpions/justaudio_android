@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_card_height"
+        android:orientation="horizontal">
+
+        <!--LAYOUT IMAGE WITH PROGRESS BAR -->
+        <com.justaudio.views.SquaredFrameLayout
+            android:layout_width="@dimen/list_card_height"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/iv_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:contentDescription="@string/txt_cd"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_list_holder" />
+
+            <ProgressBar
+                android:id="@+id/pb_list"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+        </com.justaudio.views.SquaredFrameLayout>
+
+
+        <!--LAYOUT WITH TITLE ,SUBTEXT, NEXT ARROW AND THE DIVIDER-->
+
+        <!--LAYOUT WITH TITLE ,SUBTEXT AND  NEXT ARROW-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_card_height"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/list_title_left_margin"
+                android:layout_marginRight="@dimen/list_title_left_margin"
+                android:layout_weight="0.7"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/tv_list_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="@string/app_name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_list_title_size" />
+
+                <TextView
+                    android:id="@+id/tv_list_subtext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="@string/app_name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_list_sub_text_size"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:paddingLeft="@dimen/_5dp"
+                android:paddingRight="@dimen/_5dp">
+
+                <ImageView
+                    android:id="@+id/iv_list_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/txt_cd"
+                    android:src="@drawable/icon_play_small" />
+
+                <ImageView
+                    android:id="@+id/iv_list_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:contentDescription="@string/txt_cd"
+                    android:src="@drawable/icon_more" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_list_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1dp"
+        android:background="@drawable/icon_divider" />
+
+</LinearLayout>

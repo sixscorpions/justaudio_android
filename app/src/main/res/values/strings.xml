@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">JustAudio</string>
+
+
+    <string name="txt_cd">image</string>
+    <string name="txt_app_version">Version 1.0</string>
+    <string name="txt_cancel">Cancel</string>
+    <string name="txt_ok">Ok</string>
+
+    <string-array name="navDrawerItems">
+        <item>Home</item>
+        <item>New Releases</item>
+        <item>Playlist</item>
+        <item>Favaroites</item>
+        <item>Settings</item>
+        <item>Share</item>
+        <item>Rate Us</item>
+    </string-array>
+
+
+    <!--NETWORK CONNECTION-->
+    <string name="no_internet_msg_main">This Application required internet connection.
+        Please check your internet setting and try again.</string>
+    <string name="no_internet_title">No internet</string>
+    <string name="no_date">Unable to get the data from the server.</string>
+    <string name="txt_no_data">No Data Available</string>
+
+    <string name="play_initial_time">00:00</string>
+    <string name="track_number">Track</string>
+    <string name="txt_empty_time">00:00</string>
+    <string name="txt_movie_details">Movie Details</string>
+    <string name="txt_genre">GENRE</string>
+    <string name="txt_director">DIRECTOR</string>
+    <string name="txt_language">LANGUAGE</string>
+    <string name="txt_music">MUSIC</string>
+    <string name="txt_production">PRODUCTION</string>
+    <string name="txt_cast">CAST</string>
+    <string name="txt_synopsis">SYNOPSIS</string>
+
+</resources>
