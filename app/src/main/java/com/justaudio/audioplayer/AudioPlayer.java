@@ -30,9 +30,9 @@ class AudioPlayer {
     private boolean paused;
     private int position = 1;
 
-    AudioPlayer(Context context, List<TrackAudioModel> playlist, PlayerService.JcPlayerServiceListener listener) {
+    AudioPlayer(Context context, List<TrackAudioModel> list, PlayerService.JcPlayerServiceListener listener) {
         this.context = context;
-        this.playlist = playlist;
+        this.playlist = list;
         this.listener = listener;
         instance = AudioPlayer.this;
         this.notificationPlayer = new NotificationPlayer(context);

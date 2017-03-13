@@ -13,9 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.justaudio.R;
-import com.justaudio.activities.AudioPlayerActivity;
+import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.MovieInfoModel;
-import com.justaudio.dto.TabListModel;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.FontFamily;
@@ -26,27 +25,27 @@ import java.util.ArrayList;
 
 
 /**
- * Created by Pavan
+ * Created by VIDYA
  */
 public class PlayerListFragment extends Fragment {
 
     private View view;
-    private AudioPlayerActivity parent;
+    private HomeActivity parent;
 
     private ListView listView;
     private int position = -1;
-    private MovieInfoModel model;
     private String tabName;
     public ArrayList<TrackAudioModel> results;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = (MovieInfoModel) getArguments().getSerializable(AppConstants.INTENT_KEY_OBJECT_MOVIE);
+
+        //model = (MovieInfoModel) getArguments().getSerializable(AppConstants.INTENT_KEY_OBJECT_MOVIE);
         position = getArguments().getInt("Position");
         tabName = getArguments().getString("tabName");
 
-        parent = (AudioPlayerActivity) getActivity();
+        parent = (HomeActivity) getActivity();
 
     }
 
@@ -72,7 +71,7 @@ public class PlayerListFragment extends Fragment {
         tv_no_result.setTextColor(Utils.getColor(parent, R.color.white));
 
 
-        results = model.getTabList().get(position).getAudioList();
+        results = parent.audioModel.getTabList().get(position).getAudioList();
         if (results.size() > 0) {
             listView.setVisibility(View.VISIBLE);
             tv_no_result.setVisibility(View.GONE);
@@ -93,7 +92,7 @@ public class PlayerListFragment extends Fragment {
         } else
             adapter.updateAdapter(results);
 
-        if (parent.player != null)
+        if (position == 0 && parent.player != null)
             parent.player.initPlaylist(results);
     }
 
@@ -104,10 +103,9 @@ public class PlayerListFragment extends Fragment {
 
         private ArrayList<TrackAudioModel> dataList;
         private LayoutInflater inflater;
-        private AudioPlayerActivity parent;
+        private HomeActivity parent;
 
-
-        private PlayerListAdapter(AudioPlayerActivity context, ArrayList<TrackAudioModel> results) {
+        private PlayerListAdapter(HomeActivity context, ArrayList<TrackAudioModel> results) {
             this.dataList = results;
             parent = context;
             inflater = LayoutInflater.from(context.getApplicationContext());
@@ -172,8 +170,7 @@ public class PlayerListFragment extends Fragment {
 
             /*FOR ARTIEST TYPE*/
             if (tabName.equalsIgnoreCase("Artists")) {
-                String url = "http://nas01.atnoc.com/cineaaudio/Srimanthudu/moviecharacters/mahesh.jpg";
-                UILoader.UILPicLoading(holder.iv_list, url, holder.pb_list, R.drawable.icon_list_holder);
+                UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list, R.drawable.icon_list_holder);
             } else
                 UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list,
                         R.drawable.icon_list_holder);
@@ -186,9 +183,8 @@ public class PlayerListFragment extends Fragment {
 
                     /*CHANGE ICON POSITION*/
                     pause_button_position = position;
-                    holder.iv_list_play.setImageResource(R.drawable.icon_player_pause);
+                    holder.iv_list_play.setImageResource(R.drawable.icon_stop);
                     notifyDataSetChanged();
-
 
                     TrackAudioModel mData = dataList.get(position);
                     parent.player.playAudio(mData);

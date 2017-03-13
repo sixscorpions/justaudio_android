@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by VIDYA
@@ -27,12 +28,14 @@ public class TrackAudioModel implements Serializable {
     private ArrayList<NamesModelNew> tabsName;
 
 
-    public TrackAudioModel(JSONObject object, int i) throws JSONException {
+    TrackAudioModel(JSONObject object, int i) throws JSONException {
 
-
-        setId(i);
 
         setOrigin(Origin.URL);
+
+
+        if (object.has("id"))
+            setId(object.getInt("id"));
 
         if (object.has("name"))
             setTitle(object.getString("name"));

@@ -85,8 +85,8 @@
 
                 <ImageView
                     android:id="@+id/iv_list_play"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="@dimen/iv_play_list_size"
+                    android:layout_height="@dimen/iv_play_list_size"
                     android:layout_gravity="center_vertical"
                     android:contentDescription="@string/txt_cd"
                     android:src="@drawable/icon_play_small" />

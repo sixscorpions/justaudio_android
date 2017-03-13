@@ -1,10 +1,11 @@
 package com.justaudio.fragment;
 
-import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,10 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import com.justaudio.activities.AudioPlayerActivity;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.adapter.MovieListAdapter;
 import com.justaudio.R;
@@ -24,7 +26,7 @@ import com.justaudio.services.JSONArrayTask;
 import com.justaudio.services.JSONResult;
 import com.justaudio.services.NetworkUtils;
 import com.justaudio.utils.AppConstants;
-import com.justaudio.utils.CustomDialog;
+import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.ToolbarUtils;
 import com.justaudio.utils.Utils;
 
@@ -44,18 +46,26 @@ public class HomeFragment extends Fragment implements JSONResult {
     private View view;
     private HomeActivity parent;
     private JSONArrayTask getMoviesTask;
-    private SwipeRefreshLayout swipe_container;
 
+    public TextView tv_title;
+    public ImageView iv_toggle;
 
     private GridView gv_movies;
+    private SwipeRefreshLayout swipe_container;
     private LinearLayout ll_no_data;
+
+
     private ArrayList<MovieListModel> movieList;
+    private String title;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parent = (HomeActivity) getActivity();
+
+        title = getArguments().getString(AppConstants.INTENT_KEY_TITLE);
+
     }
 
     @Override
@@ -63,12 +73,32 @@ public class HomeFragment extends Fragment implements JSONResult {
         if (view != null)
             return view;
 
-        view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home_new, container, false);
         initializeTheViews();
         return view;
     }
 
     private void initializeTheViews() {
+
+        /*TEXT_VIEW TITLE*/
+        tv_title = (TextView) view.findViewById(R.id.tv_toolbar_title);
+        tv_title.setTypeface(FontFamily.setHelveticaTypeface(parent), Typeface.BOLD);
+        tv_title.setText("" + title);
+
+
+        /*IMAGE_VIEW  TOGGLE*/
+        iv_toggle = (ImageView) view.findViewById(R.id.iv_toggle);
+        iv_toggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean status = parent.drawer_layout.isDrawerOpen(GravityCompat.START);
+                if (status) {
+                    parent.drawer_layout.closeDrawers();
+                } else {
+                    parent.drawer_layout.openDrawer(GravityCompat.START);
+                }
+            }
+        });
 
         swipe_container = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipe_container.setColorSchemeResources(android.R.color.holo_red_light, android.
@@ -181,11 +211,8 @@ public class HomeFragment extends Fragment implements JSONResult {
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                     MovieListModel model = (MovieListModel) adapterView.getAdapter().getItem(position);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(AppConstants.INTENT_KEY_MOVIE_ID, model);
-
-                    Intent intent = new Intent(parent, AudioPlayerActivity.class);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    bundle.putString("movie_id", model.getMovie_id());
+                    Utils.navigateFragment(new PlayerFragment(), PlayerFragment.TAG, bundle, parent);
                 }
             });
         } else {

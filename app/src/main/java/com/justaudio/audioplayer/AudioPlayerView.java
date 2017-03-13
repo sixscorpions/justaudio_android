@@ -18,8 +18,8 @@ import android.widget.TextView;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.justaudio.R;
+import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
-import com.justaudio.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +44,7 @@ public class AudioPlayerView extends LinearLayout implements
     private TextView txtCurrentDuration;
     private AssetFileDescriptor assetFileDescriptor;
     private boolean initialized;
+    private HomeActivity parent;
 
     public AudioPlayerView(Context context) {
         super(context);
@@ -60,8 +61,12 @@ public class AudioPlayerView extends LinearLayout implements
         super(context, attrs, defStyle);
     }
 
+    public void setInitializeActivity(HomeActivity activity) {
+        this.parent = activity;
+    }
+
     private void init() {
-        inflate(getContext(), R.layout.layout_audio_bottom_player_controler, this);
+        inflate(getContext(), R.layout.layout_audio_player_controller_new, this);
 
         this.progressBarPlayer = (ProgressBar) findViewById(R.id.progress_bar_player);
         this.btnNext = (ImageButton) findViewById(R.id.btn_next);
@@ -87,6 +92,7 @@ public class AudioPlayerView extends LinearLayout implements
     public void initPlaylist(List<TrackAudioModel> playlist) {
 
         sortPlaylist(playlist);
+
         audioPlayer = new AudioPlayer(getContext(), playlist, AudioPlayerView.this);
         audioPlayer.registerInvalidPathListener(this);
         initialized = true;
@@ -150,6 +156,7 @@ public class AudioPlayerView extends LinearLayout implements
     }
 
     public void playAudio(TrackAudioModel trackAudioModel) {
+
         showProgressBar();
         seekBar.setProgress(0);
         createJcAudioPlayer();

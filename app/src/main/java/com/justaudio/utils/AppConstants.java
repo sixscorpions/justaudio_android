@@ -18,4 +18,5 @@ public class AppConstants {
 
 
     public static final String INTENT_KEY_OBJECT_MOVIE = "INTENT_KEY_OBJECT_MOVIE";
+    public static final String INTENT_KEY_TITLE = "INTENT_KEY_TITLE";
 }
