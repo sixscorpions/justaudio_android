@@ -44,13 +44,14 @@ public class HomeActivity extends BaseActivity {
         drawer_layout.setFocusable(true);
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        player = (AudioPlayerView) findViewById(R.id.player_view);
-        player.setInitializeActivity(this);
 
         ll_empty_player = (LinearLayout) findViewById(R.id.ll_empty_player);
 
-        // AudioUtils.hidePlayerControl(this);
-        //navigateHomeFragment("Home");
+
+        player = (AudioPlayerView) findViewById(R.id.player_view);
+        player.setInitializeActivity(this);
+        AudioUtils.hidePlayerControl(this);
+
 
         setLeftMenuData();
     }

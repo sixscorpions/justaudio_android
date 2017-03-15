@@ -90,8 +90,6 @@ public class PlayerFragment extends Fragment implements JSONResult {
 
     private void initializeTheViews() {
 
-        //AudioUtils.showPlayerControl(parent);
-
 
         ImageView iv_action_back = (ImageView) view.findViewById(R.id.iv_action_back);
         iv_action_back.setOnClickListener(new View.OnClickListener() {

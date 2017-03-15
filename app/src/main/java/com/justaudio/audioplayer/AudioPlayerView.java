@@ -22,6 +22,7 @@ import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.PlayerListFragment;
+import com.justaudio.utils.AudioUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -160,7 +161,7 @@ public class AudioPlayerView extends LinearLayout implements
     }
 
     public void playAudio(TrackAudioModel trackAudioModel, Fragment fragment) {
-        this.fragment = (PlayerListFragment) fragment;
+        AudioPlayerView.fragment = (PlayerListFragment) fragment;
         showProgressBar();
         seekBar.setProgress(0);
         createJcAudioPlayer();
@@ -169,6 +170,7 @@ public class AudioPlayerView extends LinearLayout implements
 
         try {
             audioPlayer.playAudio(trackAudioModel);
+            AudioUtils.showPlayerControl(parent);
         } catch (AudioListNullPointerException e) {
             dismissProgressBar();
             e.printStackTrace();

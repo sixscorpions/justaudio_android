@@ -26,6 +26,7 @@ import com.justaudio.services.JSONArrayTask;
 import com.justaudio.services.JSONResult;
 import com.justaudio.services.NetworkUtils;
 import com.justaudio.utils.AppConstants;
+import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.ToolbarUtils;
 import com.justaudio.utils.Utils;
@@ -79,6 +80,8 @@ public class HomeFragment extends Fragment implements JSONResult {
     }
 
     private void initializeTheViews() {
+
+
 
         /*TEXT_VIEW TITLE*/
         tv_title = (TextView) view.findViewById(R.id.tv_toolbar_title);

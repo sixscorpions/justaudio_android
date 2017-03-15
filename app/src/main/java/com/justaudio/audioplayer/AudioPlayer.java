@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 
 import com.justaudio.dto.TrackAudioModel;
+import com.justaudio.utils.AudioUtils;
 
 import java.io.Serializable;
 import java.util.List;
