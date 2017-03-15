@@ -3,6 +3,7 @@ package com.justaudio.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TrackAudioModel;
+import com.justaudio.interfaces.IUpdateUi;
 import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.UILoader;
@@ -27,32 +29,38 @@ import java.util.ArrayList;
 /**
  * Created by VIDYA
  */
-public class PlayerListFragment extends Fragment {
+public class PlayerListFragment extends Fragment implements IUpdateUi {
 
     private View view;
     private HomeActivity parent;
 
     private ListView listView;
-    private int position = -1;
+    private int mPosition = -1;
     private String tabName;
     public ArrayList<TrackAudioModel> results;
+
+    private static IUpdateUi iUpdateUi;
+    private PlayerListFragment fragment;
+
+    public static IUpdateUi getInstance() {
+        return iUpdateUi;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        iUpdateUi = this;
         //model = (MovieInfoModel) getArguments().getSerializable(AppConstants.INTENT_KEY_OBJECT_MOVIE);
-        position = getArguments().getInt("Position");
+        mPosition = getArguments().getInt("Position");
         tabName = getArguments().getString("tabName");
-
         parent = (HomeActivity) getActivity();
-
+        fragment = PlayerListFragment.this;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (view != null)
-            return view;
+        /*if (view != null)
+            return view;*/
 
         view = inflater.inflate(R.layout.fragment_list_child_new, container, false);
         initializeTheViews();
@@ -61,7 +69,6 @@ public class PlayerListFragment extends Fragment {
 
 
     private void initializeTheViews() {
-
         /*LIST VIEW*/
         listView = (ListView) view.findViewById(R.id.listView);
 
@@ -71,7 +78,7 @@ public class PlayerListFragment extends Fragment {
         tv_no_result.setTextColor(Utils.getColor(parent, R.color.white));
 
 
-        results = parent.audioModel.getTabList().get(position).getAudioList();
+        results = parent.audioModel.getTabList().get(mPosition).getAudioList();
         if (results.size() > 0) {
             listView.setVisibility(View.VISIBLE);
             tv_no_result.setVisibility(View.GONE);
@@ -87,26 +94,56 @@ public class PlayerListFragment extends Fragment {
     private void setListData(ArrayList<TrackAudioModel> results) {
 
         if (adapter == null) {
-            adapter = new PlayerListAdapter(parent, results);
+            adapter = new PlayerListAdapter(parent/*, results*/);
             listView.setAdapter(adapter);
         } else
             adapter.updateAdapter(results);
 
-        if (position == 0 && parent.player != null)
+        if (mPosition == 0 && parent.player != null)
             parent.player.initPlaylist(results);
     }
 
 
     private int pause_button_position = -1;
 
-    private class PlayerListAdapter extends BaseAdapter {
+    @Override
+    public void updateUI() {
+        if (pause_button_position == results.size() - 1) {
+            pause_button_position = 0;
+            //PlayerListFragment.adapter.notifyDataSetChanged();
+        } else {
+            pause_button_position = pause_button_position + 1;
+            //PlayerListFragment.adapter.notifyDataSetChanged();
+        }
+        adapter.notifyDataSetChanged();
+    }
 
-        private ArrayList<TrackAudioModel> dataList;
+    @Override
+    public void updatePreUI() {
+        if (pause_button_position == 0) {
+            pause_button_position = results.size() - 1;
+            //PlayerListFragment.adapter.notifyDataSetChanged();
+        } else {
+            pause_button_position = pause_button_position - 1;
+            //PlayerListFragment.adapter.notifyDataSetChanged();
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateCurrentUI() {
+        pause_button_position = -1;
+        adapter.notifyDataSetChanged();
+    }
+
+    public class PlayerListAdapter extends BaseAdapter {
+
+        //private ArrayList<TrackAudioModel> dataList;
         private LayoutInflater inflater;
         private HomeActivity parent;
 
-        private PlayerListAdapter(HomeActivity context, ArrayList<TrackAudioModel> results) {
-            this.dataList = results;
+        private PlayerListAdapter(HomeActivity context/*, ArrayList<TrackAudioModel> results*/) {
+            //this.dataList = results;
             parent = context;
             inflater = LayoutInflater.from(context.getApplicationContext());
         }
@@ -114,12 +151,12 @@ public class PlayerListFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return dataList.size();
+            return results.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return dataList.get(position);
+            return results.get(position);
         }
 
         @Override
@@ -163,7 +200,7 @@ public class PlayerListFragment extends Fragment {
             if (position != pause_button_position)
                 holder.iv_list_play.setImageResource(R.drawable.icon_play_small);
 
-            TrackAudioModel mData = dataList.get(position);
+            TrackAudioModel mData = results.get(position);
 
             holder.tv_list_title.setText(mData.getTitle());
 
@@ -175,6 +212,11 @@ public class PlayerListFragment extends Fragment {
                 UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list,
                         R.drawable.icon_list_holder);
 
+            if (pause_button_position == position) {
+                holder.iv_list_play.setImageResource(R.drawable.icon_stop);
+            } else {
+                holder.iv_list_play.setImageResource(R.drawable.icon_play);
+            }
 
             /*PLAY THE AUDIO*/
             holder.iv_list_play.setOnClickListener(new View.OnClickListener() {
@@ -183,11 +225,12 @@ public class PlayerListFragment extends Fragment {
 
                     /*CHANGE ICON POSITION*/
                     pause_button_position = position;
-                    holder.iv_list_play.setImageResource(R.drawable.icon_stop);
+                    //holder.iv_list_play.setImageResource(R.drawable.icon_stop);
                     notifyDataSetChanged();
 
-                    TrackAudioModel mData = dataList.get(position);
-                    parent.player.playAudio(mData);
+                    TrackAudioModel mData = results.get(position);
+                    //Log.d("getTargetFragment", "" + getTargetFragment().getTargetRequestCode());
+                    parent.player.playAudio(mData, PlayerFragment.fragmentArrayList.get(mPosition));
                 }
             });
             return convertView;
@@ -205,7 +248,7 @@ public class PlayerListFragment extends Fragment {
         }
 
         void updateAdapter(ArrayList<TrackAudioModel> result) {
-            this.dataList = result;
+            //this.dataList = result;
             listView.setAdapter(null);
             adapter.notifyDataSetChanged();
             listView.setAdapter(adapter);

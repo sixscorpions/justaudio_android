@@ -54,4 +54,5 @@
     <dimen name="iv_next_prev_h_w">15dp</dimen>
     <dimen name="iv_play_h_w">40dp</dimen>
     <dimen name="iv_play_list_size">40dp</dimen>
+    <dimen name="tv_pop_window_size">20sp</dimen>
 </resources>

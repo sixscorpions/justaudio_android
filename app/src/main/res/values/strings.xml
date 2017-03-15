@@ -36,5 +36,8 @@
     <string name="txt_production">PRODUCTION</string>
     <string name="txt_cast">CAST</string>
     <string name="txt_synopsis">SYNOPSIS</string>
+    <string name="txt_share">Share</string>
+    <string name="txt_like">Like</string>
+    <string name="txt_add_to_queue">Add to queue</string>
 
 </resources>

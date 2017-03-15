@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.os.Build;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
+import com.justaudio.fragment.PlayerListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +47,8 @@ public class AudioPlayerView extends LinearLayout implements
     private AssetFileDescriptor assetFileDescriptor;
     private boolean initialized;
     private HomeActivity parent;
+
+    public static PlayerListFragment fragment;
 
     public AudioPlayerView(Context context) {
         super(context);
@@ -155,8 +159,8 @@ public class AudioPlayerView extends LinearLayout implements
         }
     }
 
-    public void playAudio(TrackAudioModel trackAudioModel) {
-
+    public void playAudio(TrackAudioModel trackAudioModel, Fragment fragment) {
+        this.fragment = (PlayerListFragment) fragment;
         showProgressBar();
         seekBar.setProgress(0);
         createJcAudioPlayer();
@@ -172,14 +176,16 @@ public class AudioPlayerView extends LinearLayout implements
     }
 
     public void next() {
-        resetPlayerInfo();
-        showProgressBar();
-
-        try {
-            audioPlayer.nextAudio();
-        } catch (AudioListNullPointerException e) {
-            dismissProgressBar();
-            e.printStackTrace();
+        if (fragment != null) {
+            resetPlayerInfo();
+            showProgressBar();
+            try {
+                audioPlayer.nextAudio();
+            } catch (AudioListNullPointerException e) {
+                dismissProgressBar();
+                e.printStackTrace();
+            }
+            fragment.updateUI();
         }
     }
 
@@ -199,14 +205,17 @@ public class AudioPlayerView extends LinearLayout implements
     }
 
     public void previous() {
-        resetPlayerInfo();
-        showProgressBar();
+        if (fragment != null) {
+            resetPlayerInfo();
+            showProgressBar();
 
-        try {
-            audioPlayer.previousAudio();
-        } catch (AudioListNullPointerException e) {
-            dismissProgressBar();
-            e.printStackTrace();
+            try {
+                audioPlayer.previousAudio();
+            } catch (AudioListNullPointerException e) {
+                dismissProgressBar();
+                e.printStackTrace();
+            }
+            fragment.updatePreUI();
         }
     }
 

@@ -63,7 +63,7 @@ public class PlayerFragment extends Fragment implements JSONResult {
     private TextView tv_info_production_value;
 
 
-    private ArrayList<Fragment> fragmentArrayList;
+    public static ArrayList<PlayerListFragment> fragmentArrayList;
     private String movieId;
     private int position;
 
@@ -262,7 +262,8 @@ public class PlayerFragment extends Fragment implements JSONResult {
             //bundle.putSerializable(AppConstants.INTENT_KEY_OBJECT_MOVIE, model);
             bundle.putInt("Position", i);
             bundle.putString("tabName", tabName);
-            Fragment fragment = new PlayerListFragment();
+            PlayerListFragment fragment = new PlayerListFragment();
+           /* fragment.setTargetFragment(fragment, i);*/
             adapter.addFragment(fragment, tabName, bundle);
             fragmentArrayList.add(fragment);
         }
@@ -279,7 +280,9 @@ public class PlayerFragment extends Fragment implements JSONResult {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 position = tab.getPosition();
-                Fragment fragment = fragmentArrayList.get(position);
+                AudioPlayerView.fragment = null;
+                PlayerListFragment fragment = fragmentArrayList.get(position);
+                fragment.updateCurrentUI();
                 ArrayList<TrackAudioModel> results = ((PlayerListFragment) fragment).results;
 
                 if (results != null) {
