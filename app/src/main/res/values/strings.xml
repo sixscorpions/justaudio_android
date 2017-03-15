@@ -39,5 +39,6 @@
     <string name="txt_share">Share</string>
     <string name="txt_like">Like</string>
     <string name="txt_add_to_queue">Add to queue</string>
+    <string name="txt_now_playing">Now Playing</string>
 
 </resources>

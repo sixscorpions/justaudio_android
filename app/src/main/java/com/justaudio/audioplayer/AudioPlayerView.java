@@ -97,7 +97,7 @@ public class AudioPlayerView extends LinearLayout implements
     public void initPlaylist(List<TrackAudioModel> playlist) {
 
         sortPlaylist(playlist);
-
+        parent.playerList = (ArrayList<TrackAudioModel>) playlist;
         audioPlayer = new AudioPlayer(getContext(), playlist, AudioPlayerView.this);
         audioPlayer.registerInvalidPathListener(this);
         initialized = true;

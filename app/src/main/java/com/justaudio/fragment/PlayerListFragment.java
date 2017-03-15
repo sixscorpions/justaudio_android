@@ -136,7 +136,7 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
         adapter.notifyDataSetChanged();
     }
 
-    public class PlayerListAdapter extends BaseAdapter {
+    private class PlayerListAdapter extends BaseAdapter {
 
         //private ArrayList<TrackAudioModel> dataList;
         private LayoutInflater inflater;
