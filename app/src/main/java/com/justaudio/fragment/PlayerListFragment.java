@@ -19,6 +19,7 @@ import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.interfaces.IUpdateUi;
 import com.justaudio.utils.AppConstants;
+import com.justaudio.utils.CustomDialog;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.UILoader;
 import com.justaudio.utils.Utils;
@@ -201,7 +202,7 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
             if (position != pause_button_position)
                 holder.iv_list_play.setImageResource(R.drawable.icon_play_small);
 
-            TrackAudioModel mData = results.get(position);
+            final TrackAudioModel mData = results.get(position);
 
             holder.tv_list_title.setText(mData.getTitle());
 
@@ -244,6 +245,17 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
                     parent.player.playAudio(mData, PlayerFragment.fragmentArrayList.get(mPosition));
                 }
             });
+
+
+
+            /*MORE BUTTON*/
+            holder.iv_list_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CustomDialog.showMoreDialog(parent, mData);
+                }
+            });
+
             return convertView;
         }
 
