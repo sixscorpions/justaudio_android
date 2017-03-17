@@ -50,7 +50,7 @@
                 android:src="@drawable/icon_info" />
 
             <ImageView
-                android:id="@+id/iv_movie_play_all"
+                android:id="@+id/iv_play_full_movie"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

@@ -2,6 +2,7 @@ package com.justaudio.fragment;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -22,8 +23,6 @@ import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.services.ApiConfiguration;
 import com.justaudio.services.JSONResult;
 import com.justaudio.services.JSONTask;
-import com.justaudio.utils.AppConstants;
-import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.CustomDialog;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.ToolbarUtils;
@@ -49,9 +48,11 @@ public class PlayerFragment extends Fragment implements JSONResult {
 
 
     private LinearLayout ll_audio_info;
+    private LinearLayout ll_main;
 
     private ImageView iv_parallax;
     private ImageView iv_movie_info;
+    private ImageView iv_play_full_movie;
 
     private TextView tv_movie_name;
     private TextView tv_info_genre_value;
@@ -66,6 +67,8 @@ public class PlayerFragment extends Fragment implements JSONResult {
     public static ArrayList<PlayerListFragment> fragmentArrayList;
     private String movieId;
     private int position;
+
+    public static TabLayout tabLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,8 @@ public class PlayerFragment extends Fragment implements JSONResult {
 
     private void initializeTheViews() {
 
+        ll_main = (LinearLayout) view.findViewById(R.id.ll_main);
+
 
         ImageView iv_action_back = (ImageView) view.findViewById(R.id.iv_action_back);
         iv_action_back.setOnClickListener(new View.OnClickListener() {
@@ -111,6 +116,9 @@ public class PlayerFragment extends Fragment implements JSONResult {
         /*INFO BUTTON*/
         iv_movie_info = (ImageView) view.findViewById(R.id.iv_movie_info);
         iv_movie_info.setVisibility(View.GONE);
+
+        /*FULL MOVIE BUTTON*/
+        iv_play_full_movie = (ImageView) view.findViewById(R.id.iv_play_full_movie);
 
 
         /*INFO LAYOUT*/
@@ -195,7 +203,7 @@ public class PlayerFragment extends Fragment implements JSONResult {
         jsonDetailTask.setCode(ApiConfiguration.REST_GET_MOVIE_DETAILS_CODE);
         jsonDetailTask.setServerUrl(url);
         jsonDetailTask.setErrorMessage(ApiConfiguration.ERROR_RESPONSE_CODE);
-        jsonDetailTask.setConnectTimeout(8000);
+        jsonDetailTask.setConnectTimeout(15000);
         jsonDetailTask.execute();
 
     }
@@ -217,7 +225,28 @@ public class PlayerFragment extends Fragment implements JSONResult {
     }
 
 
-    private void setInfoData(MovieInfoModel model) {
+    private void setInfoData(final MovieInfoModel model) {
+
+        ll_main.setVisibility(View.VISIBLE);
+
+        iv_play_full_movie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                parent.player.initPlaylist(model.getFullMovieList());
+                final TrackAudioModel mData = model.getFullMovieList().get(0);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        PlayerListFragment fragment = fragmentArrayList.get(position);
+                        fragment.updateCurrentUI();
+                        parent.player.playAudio(mData, fragment);
+                    }
+                }, 200);
+
+            }
+        });
+
 
         UILoader.UILDetailPicLoading(iv_parallax, model.getMovie_background_image(),
                 R.drawable.ic_gallery_placeholder);
@@ -248,20 +277,19 @@ public class PlayerFragment extends Fragment implements JSONResult {
 
 
         ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
 
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
 
         /*LIST VIEWPAGER*/
         ArrayList<TabListModel> tabList = model.getTabList();
+
         for (int i = 0; i < tabList.size(); i++) {
             String tabName = tabList.get(i).getTabName();
             Bundle bundle = new Bundle();
-            //bundle.putSerializable(AppConstants.INTENT_KEY_OBJECT_MOVIE, model);
             bundle.putInt("Position", i);
             bundle.putString("tabName", tabName);
             PlayerListFragment fragment = new PlayerListFragment();
-           /* fragment.setTargetFragment(fragment, i);*/
             adapter.addFragment(fragment, tabName, bundle);
             fragmentArrayList.add(fragment);
         }
@@ -280,8 +308,8 @@ public class PlayerFragment extends Fragment implements JSONResult {
                 position = tab.getPosition();
                 AudioPlayerView.fragment = null;
                 PlayerListFragment fragment = fragmentArrayList.get(position);
-                fragment.updateCurrentUI();
-                ArrayList<TrackAudioModel> results = ((PlayerListFragment) fragment).results;
+                //fragment.updateCurrentUI();
+                ArrayList<TrackAudioModel> results = fragment.results;
 
                 if (results != null) {
                     parent.player.initPlaylist(results);
@@ -324,8 +352,6 @@ public class PlayerFragment extends Fragment implements JSONResult {
 
     @Override
     public void failedJsonResult(int code) {
-        //if (code == ApiConfiguration.REST_GET_MOVIE_DETAILS_CODE)
-
         CustomDialog.hideProgressBar(parent);
     }
 }

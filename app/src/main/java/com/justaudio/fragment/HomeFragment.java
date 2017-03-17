@@ -167,7 +167,7 @@ public class HomeFragment extends Fragment implements JSONResult {
         getMoviesTask.setCode(ApiConfiguration.REST_GET_MOVIES_CODE);
         getMoviesTask.setServerUrl(Utils.getServer(parent, R.string.REST_GET_MOVIES_CODE));
         getMoviesTask.setErrorMessage(ApiConfiguration.ERROR_RESPONSE_CODE);
-        getMoviesTask.setConnectTimeout(10000);
+        getMoviesTask.setConnectTimeout(15000);
         getMoviesTask.execute();
 
     }

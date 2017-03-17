@@ -104,7 +104,7 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
     }
 
 
-    private int pause_button_position = -1;
+    public int pause_button_position = -1;
 
     @Override
     public void updateUI() {
@@ -133,7 +133,8 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
     @Override
     public void updateCurrentUI() {
         pause_button_position = -1;
-        adapter.notifyDataSetChanged();
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
     }
 
     private class PlayerListAdapter extends BaseAdapter {
@@ -222,6 +223,16 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
             holder.iv_list_play.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    if (HomeActivity.mCurrentPlaying == -1) {
+                        HomeActivity.mCurrentPlaying = mPosition;
+                    } else {
+                        PlayerFragment.fragmentArrayList.get(HomeActivity.mCurrentPlaying).pause_button_position = -1;
+                        PlayerFragment.fragmentArrayList.get(HomeActivity.mCurrentPlaying).adapter.notifyDataSetChanged();
+                        HomeActivity.mCurrentPlaying = mPosition;
+                    }
+                    /*CHANGE ICON POSITION*/
+                    pause_button_position = position;
 
                     /*CHANGE ICON POSITION*/
                     pause_button_position = position;

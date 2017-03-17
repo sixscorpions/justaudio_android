@@ -16,7 +16,7 @@ public class TabListModel implements Serializable {
     private String tabName;
     private ArrayList<TrackAudioModel> audioList;
 
-    public TabListModel(JSONObject object) throws JSONException {
+    TabListModel(JSONObject object) throws JSONException {
         if (object.has("audioType"))
             setTabName(object.getString("audioType"));
         if (object.has("audios")) {
@@ -24,7 +24,7 @@ public class TabListModel implements Serializable {
             ArrayList<TrackAudioModel> list = new ArrayList<>();
             for (int i = 0; i < array.length(); i++) {
                 JSONObject audioObject = array.getJSONObject(i);
-                TrackAudioModel model = new TrackAudioModel(audioObject,i);
+                TrackAudioModel model = new TrackAudioModel(audioObject);
                 list.add(model);
             }
             setAudioList(list);

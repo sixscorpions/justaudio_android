@@ -160,6 +160,22 @@ public class AudioPlayerView extends LinearLayout implements
         }
     }
 
+    public void playFullAudio(TrackAudioModel trackAudioModel) {
+        showProgressBar();
+        seekBar.setProgress(0);
+        createJcAudioPlayer();
+        if (!audioPlayer.getPlaylist().contains(trackAudioModel))
+            audioPlayer.getPlaylist().add(trackAudioModel);
+
+        try {
+            audioPlayer.playAudio(trackAudioModel);
+            AudioUtils.showPlayerControl(parent);
+        } catch (AudioListNullPointerException e) {
+            dismissProgressBar();
+            e.printStackTrace();
+        }
+    }
+
     public void playAudio(TrackAudioModel trackAudioModel, Fragment fragment) {
         AudioPlayerView.fragment = (PlayerListFragment) fragment;
         showProgressBar();

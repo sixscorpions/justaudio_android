@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,12 +44,14 @@ public class HomeActivity extends BaseActivity {
 
     public LinearLayout ll_empty_player;
     public LinearLayout ll_playing;
+    private ImageView iv_now_playing_close;
 
     private ListView lv_player;
     public PlayerListAdapter adapter;
 
     public MovieInfoModel audioModel;
     public ArrayList<TrackAudioModel> playerList;
+    public static int mCurrentPlaying = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,7 @@ public class HomeActivity extends BaseActivity {
         lv_player = (ListView) findViewById(R.id.listView);
         TextView tv_now_playing = (TextView) findViewById(R.id.tv_now_playing);
         tv_now_playing.setTypeface(FontFamily.setHelveticaTypeface(this), Typeface.BOLD);
-        ImageView iv_now_playing_close = (ImageView) findViewById(R.id.iv_now_playing_close);
+        iv_now_playing_close = (ImageView) findViewById(R.id.iv_now_playing_close);
         iv_now_playing_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,6 +203,13 @@ public class HomeActivity extends BaseActivity {
             UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list,
                     R.drawable.icon_list_holder);
 
+            Log.d("tabLayout", "" + PlayerFragment.tabLayout.getSelectedTabPosition());
+            Log.d("PlayerListFragment", "" + PlayerFragment.fragmentArrayList.get(PlayerFragment.tabLayout.getSelectedTabPosition()).pause_button_position);
+            if (PlayerFragment.fragmentArrayList.get(PlayerFragment.tabLayout.getSelectedTabPosition()).pause_button_position == position) {
+                holder.iv_list_play.setImageResource(R.drawable.icon_stop);
+            } else {
+                holder.iv_list_play.setImageResource(R.drawable.icon_play);
+            }
 
             /*PLAY THE AUDIO*/
             holder.iv_list_play.setOnClickListener(new View.OnClickListener() {
@@ -231,6 +241,11 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+
+        if (ll_playing.getVisibility() == View.VISIBLE) {
+            iv_now_playing_close.performClick();
+        }
+
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 0) {
             android.support.v4.app.FragmentManager.BackStackEntry backStackEntry

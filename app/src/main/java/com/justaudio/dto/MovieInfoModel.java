@@ -13,19 +13,20 @@ import java.util.ArrayList;
 
 public class MovieInfoModel implements Serializable {
 
-    private String movie_id = "";
-    private String movie_name = "";
-    private String movie_lang = "";
-    private String movie_releaseDate = "";
-    private String movie_background_image = "";
-    private String movie_thumbnail_image = "";
-    private String synopsis = "";
-    private String genre = "";
-    private String director = "";
-    private String producation = "";
-    private String cast = "";
-    private String music = "";
+    private String movie_id;
+    private String movie_name;
+    private String movie_lang;
+    private String movie_releaseDate;
+    private String movie_background_image;
+    private String movie_thumbnail_image;
+    private String synopsis;
+    private String genre;
+    private String director;
+    private String producation;
+    private String cast;
+    private String music;
     private ArrayList<TabListModel> tabList;
+    private ArrayList<TrackAudioModel> fullMovieList;
 
 
     public MovieInfoModel(JSONObject object) throws JSONException {
@@ -53,7 +54,8 @@ public class MovieInfoModel implements Serializable {
             StringBuilder value = new StringBuilder();
             for (int i = 0; i < gArray.length(); i++) {
                 value.append(gArray.get(i));
-                if (i != 0)
+
+                if (i != gArray.length() - 1)
                     value.append(",");
             }
             setGenre(value.toString());
@@ -64,7 +66,8 @@ public class MovieInfoModel implements Serializable {
             StringBuilder value = new StringBuilder();
             for (int i = 0; i < dArray.length(); i++) {
                 value.append(dArray.get(i));
-                if (i != 0)
+
+                if (i != dArray.length() - 1)
                     value.append(",");
             }
             setDirector(value.toString());
@@ -76,7 +79,9 @@ public class MovieInfoModel implements Serializable {
             StringBuilder value = new StringBuilder();
             for (int i = 0; i < pArray.length(); i++) {
                 value.append(pArray.get(i));
-                if (i != 0)
+
+
+                if (i != pArray.length() - 1)
                     value.append(",");
             }
             setProducation(value.toString());
@@ -87,7 +92,10 @@ public class MovieInfoModel implements Serializable {
             JSONArray cArray = object.getJSONArray("cast");
             StringBuilder value = new StringBuilder(100);
             for (int i = 0; i < cArray.length(); i++) {
-                value.append(cArray.get(i)).append(",");
+                value.append(cArray.get(i));
+
+                if (i != cArray.length() - 1)
+                    value.append(",");
             }
             setCast(value.toString());
         }
@@ -95,7 +103,10 @@ public class MovieInfoModel implements Serializable {
             JSONArray mArray = object.getJSONArray("audioCompanies");
             StringBuilder value = new StringBuilder(100);
             for (int i = 0; i < mArray.length(); i++) {
-                value.append(mArray.get(i)).append(",");
+                value.append(mArray.get(i));
+
+                if (i != mArray.length() - 1)
+                    value.append(",");
             }
             setMusic(value.toString());
         }
@@ -109,6 +120,15 @@ public class MovieInfoModel implements Serializable {
                 list.add(model);
             }
             setTabList(list);
+        }
+
+
+        if (object.has("fullMovieAudio")) {
+            JSONObject fullAudio = object.getJSONObject("fullMovieAudio");
+            ArrayList<TrackAudioModel> list = new ArrayList<>();
+            TrackAudioModel model = new TrackAudioModel(fullAudio);
+            list.add(model);
+            setFullMovieList(list);
         }
     }
 
@@ -216,5 +236,13 @@ public class MovieInfoModel implements Serializable {
 
     public void setTabList(ArrayList<TabListModel> tabList) {
         this.tabList = tabList;
+    }
+
+    public ArrayList<TrackAudioModel> getFullMovieList() {
+        return fullMovieList;
+    }
+
+    public void setFullMovieList(ArrayList<TrackAudioModel> fullMovieList) {
+        this.fullMovieList = fullMovieList;
     }
 }
