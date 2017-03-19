@@ -1,9 +1,7 @@
 package com.justaudio.activities;
 
-import android.annotation.SuppressLint;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +24,6 @@ import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.HomeFragment;
 import com.justaudio.fragment.PlayerFragment;
-import com.justaudio.fragment.PlayerListFragment;
 import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.FontFamily;

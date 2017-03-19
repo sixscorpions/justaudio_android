@@ -117,6 +117,8 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
             //PlayerListFragment.adapter.notifyDataSetChanged();
         }
         adapter.notifyDataSetChanged();
+        if (parent.adapter != null)
+            ((BaseAdapter) parent.adapter).notifyDataSetChanged();
     }
 
     @Override
@@ -129,6 +131,8 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
             //PlayerListFragment.adapter.notifyDataSetChanged();
         }
         adapter.notifyDataSetChanged();
+        if (parent.adapter != null)
+            ((BaseAdapter) parent.adapter).notifyDataSetChanged();
     }
 
     @Override
