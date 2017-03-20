@@ -66,7 +66,6 @@ public class PlayerFragment extends Fragment implements JSONResult {
 
     public static ArrayList<PlayerListFragment> fragmentArrayList;
     private String movieId;
-    private int position;
 
     public static TabLayout tabLayout;
 
@@ -203,7 +202,7 @@ public class PlayerFragment extends Fragment implements JSONResult {
         jsonDetailTask.setCode(ApiConfiguration.REST_GET_MOVIE_DETAILS_CODE);
         jsonDetailTask.setServerUrl(url);
         jsonDetailTask.setErrorMessage(ApiConfiguration.ERROR_RESPONSE_CODE);
-        jsonDetailTask.setConnectTimeout(15000);
+        jsonDetailTask.setConnectTimeout(10000);
         jsonDetailTask.execute();
 
     }
@@ -228,21 +227,18 @@ public class PlayerFragment extends Fragment implements JSONResult {
     private void setInfoData(final MovieInfoModel model) {
 
         ll_main.setVisibility(View.VISIBLE);
-
         iv_play_full_movie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 parent.player.initPlaylist(model.getFullMovieList());
-                final TrackAudioModel mData = model.getFullMovieList().get(0);
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        PlayerListFragment fragment = fragmentArrayList.get(position);
-                        fragment.updateCurrentUI();
-                        parent.player.playAudio(mData, fragment);
+                        final TrackAudioModel mData = model.getFullMovieList().get(0);
+                        parent.player.playAudio(mData);
                     }
-                }, 200);
+                }, 100);
 
             }
         });
@@ -298,55 +294,9 @@ public class PlayerFragment extends Fragment implements JSONResult {
         mViewPager.setOffscreenPageLimit(1);
         mViewPager.setCurrentItem(0);
 
-
         tabLayout.setupWithViewPager(mViewPager);
         ToolbarUtils.setViewPageTypeface(parent, tabLayout);
 
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                position = tab.getPosition();
-                AudioPlayerView.fragment = null;
-                PlayerListFragment fragment = fragmentArrayList.get(position);
-                //fragment.updateCurrentUI();
-                ArrayList<TrackAudioModel> results = fragment.results;
-
-                if (results != null) {
-                    parent.player.initPlaylist(results);
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });
-
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int pos) {
-                position = pos;
-                Fragment fragment = fragmentArrayList.get(position);
-                ArrayList<TrackAudioModel> results = ((PlayerListFragment) fragment).results;
-                if (results != null) {
-                    parent.player.initPlaylist(results);
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
 

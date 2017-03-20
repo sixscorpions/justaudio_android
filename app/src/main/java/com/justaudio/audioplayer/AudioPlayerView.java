@@ -49,7 +49,7 @@ public class AudioPlayerView extends LinearLayout implements
     private boolean initialized;
     private HomeActivity parent;
 
-    public static PlayerListFragment fragment;
+    //public static PlayerListFragment fragment;
 
     public AudioPlayerView(Context context) {
         super(context);
@@ -133,13 +133,13 @@ public class AudioPlayerView extends LinearLayout implements
     /**
      * Add an audio for the playlist
      */
-    //TODO: Should we expose this to user? A: Yes, because the user can add files to playlist without creating a new List of TrackAudioModel objects, just adding this files dynamically.
     public void addAudio(TrackAudioModel trackAudioModel) {
-        createJcAudioPlayer();
+
+        if (audioPlayer == null)
+            createJcAudioPlayer();
+
         List<TrackAudioModel> playlist = audioPlayer.getPlaylist();
         int lastPosition = playlist.size();
-
-        trackAudioModel.setId(lastPosition + 1);
         trackAudioModel.setPosition(lastPosition + 1);
 
         if (!playlist.contains(trackAudioModel))
@@ -157,27 +157,14 @@ public class AudioPlayerView extends LinearLayout implements
 
             if (playlist != null && playlist.contains(trackAudioModel))
                 playlist.remove(trackAudioModel);
+
+            parent.playerList = (ArrayList<TrackAudioModel>) playlist;
+            parent.adapter.notifyDataSetChanged();
         }
     }
 
-    public void playFullAudio(TrackAudioModel trackAudioModel) {
-        showProgressBar();
-        seekBar.setProgress(0);
-        createJcAudioPlayer();
-        if (!audioPlayer.getPlaylist().contains(trackAudioModel))
-            audioPlayer.getPlaylist().add(trackAudioModel);
 
-        try {
-            audioPlayer.playAudio(trackAudioModel);
-            AudioUtils.showPlayerControl(parent);
-        } catch (AudioListNullPointerException e) {
-            dismissProgressBar();
-            e.printStackTrace();
-        }
-    }
-
-    public void playAudio(TrackAudioModel trackAudioModel, Fragment fragment) {
-        AudioPlayerView.fragment = (PlayerListFragment) fragment;
+    public void playAudio(TrackAudioModel trackAudioModel) {
         showProgressBar();
         seekBar.setProgress(0);
         createJcAudioPlayer();
@@ -194,17 +181,17 @@ public class AudioPlayerView extends LinearLayout implements
     }
 
     public void next() {
-        if (fragment != null) {
-            resetPlayerInfo();
-            showProgressBar();
-            try {
-                audioPlayer.nextAudio();
-            } catch (AudioListNullPointerException e) {
-                dismissProgressBar();
-                e.printStackTrace();
-            }
-            fragment.updateUI();
+
+        resetPlayerInfo();
+        showProgressBar();
+        try {
+            audioPlayer.nextAudio();
+        } catch (AudioListNullPointerException e) {
+            dismissProgressBar();
+            e.printStackTrace();
         }
+        parent.updateUI();
+
     }
 
     public void continueAudio() {
@@ -223,18 +210,16 @@ public class AudioPlayerView extends LinearLayout implements
     }
 
     public void previous() {
-        if (fragment != null) {
-            resetPlayerInfo();
-            showProgressBar();
 
-            try {
-                audioPlayer.previousAudio();
-            } catch (AudioListNullPointerException e) {
-                dismissProgressBar();
-                e.printStackTrace();
-            }
-            fragment.updatePreUI();
+        resetPlayerInfo();
+        showProgressBar();
+        try {
+            audioPlayer.previousAudio();
+        } catch (AudioListNullPointerException e) {
+            dismissProgressBar();
+            e.printStackTrace();
         }
+        parent.updatePreUI();
     }
 
     @Override

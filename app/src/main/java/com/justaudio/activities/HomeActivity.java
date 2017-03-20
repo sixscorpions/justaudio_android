@@ -2,39 +2,36 @@ package com.justaudio.activities;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.justaudio.R;
 import com.justaudio.adapter.LeftMenuAdapter;
+import com.justaudio.adapter.NowPlayingAdapter;
 import com.justaudio.audioplayer.AudioPlayerView;
 import com.justaudio.dto.LeftMenuModel;
 import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.HomeFragment;
 import com.justaudio.fragment.PlayerFragment;
+import com.justaudio.interfaces.IUpdateUi;
 import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.ToolbarUtils;
-import com.justaudio.utils.UILoader;
 import com.justaudio.utils.Utils;
 
 import java.util.ArrayList;
 
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements IUpdateUi {
 
     public DrawerLayout drawer_layout;
     public AudioPlayerView player;
@@ -44,11 +41,11 @@ public class HomeActivity extends BaseActivity {
     private ImageView iv_now_playing_close;
 
     private ListView lv_player;
-    public PlayerListAdapter adapter;
+    public NowPlayingAdapter adapter;
 
     public MovieInfoModel audioModel;
     public ArrayList<TrackAudioModel> playerList;
-    public static int mCurrentPlaying = -1;
+    public int pause_button_position = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,105 +131,41 @@ public class HomeActivity extends BaseActivity {
 
     public void setPlayerListData() {
         if (adapter == null) {
-            adapter = new PlayerListAdapter(this);
+            adapter = new NowPlayingAdapter(this);
             lv_player.setAdapter(adapter);
-        } else
-            adapter.updateAdapter();
-    }
-
-
-    private class PlayerListAdapter extends BaseAdapter {
-
-        private LayoutInflater inflater;
-
-        private PlayerListAdapter(HomeActivity context) {
-            inflater = LayoutInflater.from(context.getApplicationContext());
-        }
-
-        @Override
-        public int getCount() {
-            return playerList.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return playerList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-
-        public View getView(final int position, View convertView, ViewGroup view) {
-            final ViewHolder holder;
-            if (convertView == null) {
-                holder = new ViewHolder();
-
-                convertView = inflater.inflate(R.layout.row_audio_list_items, view, false);
-
-                //IMAGE_VIEW AND PROGRESS BAR
-                holder.iv_list = (ImageView) convertView.findViewById(R.id.iv_list);
-                holder.pb_list = (ProgressBar) convertView.findViewById(R.id.pb_list);
-
-
-                holder.iv_list_play = (ImageView) convertView.findViewById(R.id.iv_list_play);
-
-                holder.iv_list_more = (ImageView) convertView.findViewById(R.id.iv_list_more);
-
-                //TILE TEXT
-                holder.tv_list_title = (TextView) convertView.findViewById(R.id.tv_list_title);
-                holder.tv_list_title.setTypeface(FontFamily.setHelveticaTypeface(HomeActivity.this));
-
-                //SUB_TITLE
-                holder.tv_list_subtext = (TextView) convertView.findViewById(R.id.tv_list_subtext);
-                holder.tv_list_subtext.setTypeface(FontFamily.setHelveticaTypeface(HomeActivity.this));
-
-                convertView.setTag(holder);
-            } else
-                holder = (ViewHolder) convertView.getTag();
-
-            TrackAudioModel mData = playerList.get(position);
-
-            holder.tv_list_title.setText(mData.getTitle());
-
-            UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list,
-                    R.drawable.icon_list_holder);
-
-            Log.d("tabLayout", "" + PlayerFragment.tabLayout.getSelectedTabPosition());
-            Log.d("PlayerListFragment", "" + PlayerFragment.fragmentArrayList.get(PlayerFragment.tabLayout.getSelectedTabPosition()).pause_button_position);
-            if (PlayerFragment.fragmentArrayList.get(PlayerFragment.tabLayout.getSelectedTabPosition()).pause_button_position == position) {
-                holder.iv_list_play.setImageResource(R.drawable.icon_stop);
-            } else {
-                holder.iv_list_play.setImageResource(R.drawable.icon_play);
-            }
-
-            /*PLAY THE AUDIO*/
-            holder.iv_list_play.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                }
-            });
-            return convertView;
-        }
-
-        private class ViewHolder {
-            ImageView iv_list;
-            ImageView iv_list_play;
-            ImageView iv_list_more;
-
-            ProgressBar pb_list;
-
-            TextView tv_list_title;
-            TextView tv_list_subtext;
-        }
-
-        void updateAdapter() {
+        } else {
             lv_player.setAdapter(null);
             adapter.notifyDataSetChanged();
             lv_player.setAdapter(adapter);
         }
+    }
+
+    @Override
+    public void updateUI() {
+
+        if (pause_button_position == playerList.size() - 1)
+            pause_button_position = 0;
+        else
+            pause_button_position = pause_button_position + 1;
+
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updatePreUI() {
+
+        if (pause_button_position == 0)
+            pause_button_position = playerList.size() - 1;
+        else
+            pause_button_position = pause_button_position - 1;
+
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void updateCurrentUI() {
+
+        adapter.notifyDataSetChanged();
     }
 
 

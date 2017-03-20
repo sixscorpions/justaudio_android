@@ -2,23 +2,22 @@ package com.justaudio.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
-import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.interfaces.IUpdateUi;
-import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.CustomDialog;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.UILoader;
@@ -30,18 +29,16 @@ import java.util.ArrayList;
 /**
  * Created by VIDYA
  */
-public class PlayerListFragment extends Fragment implements IUpdateUi {
+public class PlayerListFragment extends Fragment {
 
     private View view;
     private HomeActivity parent;
 
     private ListView listView;
     private int mPosition = -1;
-    private String tabName;
     public ArrayList<TrackAudioModel> results;
 
     private static IUpdateUi iUpdateUi;
-    private PlayerListFragment fragment;
 
     public static IUpdateUi getInstance() {
         return iUpdateUi;
@@ -50,18 +47,13 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        iUpdateUi = this;
-        //model = (MovieInfoModel) getArguments().getSerializable(AppConstants.INTENT_KEY_OBJECT_MOVIE);
+        iUpdateUi = getInstance();
         mPosition = getArguments().getInt("Position");
-        tabName = getArguments().getString("tabName");
         parent = (HomeActivity) getActivity();
-        fragment = PlayerListFragment.this;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /*if (view != null)
-            return view;*/
 
         view = inflater.inflate(R.layout.fragment_list_child_new, container, false);
         initializeTheViews();
@@ -83,7 +75,7 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
         if (results.size() > 0) {
             listView.setVisibility(View.VISIBLE);
             tv_no_result.setVisibility(View.GONE);
-            setListData(results);
+            setListData();
         } else {
             listView.setVisibility(View.GONE);
             tv_no_result.setVisibility(View.VISIBLE);
@@ -92,64 +84,22 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
 
     private PlayerListAdapter adapter;
 
-    private void setListData(ArrayList<TrackAudioModel> results) {
+    private void setListData() {
 
         if (adapter == null) {
-            adapter = new PlayerListAdapter(parent/*, results*/);
+            adapter = new PlayerListAdapter(parent);
             listView.setAdapter(adapter);
         } else
-            adapter.updateAdapter(results);
-
-        if (mPosition == 0 && parent.player != null)
-            parent.player.initPlaylist(results);
+            adapter.updateAdapter();
     }
 
-
-    public int pause_button_position = -1;
-
-    @Override
-    public void updateUI() {
-        if (pause_button_position == results.size() - 1) {
-            pause_button_position = 0;
-            //PlayerListFragment.adapter.notifyDataSetChanged();
-        } else {
-            pause_button_position = pause_button_position + 1;
-            //PlayerListFragment.adapter.notifyDataSetChanged();
-        }
-        adapter.notifyDataSetChanged();
-        if (parent.adapter != null)
-            ((BaseAdapter) parent.adapter).notifyDataSetChanged();
-    }
-
-    @Override
-    public void updatePreUI() {
-        if (pause_button_position == 0) {
-            pause_button_position = results.size() - 1;
-            //PlayerListFragment.adapter.notifyDataSetChanged();
-        } else {
-            pause_button_position = pause_button_position - 1;
-            //PlayerListFragment.adapter.notifyDataSetChanged();
-        }
-        adapter.notifyDataSetChanged();
-        if (parent.adapter != null)
-            ((BaseAdapter) parent.adapter).notifyDataSetChanged();
-    }
-
-    @Override
-    public void updateCurrentUI() {
-        pause_button_position = -1;
-        if (adapter != null)
-            adapter.notifyDataSetChanged();
-    }
 
     private class PlayerListAdapter extends BaseAdapter {
 
-        //private ArrayList<TrackAudioModel> dataList;
         private LayoutInflater inflater;
         private HomeActivity parent;
 
-        private PlayerListAdapter(HomeActivity context/*, ArrayList<TrackAudioModel> results*/) {
-            //this.dataList = results;
+        private PlayerListAdapter(HomeActivity context) {
             parent = context;
             inflater = LayoutInflater.from(context.getApplicationContext());
         }
@@ -177,10 +127,10 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
             if (convertView == null) {
                 holder = new ViewHolder();
 
-                if (tabName.equalsIgnoreCase("Artists"))
-                    convertView = inflater.inflate(R.layout.row_artist_list_items, null);
-                else
-                    convertView = inflater.inflate(R.layout.row_audio_list_items, null);
+
+                convertView = inflater.inflate(R.layout.row_artist_list_items, null);
+
+                holder.ll_click = (LinearLayout) convertView.findViewById(R.id.ll_click);
 
                 //IMAGE_VIEW AND PROGRESS BAR
                 holder.iv_list = (ImageView) convertView.findViewById(R.id.iv_list);
@@ -203,60 +153,38 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
             } else
                 holder = (ViewHolder) convertView.getTag();
 
-            if (position != pause_button_position)
-                holder.iv_list_play.setImageResource(R.drawable.icon_play_small);
 
             final TrackAudioModel mData = results.get(position);
 
             holder.tv_list_title.setText(mData.getTitle());
+            UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list, R.drawable.icon_list_holder);
 
-
-            /*FOR ARTIEST TYPE*/
-            if (tabName.equalsIgnoreCase("Artists")) {
-                UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list, R.drawable.icon_list_holder);
-            } else
-                UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list,
-                        R.drawable.icon_list_holder);
-
-            if (pause_button_position == position) {
-                holder.iv_list_play.setImageResource(R.drawable.icon_stop);
-            } else {
-                holder.iv_list_play.setImageResource(R.drawable.icon_play);
-            }
 
             /*PLAY THE AUDIO*/
-            holder.iv_list_play.setOnClickListener(new View.OnClickListener() {
+            holder.ll_click.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    if (HomeActivity.mCurrentPlaying == -1) {
-                        HomeActivity.mCurrentPlaying = mPosition;
-                    } else {
-                        PlayerFragment.fragmentArrayList.get(HomeActivity.mCurrentPlaying).pause_button_position = -1;
-                        PlayerFragment.fragmentArrayList.get(HomeActivity.mCurrentPlaying).adapter.notifyDataSetChanged();
-                        HomeActivity.mCurrentPlaying = mPosition;
-                    }
-                    /*CHANGE ICON POSITION*/
-                    pause_button_position = position;
+                    parent.pause_button_position = position;
 
-                    /*CHANGE ICON POSITION*/
-                    pause_button_position = position;
-                    //holder.iv_list_play.setImageResource(R.drawable.icon_stop);
-                    notifyDataSetChanged();
-
-                    TrackAudioModel mData = results.get(position);
-                    //Log.d("getTargetFragment", "" + getTargetFragment().getTargetRequestCode());
-                    parent.player.playAudio(mData, PlayerFragment.fragmentArrayList.get(mPosition));
+                    parent.player.initPlaylist(results);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            TrackAudioModel mData = results.get(position);
+                            parent.player.playAudio(mData);
+                        }
+                    }, 100);
                 }
             });
-
 
 
             /*MORE BUTTON*/
             holder.iv_list_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CustomDialog.showMoreDialog(parent, mData);
+                    CustomDialog.showMoreAddDialog(parent, mData);
                 }
             });
 
@@ -272,10 +200,11 @@ public class PlayerListFragment extends Fragment implements IUpdateUi {
 
             TextView tv_list_title;
             TextView tv_list_subtext;
+
+            LinearLayout ll_click;
         }
 
-        void updateAdapter(ArrayList<TrackAudioModel> result) {
-            //this.dataList = result;
+        void updateAdapter() {
             listView.setAdapter(null);
             adapter.notifyDataSetChanged();
             listView.setAdapter(adapter);
