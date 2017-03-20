@@ -1,6 +1,7 @@
 package com.justaudio.utils;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Html;
@@ -119,6 +120,7 @@ public class CustomDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                shareContent(activity);
             }
         });
 
@@ -181,11 +183,24 @@ public class CustomDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                shareContent(activity);
             }
         });
 
 
         dialog.show();
+    }
+
+
+    private static void shareContent(BaseActivity parent) {
+
+        String link = "https://play.google.com/store/search?q=justaudio&hl=en";
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "Check out " + Utils.getStrings(parent, R.string.app_name) + " for your smartphone." +
+                "Download it today from " + link;
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        parent.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
 

@@ -103,18 +103,6 @@ public class AudioPlayerView extends LinearLayout implements
         initialized = true;
     }
 
-    /**
-     * Initialize an anonymous playlist with a default JcPlayer title for all audios
-     *
-     * @param playlist List of urls strings
-     */
-    public void initAnonPlaylist(List<TrackAudioModel> playlist) {
-        sortPlaylist(playlist);
-        generateTitleAudio(playlist, getContext().getString(R.string.track_number));
-        audioPlayer = new AudioPlayer(getContext(), playlist, AudioPlayerView.this);
-        audioPlayer.registerInvalidPathListener(this);
-        initialized = true;
-    }
 
     /**
      * Initialize an anonymous playlist, but with a custom title for all audios
