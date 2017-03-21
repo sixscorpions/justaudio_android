@@ -1,5 +1,6 @@
 package com.justaudio.utils;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -7,6 +8,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.justaudio.R;
+import com.justaudio.activities.BaseActivity;
 
 /**
  * Created by Pavan
@@ -121,8 +124,6 @@ public class Utils {
     }
 
 
-
-
     public static String getServer(Context context, int serverResID) {
         String server = context.getString(serverResID);
         String prefix = context.getString(R.string.REST_PREFIX);
@@ -131,5 +132,11 @@ public class Utils {
             return server; // server already contains full URL
 
         return prefix + server;
+    }
+
+    @SuppressLint("HardwareIds")
+    public static String getDeviceID(BaseActivity parent) {
+        return Settings.Secure.getString(parent.getApplicationContext().getContentResolver(),
+                Settings.Secure.ANDROID_ID);
     }
 }

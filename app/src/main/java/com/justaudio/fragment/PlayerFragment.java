@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.adapter.ViewPagerAdapter;
-import com.justaudio.audioplayer.AudioPlayerView;
 import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TabListModel;
 import com.justaudio.dto.TrackAudioModel;
@@ -64,23 +63,19 @@ public class PlayerFragment extends Fragment implements JSONResult {
     private TextView tv_info_production_value;
 
 
-    public static ArrayList<PlayerListFragment> fragmentArrayList;
     private String movieId;
-
-    public static TabLayout tabLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parent = (HomeActivity) getActivity();
 
-        fragmentArrayList = new ArrayList<>();
         movieId = getArguments().getString("movie_id");
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         if (view != null)
             return view;
 
@@ -230,7 +225,7 @@ public class PlayerFragment extends Fragment implements JSONResult {
         iv_play_full_movie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                parent.player.initPlaylist(model.getFullMovieList());
+                parent.player.initPlaylist(model.getFullMovieList(), null);
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -273,7 +268,7 @@ public class PlayerFragment extends Fragment implements JSONResult {
 
 
         ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
 
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
 
@@ -287,7 +282,6 @@ public class PlayerFragment extends Fragment implements JSONResult {
             bundle.putString("tabName", tabName);
             PlayerListFragment fragment = new PlayerListFragment();
             adapter.addFragment(fragment, tabName, bundle);
-            fragmentArrayList.add(fragment);
         }
 
         mViewPager.setAdapter(adapter);

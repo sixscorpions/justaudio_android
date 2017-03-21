@@ -1,5 +1,6 @@
 package com.justaudio.adapter;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,38 +12,49 @@ import android.widget.TextView;
 
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
+import com.justaudio.dto.MovieListModel;
 import com.justaudio.dto.TrackAudioModel;
+import com.justaudio.fragment.FavoritesFragment;
 import com.justaudio.utils.CustomDialog;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.UILoader;
+
+import java.util.ArrayList;
 
 /**
  * Created by ${VIDYA}
  */
 
-public class NowPlayingAdapter extends BaseAdapter {
+public class FavoritesAdapter extends BaseAdapter {
 
     private LayoutInflater inflater;
     private HomeActivity parent;
+    private ArrayList<TrackAudioModel> playerList;
 
-    public NowPlayingAdapter(HomeActivity context) {
-        this.parent = context;
+    private FavoritesFragment favoritesFragment;
+
+    public FavoritesAdapter(HomeActivity context, ArrayList<TrackAudioModel> data,
+                            FavoritesFragment fragment) {
         inflater = LayoutInflater.from(context.getApplicationContext());
+
+        this.parent = context;
+        this.favoritesFragment = fragment;
+        playerList = data;
     }
 
     @Override
     public int getCount() {
-        return parent.playerList.size();
+        return playerList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return parent.playerList.get(position);
+        return playerList.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
 
@@ -76,7 +88,7 @@ public class NowPlayingAdapter extends BaseAdapter {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        final TrackAudioModel mData = parent.playerList.get(position);
+        final TrackAudioModel mData = playerList.get(position);
 
         holder.tv_list_title.setText(mData.getTitle());
 
@@ -85,7 +97,7 @@ public class NowPlayingAdapter extends BaseAdapter {
 
 
         /*UPDATE PLAY AND PAUSE BUTTON*/
-        if (parent.pause_button_position == position)
+        if (favoritesFragment.pause_button_position == position)
             holder.iv_list_play.setImageResource(R.drawable.icon_stop);
         else
             holder.iv_list_play.setImageResource(R.drawable.icon_play);
@@ -95,9 +107,18 @@ public class NowPlayingAdapter extends BaseAdapter {
         holder.ll_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                parent.pause_button_position = position;
-                parent.updateCurrentUI();
-                parent.player.playAudio(mData);
+
+                favoritesFragment.pause_button_position = position;
+                favoritesFragment.updateCurrentUI();
+
+                parent.player.initPlaylist(playerList, favoritesFragment);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        parent.player.playAudio(mData);
+                    }
+                }, 100);
             }
         });
 
@@ -105,7 +126,7 @@ public class NowPlayingAdapter extends BaseAdapter {
         holder.iv_list_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomDialog.showMoreRemoveDialog(parent, mData);
+                CustomDialog.showRemoveFevDialog(parent, mData);
             }
         });
 

@@ -1,11 +1,11 @@
 package com.justaudio.interfaces;
 
 /**
- * Created by shankar on 3/13/2017.
+ * Created by shankar
  */
 
 public interface IUpdateUi {
-    void updateUI();
+    void updateNextUI();
     void updatePreUI();
     void updateCurrentUI();
 }

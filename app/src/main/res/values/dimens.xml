@@ -51,7 +51,7 @@
     <dimen name="_25dp">25dp</dimen>
     <dimen name="_30dp">30dp</dimen>
     <dimen name="tab_height">50dp</dimen>
-    <dimen name="iv_next_prev_h_w">15dp</dimen>
+    <dimen name="iv_next_prev_h_w">12dp</dimen>
     <dimen name="iv_play_h_w">40dp</dimen>
     <dimen name="iv_play_list_size">40dp</dimen>
     <dimen name="tv_pop_window_size">20sp</dimen>

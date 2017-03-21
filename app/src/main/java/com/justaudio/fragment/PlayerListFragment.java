@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
-import com.justaudio.interfaces.IUpdateUi;
 import com.justaudio.utils.CustomDialog;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.UILoader;
@@ -35,19 +34,14 @@ public class PlayerListFragment extends Fragment {
     private HomeActivity parent;
 
     private ListView listView;
+    private PlayerListAdapter adapter;
     private int mPosition = -1;
-    public ArrayList<TrackAudioModel> results;
+    private ArrayList<TrackAudioModel> results;
 
-    private static IUpdateUi iUpdateUi;
-
-    public static IUpdateUi getInstance() {
-        return iUpdateUi;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        iUpdateUi = getInstance();
         mPosition = getArguments().getInt("Position");
         parent = (HomeActivity) getActivity();
     }
@@ -82,7 +76,6 @@ public class PlayerListFragment extends Fragment {
         }
     }
 
-    private PlayerListAdapter adapter;
 
     private void setListData() {
 
@@ -117,7 +110,7 @@ public class PlayerListFragment extends Fragment {
 
         @Override
         public long getItemId(int position) {
-            return 0;
+            return position;
         }
 
 
@@ -157,7 +150,8 @@ public class PlayerListFragment extends Fragment {
             final TrackAudioModel mData = results.get(position);
 
             holder.tv_list_title.setText(mData.getTitle());
-            UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list, R.drawable.icon_list_holder);
+            UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(),
+                    holder.pb_list, R.drawable.icon_list_holder);
 
 
             /*PLAY THE AUDIO*/
@@ -167,7 +161,7 @@ public class PlayerListFragment extends Fragment {
 
                     parent.pause_button_position = position;
 
-                    parent.player.initPlaylist(results);
+                    parent.player.initPlaylist(results, null);
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override

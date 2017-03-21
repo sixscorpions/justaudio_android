@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,26 +9,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_player_dark"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <TextView
             android:id="@+id/txt_current_music"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:ellipsize="marquee"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:gravity="center"
             android:marqueeRepeatLimit="marquee_forever"
-            android:maxLines="2"
+            android:maxLines="1"
             android:scrollHorizontally="true"
             android:text="@string/app_name"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size"
             android:visibility="visible" />
-
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -54,8 +54,8 @@
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:maxHeight="8dp"
-                android:minHeight="8dp"
+                android:maxHeight="7dp"
+                android:minHeight="7dp"
                 android:progressDrawable="@drawable/seekbar_progress"
                 android:thumb="@color/transparent" />
 
@@ -73,7 +73,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="35dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"

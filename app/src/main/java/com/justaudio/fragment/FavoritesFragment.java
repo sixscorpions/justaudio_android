@@ -15,18 +15,21 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.justaudio.activities.HomeActivity;
-import com.justaudio.adapter.MovieListAdapter;
 import com.justaudio.R;
+import com.justaudio.activities.HomeActivity;
+import com.justaudio.adapter.FavoritesAdapter;
+import com.justaudio.adapter.MovieListAdapter;
 import com.justaudio.dto.MovieListModel;
+import com.justaudio.dto.TrackAudioModel;
+import com.justaudio.interfaces.IUpdateUi;
 import com.justaudio.services.ApiConfiguration;
 import com.justaudio.services.JSONArrayTask;
 import com.justaudio.services.JSONResult;
 import com.justaudio.services.NetworkUtils;
 import com.justaudio.utils.AppConstants;
-import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.ToolbarUtils;
 import com.justaudio.utils.Utils;
@@ -36,13 +39,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by VIDYA
  */
-public class HomeFragment extends Fragment implements JSONResult {
+public class FavoritesFragment extends Fragment implements JSONResult, IUpdateUi {
 
-    public static final String TAG = "HomeFragment";
+    public static final String TAG = "FavoritesFragment";
 
     private View view;
     private HomeActivity parent;
@@ -51,14 +55,13 @@ public class HomeFragment extends Fragment implements JSONResult {
     public TextView tv_title;
     public ImageView iv_toggle;
 
-    private GridView gv_movies;
+    private ListView lv_favorite;
     private SwipeRefreshLayout swipe_container;
     private LinearLayout ll_no_data;
 
-
-    private ArrayList<MovieListModel> movieList;
     private String title;
-
+    public int pause_button_position = -1;
+    private FavoritesAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,13 +76,12 @@ public class HomeFragment extends Fragment implements JSONResult {
         if (view != null)
             return view;
 
-        view = inflater.inflate(R.layout.fragment_home_new, container, false);
+        view = inflater.inflate(R.layout.fragment_favorites, container, false);
         initializeTheViews();
         return view;
     }
 
     private void initializeTheViews() {
-
 
         /*TEXT_VIEW TITLE*/
         tv_title = (TextView) view.findViewById(R.id.tv_toolbar_title);
@@ -106,8 +108,9 @@ public class HomeFragment extends Fragment implements JSONResult {
                 R.color.holo_blue_light, android.R.color.holo_purple);
         swipe_container.setOnRefreshListener(swipeRefreshListener);
 
-        gv_movies = (GridView) view.findViewById(R.id.gv_movies);
-        gv_movies.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+        lv_favorite = (ListView) view.findViewById(R.id.lv_favorite);
+        lv_favorite.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -142,7 +145,6 @@ public class HomeFragment extends Fragment implements JSONResult {
                         @Override
                         public void run() {
                             if (NetworkUtils.isNetworkAvailable(parent)) {
-                                movieList = null;
                                 getMoviesData();
                             } else
                                 NetworkUtils.showNetworkConnectDialog(parent, true);
@@ -160,65 +162,95 @@ public class HomeFragment extends Fragment implements JSONResult {
         if (getMoviesTask != null)
             getMoviesTask.cancel(true);
 
+        String deviceId = Utils.getDeviceID(parent);
+        String url = String.format(Utils.getServer(parent, R.string.REST_ADD_TO_FAVORITES), 1);
+
         getMoviesTask = new JSONArrayTask(this);
         getMoviesTask.setMethod(JSONArrayTask.METHOD.GET);
-        getMoviesTask.setCode(ApiConfiguration.REST_GET_MOVIES_CODE);
-        getMoviesTask.setServerUrl(Utils.getServer(parent, R.string.REST_GET_MOVIES_CODE));
+        getMoviesTask.setCode(ApiConfiguration.REST_GET_FEV_LIST_CODE);
+        getMoviesTask.setServerUrl(url);
         getMoviesTask.setErrorMessage(ApiConfiguration.ERROR_RESPONSE_CODE);
-        getMoviesTask.setConnectTimeout(15000);
+        getMoviesTask.setConnectTimeout(8000);
         getMoviesTask.execute();
 
     }
 
     @Override
     public void successJsonResult(int code, Object result) {
-        if (code == ApiConfiguration.REST_GET_MOVIES_CODE) {
-
+        if (code == ApiConfiguration.REST_GET_FEV_LIST_CODE) {
             try {
+                ArrayList<TrackAudioModel> mList = new ArrayList<>();
                 JSONArray array = (JSONArray) result;
-                if (movieList == null)
-                    movieList = new ArrayList<>();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject jObj = array.getJSONObject(i);
-                    MovieListModel dataItem = new MovieListModel(jObj);
-                    movieList.add(dataItem);
+                    TrackAudioModel dataItem = new TrackAudioModel(jObj);
+                    mList.add(dataItem);
                 }
+                setData(mList);
             } catch (JSONException e) {
                 e.printStackTrace();
-                NetworkUtils.showAlertDialog(parent, getMoviesTask.getResultMessage());
             }
-            setData(movieList);
         }
         swipe_container.setRefreshing(false);
     }
 
     @Override
     public void failedJsonResult(int code) {
-        if (code == ApiConfiguration.REST_GET_MOVIES_CODE)
-            NetworkUtils.showAlertDialog(parent, getMoviesTask.getResultMessage());
+        if (code == ApiConfiguration.REST_GET_FEV_LIST_CODE) {
+            ll_no_data.setVisibility(View.VISIBLE);
+            lv_favorite.setVisibility(View.GONE);
+        }
         swipe_container.setRefreshing(false);
+
     }
 
-    private void setData(ArrayList<MovieListModel> data) {
-
+    private void setData(ArrayList<TrackAudioModel> data) {
         if (data.size() > 0) {
             ll_no_data.setVisibility(View.GONE);
-            gv_movies.setVisibility(View.VISIBLE);
-
-            MovieListAdapter adapter = new MovieListAdapter(parent, data);
-            gv_movies.setAdapter(adapter);
-            gv_movies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                    MovieListModel model = (MovieListModel) adapterView.getAdapter().getItem(position);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("movie_id", model.getMovie_id());
-                    Utils.navigateFragment(new PlayerFragment(), PlayerFragment.TAG, bundle, parent);
-                }
-            });
+            lv_favorite.setVisibility(View.VISIBLE);
+            adapter = new FavoritesAdapter(parent, data, FavoritesFragment.this);
+            lv_favorite.setAdapter(adapter);
         } else {
             ll_no_data.setVisibility(View.VISIBLE);
-            gv_movies.setVisibility(View.GONE);
+            lv_favorite.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void updateNextUI() {
+
+        List<TrackAudioModel> mList = parent.player.getMyPlaylist();
+        if (mList != null && mList.size() != 1) {
+
+            if (pause_button_position == mList.size() - 1)
+                pause_button_position = 0;
+            else
+                pause_button_position = pause_button_position + 1;
+
+            if (adapter != null)
+                adapter.notifyDataSetChanged();
+        }
+
+    }
+
+    @Override
+    public void updatePreUI() {
+
+        List<TrackAudioModel> mList = parent.player.getMyPlaylist();
+        if (mList != null && mList.size() != 1) {
+            if (pause_button_position == 0)
+                pause_button_position = parent.player.getMyPlaylist().size() - 1;
+            else
+                pause_button_position = pause_button_position - 1;
+
+            if (adapter != null)
+                adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void updateCurrentUI() {
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
     }
 }

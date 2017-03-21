@@ -22,7 +22,7 @@ public class TrackAudioModel implements Serializable {
     private String thumbnail_image;
 
 
-    TrackAudioModel(JSONObject object) throws JSONException {
+    public TrackAudioModel(JSONObject object) throws JSONException {
 
 
         setOrigin(Origin.URL);

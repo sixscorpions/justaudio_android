@@ -21,6 +21,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
+import com.justaudio.fragment.FavoritesFragment;
 import com.justaudio.fragment.PlayerListFragment;
 import com.justaudio.utils.AudioUtils;
 
@@ -35,10 +36,10 @@ public class AudioPlayerView extends LinearLayout implements
     private static final int TITLE_ANIMATION_DURATION = 600;
 
     private TextView txtCurrentMusic;
-    public ImageButton btnPrev;
-    public ImageButton btnPlay;
-    public ImageButton btnNext;
-    public SeekBar seekBar;
+    private ImageButton btnPrev;
+    private ImageButton btnPlay;
+    private ImageButton btnNext;
+    private SeekBar seekBar;
 
     private ProgressBar progressBarPlayer;
     public AudioPlayer audioPlayer;
@@ -48,8 +49,7 @@ public class AudioPlayerView extends LinearLayout implements
     private AssetFileDescriptor assetFileDescriptor;
     private boolean initialized;
     private HomeActivity parent;
-
-    //public static PlayerListFragment fragment;
+    private FavoritesFragment favoritesFragment;
 
     public AudioPlayerView(Context context) {
         super(context);
@@ -94,8 +94,9 @@ public class AudioPlayerView extends LinearLayout implements
      *
      * @param playlist List of TrackAudioModel objects that you want play
      */
-    public void initPlaylist(List<TrackAudioModel> playlist) {
+    public void initPlaylist(List<TrackAudioModel> playlist, FavoritesFragment fragment) {
 
+        this.favoritesFragment = fragment;
         sortPlaylist(playlist);
         parent.playerList = (ArrayList<TrackAudioModel>) playlist;
         audioPlayer = new AudioPlayer(getContext(), playlist, AudioPlayerView.this);
@@ -147,7 +148,7 @@ public class AudioPlayerView extends LinearLayout implements
                 playlist.remove(trackAudioModel);
 
             parent.playerList = (ArrayList<TrackAudioModel>) playlist;
-            parent.adapter.notifyDataSetChanged();
+            parent.updateCurrentUI();
         }
     }
 
@@ -178,7 +179,11 @@ public class AudioPlayerView extends LinearLayout implements
             dismissProgressBar();
             e.printStackTrace();
         }
-        parent.updateUI();
+
+        if (favoritesFragment != null)
+            favoritesFragment.updateNextUI();
+
+        parent.updateNextUI();
 
     }
 
@@ -207,6 +212,10 @@ public class AudioPlayerView extends LinearLayout implements
             dismissProgressBar();
             e.printStackTrace();
         }
+
+        if (favoritesFragment != null)
+            favoritesFragment.updatePreUI();
+
         parent.updatePreUI();
     }
 

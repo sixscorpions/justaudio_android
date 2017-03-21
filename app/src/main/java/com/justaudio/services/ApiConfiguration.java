@@ -45,7 +45,9 @@ public class ApiConfiguration {
 
     public static final int REST_GET_MOVIES_CODE = 1;
     public static final int REST_GET_MOVIE_DETAILS_CODE = 2;
-    public static final int REST_GET_MOVIE_AUDIOS_LIST_CODE = 3;
+    public static final int REST_ADD_TO_FAVORITES_CODE = 3;
+    public static final int REST_DELETE_FROM_FAVORITES_CODE = 4;
+    public static final int REST_GET_FEV_LIST_CODE = 5;
 
 
 }

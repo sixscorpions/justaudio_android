@@ -9,5 +9,8 @@
     <string name="REST_GET_MOVIES_CODE">audioapp/movies</string>
     <string name="REST_GET_MOVIE_DETAILS_CODE">audioapp/movie/%s/details</string>
     <string name="REST_GET_MOVIE_AUDIOS_LIST">audioapp/movie/%s/audios</string>
+    <string name="REST_GET_ALL_FAVORITE_LIST">audioapp/favorites/%s</string>
+    <string name="REST_ADD_TO_FAVORITES">audioapp/favorites/%s/</string>
+    <string name="REST_DELETE_FROM_FAVORITES">audioapp/favorites/%s/</string>
 
 </resources>

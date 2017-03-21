@@ -176,7 +176,6 @@ public class JSONTask extends AsyncTask<Object, Integer, Object> {
                 e.printStackTrace();
                 return null;
             }
-
             try {
                 resultJSON = new JSONObject(result);
                 if (BuildConfig.DEBUG)
@@ -261,7 +260,7 @@ public class JSONTask extends AsyncTask<Object, Integer, Object> {
    *  RETURNS THE TASK METHOD
    * */
     public enum METHOD {
-        GET, PUT, FILE_UPLOAD, POST;
+        GET, POST, DELETE;
     }
 
     public String setMethod(METHOD method) {

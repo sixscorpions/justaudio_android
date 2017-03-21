@@ -96,6 +96,7 @@ public class CustomDialog {
         tv_dialog_fev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                activity.addToFavorites(mData.getId());
                 dialog.dismiss();
             }
         });
@@ -159,6 +160,7 @@ public class CustomDialog {
         tv_dialog_fev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                activity.addToFavorites(mData.getId());
                 dialog.dismiss();
             }
         });
@@ -191,13 +193,69 @@ public class CustomDialog {
         dialog.show();
     }
 
+    public static void showRemoveFevDialog(final HomeActivity activity, final TrackAudioModel mData) {
+
+
+        final Dialog dialog = new Dialog(activity);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.anim_list_dialog;
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_more);
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+
+        /*CANCEL*/
+        ImageView iv_dialog_close = (ImageView) dialog.findViewById(R.id.iv_info_close);
+        iv_dialog_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        /*FEV.*/
+        TextView tv_dialog_fev = (TextView) dialog.findViewById(R.id.tv_dialog_fev);
+        tv_dialog_fev.setTypeface(FontFamily.setHelveticaTypeface(activity));
+        tv_dialog_fev.setVisibility(View.GONE);
+
+        /*REMOVE*/
+        TextView tv_dialog_add_que = (TextView) dialog.findViewById(R.id.tv_dialog_add_que);
+        tv_dialog_add_que.setText("Remove from favorite");
+        tv_dialog_add_que.setTypeface(FontFamily.setHelveticaTypeface(activity));
+        tv_dialog_add_que.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.deleteFromFavorites(mData.getId());
+            }
+        });
+
+
+        /*SHARE*/
+        TextView tv_dialog_share = (TextView) dialog.findViewById(R.id.tv_dialog_share);
+        tv_dialog_share.setTypeface(FontFamily.setHelveticaTypeface(activity));
+        tv_dialog_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                shareContent(activity);
+            }
+        });
+
+
+        dialog.show();
+    }
+
 
     private static void shareContent(BaseActivity parent) {
 
         String link = "https://play.google.com/store/search?q=justaudio&hl=en";
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "Check out " + Utils.getStrings(parent, R.string.app_name) + " for your smartphone." +
+        String shareBody = "Check out " + Utils.getStrings(parent, R.string.app_name) + "for your smartphone." +
                 "Download it today from " + link;
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         parent.startActivity(Intent.createChooser(sharingIntent, "Share via"));
