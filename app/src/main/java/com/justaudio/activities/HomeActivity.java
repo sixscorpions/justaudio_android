@@ -1,6 +1,7 @@
 package com.justaudio.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -301,7 +302,7 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
                 case HomeFragment.TAG:
                     closeCount++;
                     if (closeCount > 1)
-                        finishAffinity();
+                        minimizeApp();
                     else
                         Toast.makeText(this, "Press Again to Exit", Toast.LENGTH_SHORT).show();
                     break;
@@ -317,4 +318,10 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
     }
 
 
+    public void minimizeApp() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+    }
 }
