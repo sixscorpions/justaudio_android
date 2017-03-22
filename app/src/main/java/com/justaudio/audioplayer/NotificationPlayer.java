@@ -5,12 +5,21 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import com.justaudio.R;
+import com.justaudio.utils.UILoader;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by VIDYA
@@ -33,13 +42,13 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     private Context context;
     private String title;
     private String time = "00:00";
-    private int iconResource;
+    private String iconResource;
 
     public NotificationPlayer(Context context) {
         this.context = context;
     }
 
-    public void createNotificationPlayer(String title, int iconResourceResource) {
+    public void createNotificationPlayer(String title, String iconResourceResource) {
         this.title = title;
         this.iconResource = iconResourceResource;
         Intent openUi = new Intent(context, context.getClass());
@@ -52,10 +61,12 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Notification notification = new Notification.Builder(context)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setSmallIcon(iconResourceResource)
-                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), iconResourceResource))
+                    .setSmallIcon(R.drawable.ic_notification_default_white)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                            R.drawable.ic_notification_default_white))
                     .setContent(createNotificationPlayerView())
-                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID, openUi, PendingIntent.FLAG_CANCEL_CURRENT))
+                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
+                            openUi, PendingIntent.FLAG_CANCEL_CURRENT))
                     .setCategory(Notification.CATEGORY_SOCIAL)
                     .build();
             notificationManager.notify(NOTIFICATION_ID, notification);
@@ -64,8 +75,9 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
             NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setSmallIcon(iconResourceResource)
-                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), iconResourceResource))
+                    .setSmallIcon(R.drawable.ic_notification_default_white)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                            R.drawable.ic_notification_default_white))
                     .setContent(createNotificationPlayerView())
                     .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID, openUi,
                             PendingIntent.FLAG_CANCEL_CURRENT))
@@ -73,6 +85,7 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
             notificationManager.notify(NOTIFICATION_ID, notificationCompat.build());
         }
     }
+
 
     public void updateNotification() {
         createNotificationPlayer(title, iconResource);
@@ -89,14 +102,18 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
             remoteView.setOnClickPendingIntent(R.id.btn_pause_notification, buildPendingIntent(PAUSE, PAUSE_ID));
         }
 
+
         remoteView.setTextViewText(R.id.txt_current_music_notification, title);
         remoteView.setTextViewText(R.id.txt_duration_notification, time);
-        remoteView.setImageViewResource(R.id.icon_player, iconResource);
+        remoteView.setImageViewResource(R.id.icon_player, R.mipmap.ic_launcher);
+        //UILoader.UILNotificationPicLoading(remoteView, R.id.icon_player, iconResource);
         remoteView.setOnClickPendingIntent(R.id.btn_next_notification, buildPendingIntent(NEXT, NEXT_ID));
         remoteView.setOnClickPendingIntent(R.id.btn_prev_notification, buildPendingIntent(PREVIOUS, PREVIOUS_ID));
 
         return remoteView;
     }
+
+
 
     private PendingIntent buildPendingIntent(String action, int id) {
         Intent playIntent = new Intent(context.getApplicationContext(), PlayerNotificationReceiver.class);

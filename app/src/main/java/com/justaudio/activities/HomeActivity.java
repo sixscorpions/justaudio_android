@@ -303,8 +303,6 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
                     closeCount++;
                     if (closeCount > 1)
                         minimizeApp();
-                    else
-                        Toast.makeText(this, "Press Again to Exit", Toast.LENGTH_SHORT).show();
                     break;
                 case PlayerFragment.TAG:
                     super.onBackPressed();

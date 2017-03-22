@@ -4,10 +4,13 @@ import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RemoteViews;
 
+import com.justaudio.R;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 /**
@@ -66,5 +69,36 @@ public class UILoader {
                 .build();
 
         ImageLoader.getInstance().displayImage(ImageUrl, ivImageView, options);
+    }
+
+    public static void UILNotificationPicLoading(final RemoteViews ivImageView, final int resource, String ImageUrl) {
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
+                .cacheInMemory(false)
+                .cacheOnDisk(false)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
+        ImageLoader.getInstance().loadImage(ImageUrl, options, new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String s, View view) {
+                ivImageView.setImageViewResource(resource, R.drawable.ic_gallery_placeholder);
+            }
+
+            @Override
+            public void onLoadingFailed(String s, View view, FailReason failReason) {
+                ivImageView.setImageViewResource(resource, R.drawable.ic_gallery_placeholder);
+            }
+
+            @Override
+            public void onLoadingComplete(String s, View view, Bitmap bitmap) {
+                ivImageView.setImageViewBitmap(resource, bitmap);
+            }
+
+            @Override
+            public void onLoadingCancelled(String s, View view) {
+                ivImageView.setImageViewResource(resource, R.drawable.ic_gallery_placeholder);
+            }
+        });
     }
 }

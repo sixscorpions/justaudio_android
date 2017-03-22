@@ -99,7 +99,7 @@ public class AudioPlayerView extends LinearLayout implements
         this.favoritesFragment = fragment;
         sortPlaylist(playlist);
         parent.playerList = (ArrayList<TrackAudioModel>) playlist;
-        audioPlayer = new AudioPlayer(getContext(), playlist, AudioPlayerView.this);
+        audioPlayer = new AudioPlayer(parent, playlist, AudioPlayerView.this);
         audioPlayer.registerInvalidPathListener(this);
         initialized = true;
     }
@@ -114,7 +114,7 @@ public class AudioPlayerView extends LinearLayout implements
     public void initWithTitlePlaylist(List<TrackAudioModel> playlist, String title) {
         sortPlaylist(playlist);
         generateTitleAudio(playlist, title);
-        audioPlayer = new AudioPlayer(getContext(), playlist, AudioPlayerView.this);
+        audioPlayer = new AudioPlayer(parent, playlist, AudioPlayerView.this);
         audioPlayer.registerInvalidPathListener(this);
         initialized = true;
     }
@@ -163,6 +163,7 @@ public class AudioPlayerView extends LinearLayout implements
         try {
             audioPlayer.playAudio(trackAudioModel);
             AudioUtils.showPlayerControl(parent);
+            audioPlayer.createNewNotification();
 
         } catch (AudioListNullPointerException e) {
             dismissProgressBar();
@@ -249,29 +250,6 @@ public class AudioPlayerView extends LinearLayout implements
         }
     }
 
-    /**
-     * Create a notification player with same playlist with a custom icon.
-     *
-     * @param iconResource icon path.
-     */
-    public void createNotification(int iconResource) {
-        if (audioPlayer != null) audioPlayer.createNewNotification(iconResource);
-    }
-
-    /**
-     * Create a notification player with same playlist with a default icon
-     */
-    public void createNotification() {
-        if (audioPlayer != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                // For light theme
-                audioPlayer.createNewNotification(R.drawable.ic_notification_default_black);
-            } else {
-                // For dark theme
-                audioPlayer.createNewNotification(R.drawable.ic_notification_default_white);
-            }
-        }
-    }
 
     public List<TrackAudioModel> getMyPlaylist() {
         return audioPlayer.getPlaylist();
@@ -284,7 +262,7 @@ public class AudioPlayerView extends LinearLayout implements
     private void createJcAudioPlayer() {
         if (audioPlayer == null) {
             List<TrackAudioModel> playlist = new ArrayList<>();
-            audioPlayer = new AudioPlayer(getContext(), playlist, AudioPlayerView.this);
+            audioPlayer = new AudioPlayer(parent, playlist, AudioPlayerView.this);
         }
         audioPlayer.registerInvalidPathListener(this);
         initialized = true;

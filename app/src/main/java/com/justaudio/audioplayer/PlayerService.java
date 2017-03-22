@@ -299,7 +299,8 @@ public class PlayerService extends Service implements
         if (jcPlayerServiceListeners != null)
             for (JcPlayerServiceListener jcPlayerServiceListener : jcPlayerServiceListeners) {
                 jcPlayerServiceListener.updateTitle(currentTrackAudioModel.getTitle());
-                jcPlayerServiceListener.onPreparedAudio(currentTrackAudioModel.getTitle(), mediaPlayer.getDuration());
+                jcPlayerServiceListener.onPreparedAudio(currentTrackAudioModel.getTitle(),
+                        mediaPlayer.getDuration());
             }
 
         if (notificationListener != null) {

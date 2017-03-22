@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import com.justaudio.R;
+import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.utils.AudioUtils;
 
@@ -24,14 +26,14 @@ class AudioPlayer {
     private List<TrackAudioModel> playlist;
     private TrackAudioModel currentTrackAudioModel;
     private int currentPositionList;
-    private Context context;
+    private HomeActivity context;
     private static AudioPlayer instance = null;
     private boolean mBound = false;
     private boolean playing;
     private boolean paused;
     private int position = 1;
 
-    AudioPlayer(Context context, List<TrackAudioModel> list, PlayerService.JcPlayerServiceListener listener) {
+    AudioPlayer(HomeActivity context, List<TrackAudioModel> list, PlayerService.JcPlayerServiceListener listener) {
         this.context = context;
         this.playlist = list;
         this.listener = listener;
@@ -152,9 +154,10 @@ class AudioPlayer {
         }
     }
 
-    public void createNewNotification(int iconResource) {
+    public void createNewNotification() {
         if (currentTrackAudioModel != null)
-            notificationPlayer.createNotificationPlayer(currentTrackAudioModel.getTitle(), iconResource);
+            notificationPlayer.createNotificationPlayer(currentTrackAudioModel.getTitle(),
+                    currentTrackAudioModel.getThumbnail_image());
     }
 
     public void updateNotification() {

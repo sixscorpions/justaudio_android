@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +26,8 @@ import com.justaudio.services.JSONTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ${VIDYA}
@@ -109,8 +112,23 @@ public class CustomDialog {
         tv_dialog_add_que.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (activity.player.getVisibility() == View.INVISIBLE) {
+                    activity.pause_button_position = 0;
+                    List<TrackAudioModel> playlist = new ArrayList<>();
+                    playlist.add(mData);
+                    activity.player.initPlaylist(playlist, null);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            activity.player.playAudio(mData);
+                        }
+                    }, 100);
+                } else
+                    activity.player.addAudio(mData);
+
                 dialog.dismiss();
-                activity.player.addAudio(mData);
             }
         });
 
