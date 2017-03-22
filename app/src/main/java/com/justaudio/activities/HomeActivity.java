@@ -259,6 +259,11 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
         CustomDialog.hideProgressBar(this);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        //player.createNotification();
+    }
 
     @Override
     public void onAudioFocusChange(int focusChange) {

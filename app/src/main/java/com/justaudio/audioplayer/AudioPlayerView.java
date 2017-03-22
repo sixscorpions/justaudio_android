@@ -163,6 +163,7 @@ public class AudioPlayerView extends LinearLayout implements
         try {
             audioPlayer.playAudio(trackAudioModel);
             AudioUtils.showPlayerControl(parent);
+
         } catch (AudioListNullPointerException e) {
             dismissProgressBar();
             e.printStackTrace();
