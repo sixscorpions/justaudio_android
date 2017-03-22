@@ -105,7 +105,7 @@ public class NowPlayingAdapter extends BaseAdapter {
         holder.iv_list_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomDialog.showMoreRemoveDialog(parent, mData);
+                CustomDialog.showMoreRemoveDialog(parent, mData, position);
             }
         });
 

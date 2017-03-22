@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -130,8 +131,9 @@ public class CustomDialog {
     }
 
 
-    public static void showMoreRemoveDialog(final HomeActivity activity, final TrackAudioModel mData) {
+    public static void showMoreRemoveDialog(final HomeActivity activity, final TrackAudioModel mData, final int position) {
 
+        Log.d("position", "" + position);
 
         final Dialog dialog = new Dialog(activity);
         dialog.getWindow().getAttributes().windowAnimations = R.style.anim_list_dialog;
@@ -173,6 +175,11 @@ public class CustomDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                if (activity.pause_button_position == position) {
+                    activity.pause_button_position = -1;
+                } else if (activity.pause_button_position > position) {
+                    activity.pause_button_position = activity.pause_button_position - 1;
+                }
                 activity.player.removeAudio(mData);
             }
         });
