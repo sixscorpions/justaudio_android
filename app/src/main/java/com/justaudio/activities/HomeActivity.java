@@ -1,5 +1,6 @@
 package com.justaudio.activities;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -268,11 +269,10 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
 
     @Override
     public void onAudioFocusChange(int focusChange) {
+
         if (focusChange <= 0) {
             if (player != null)
                 player.pause();
-        } else {
-            player.continueAudio();
         }
     }
 
@@ -305,6 +305,9 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
                         minimizeApp();
                     break;
                 case PlayerFragment.TAG:
+                    super.onBackPressed();
+                    break;
+                case FavoritesFragment.TAG:
                     super.onBackPressed();
                     break;
                 default:
