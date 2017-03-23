@@ -213,6 +213,13 @@ class AudioPlayer {
         return paused;
     }
 
+
+    public void killTheAppFromBackground() {
+        kill();
+        notificationPlayer.destroyNotificationIfExists();
+        context.finishAffinity();
+    }
+
     public void kill() {
         if (playerService != null) {
             playerService.stop();

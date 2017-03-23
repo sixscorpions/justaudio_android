@@ -35,7 +35,9 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     public static final int PREVIOUS_ID = 1;
     public static final int PLAY_ID = 2;
     public static final int PAUSE_ID = 3;
+    public static final int CLOSE_ID = 4;
     public static final String NEXT = "NEXT";
+    public static final String CLOSE = "CLOSE";
     public static final String PREVIOUS = "PREVIOUS";
     public static final String PAUSE = "PAUSE";
     public static final String PLAY = "PLAY";
@@ -120,9 +122,11 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
         if (AudioPlayer.getInstance().isPaused()) {
             remoteView = new RemoteViews(context.getPackageName(), R.layout.notification_play);
             remoteView.setOnClickPendingIntent(R.id.btn_play_notification, buildPendingIntent(PLAY, PLAY_ID));
+            remoteView.setOnClickPendingIntent(R.id.iv_notification_cancel, buildPendingIntent(CLOSE, CLOSE_ID));
         } else {
             remoteView = new RemoteViews(context.getPackageName(), R.layout.notification_pause);
             remoteView.setOnClickPendingIntent(R.id.btn_pause_notification, buildPendingIntent(PAUSE, PAUSE_ID));
+            remoteView.setOnClickPendingIntent(R.id.iv_notification_cancel, buildPendingIntent(CLOSE, CLOSE_ID));
         }
 
 
