@@ -59,17 +59,29 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
             notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Notification notification = new Notification.Builder(context)
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
+                    .setVisibility(Notification.VISIBILITY_PUBLIC)
+                    .setSmallIcon(R.drawable.ic_notification_default_white)
+                    .setContentTitle(title)
+                    .setCustomBigContentView(createNotificationPlayerView())
+                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
+                            openUi, PendingIntent.FLAG_CANCEL_CURRENT))
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                            R.drawable.ic_notification_default_white))
+                    .setCategory(Notification.CATEGORY_SOCIAL);
+
+            /*NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
                     .setSmallIcon(R.drawable.ic_notification_default_white)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                             R.drawable.ic_notification_default_white))
-                    .setContent(createNotificationPlayerView())
+                    .setCustomContentView(createNotificationPlayerView())
                     .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
                             openUi, PendingIntent.FLAG_CANCEL_CURRENT))
                     .setCategory(Notification.CATEGORY_SOCIAL)
-                    .build();
-            notificationManager.notify(NOTIFICATION_ID, notification);
+                    .build();*/
+            notificationManager.notify(NOTIFICATION_ID, builder.build());
 
         } else {
 
@@ -112,7 +124,6 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
         return remoteView;
     }
-
 
 
     private PendingIntent buildPendingIntent(String action, int id) {
