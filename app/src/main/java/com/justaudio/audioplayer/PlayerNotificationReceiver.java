@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.justaudio.activities.HomeActivity;
+
 public class PlayerNotificationReceiver extends BroadcastReceiver {
     public PlayerNotificationReceiver() {
     }
@@ -13,10 +15,10 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
         AudioPlayer audioPlayer = AudioPlayer.getInstance();
         String action = "";
 
-        if(intent.hasExtra(NotificationPlayer.ACTION))
+        if (intent.hasExtra(NotificationPlayer.ACTION))
             action = intent.getStringExtra(NotificationPlayer.ACTION);
 
-        switch (action){
+        switch (action) {
             case NotificationPlayer.PLAY:
                 try {
                     audioPlayer.continueAudio();
@@ -41,6 +43,15 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
                         e1.printStackTrace();
                     }
                 }
+
+                if (HomeActivity.pause_button_position == audioPlayer.getPlaylist().size() - 1)
+                    HomeActivity.pause_button_position = 0;
+                else
+                    HomeActivity.pause_button_position = HomeActivity.pause_button_position + 1;
+
+                if (HomeActivity.adapter != null)
+                    HomeActivity.adapter.notifyDataSetChanged();
+
                 break;
 
             case NotificationPlayer.PREVIOUS:
@@ -53,6 +64,14 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
                         e1.printStackTrace();
                     }
                 }
+
+                if (HomeActivity.pause_button_position == 0)
+                    HomeActivity.pause_button_position = audioPlayer.getPlaylist().size() - 1;
+                else
+                    HomeActivity.pause_button_position = HomeActivity.pause_button_position - 1;
+
+                if (HomeActivity.adapter != null)
+                    HomeActivity.adapter.notifyDataSetChanged();
                 break;
         }
     }

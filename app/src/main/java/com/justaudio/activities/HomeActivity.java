@@ -54,11 +54,11 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
     private ImageView iv_now_playing_close;
 
     private ListView lv_player;
-    private NowPlayingAdapter adapter;
+    public static NowPlayingAdapter adapter;
 
     public MovieInfoModel audioModel;
     public ArrayList<TrackAudioModel> playerList;
-    public int pause_button_position = -1;
+    public static int pause_button_position = -1;
     private String title = "";
 
     @Override
