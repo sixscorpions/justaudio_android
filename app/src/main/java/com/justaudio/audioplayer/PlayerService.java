@@ -1,6 +1,8 @@
 package com.justaudio.audioplayer;
 
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
@@ -203,6 +205,13 @@ public class PlayerService extends Service implements
     @Override
     public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
 
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.cancel(NotificationPlayer.NOTIFICATION_ID);
     }
 
     @Override

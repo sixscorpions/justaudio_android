@@ -3,16 +3,20 @@ package com.justaudio.audioplayer;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import com.justaudio.R;
+import com.justaudio.activities.HomeActivity;
 import com.justaudio.utils.UILoader;
 
 import java.io.BufferedInputStream;
@@ -39,24 +43,43 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     public static final String PLAYLIST = "PLAYLIST";
     public static final String CURRENT_AUDIO = "CURRENT_AUDIO";
     private NotificationManager notificationManager;
-    private Context context;
+    private HomeActivity context;
     private String title;
     private String time = "00:00";
     private String iconResource;
 
-    public NotificationPlayer(Context context) {
+    public NotificationPlayer(HomeActivity context) {
         this.context = context;
     }
 
-    public void createNotificationPlayer(String title, String iconResourceResource) {
+    public void createNotificationPlayer(final String title, String iconResourceResource) {
         this.title = title;
         this.iconResource = iconResourceResource;
-        Intent openUi = new Intent(context, context.getClass());
+        final Intent openUi = new Intent(context, context.getClass());
         openUi.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         AudioPlayer.getInstance().registerNotificationListener(this);
 
         if (notificationManager == null)
             notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        ServiceConnection mConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                Intent intent = new Intent(context, KillNotificationsService.class);
+                ((KillNotificationsService.KillBinder) service).service.startService(intent);
+                createNotificationData(openUi);
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+
+            }
+        };
+        context.bindService(new Intent(context, KillNotificationsService.class), mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+
+    private void createNotificationData(Intent openUi) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -70,21 +93,9 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                             R.drawable.ic_notification_default_white))
                     .setCategory(Notification.CATEGORY_SOCIAL);
-
-            /*NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                    .setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setSmallIcon(R.drawable.ic_notification_default_white)
-                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                            R.drawable.ic_notification_default_white))
-                    .setCustomContentView(createNotificationPlayerView())
-                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
-                            openUi, PendingIntent.FLAG_CANCEL_CURRENT))
-                    .setCategory(Notification.CATEGORY_SOCIAL)
-                    .build();*/
             notificationManager.notify(NOTIFICATION_ID, builder.build());
 
         } else {
-
             NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
                     .setSmallIcon(R.drawable.ic_notification_default_white)
