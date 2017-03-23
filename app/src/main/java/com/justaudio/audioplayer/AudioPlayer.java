@@ -216,7 +216,6 @@ class AudioPlayer {
 
     public void killTheAppFromBackground() {
         kill();
-        notificationPlayer.destroyNotificationIfExists();
         context.finishAffinity();
     }
 

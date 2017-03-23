@@ -51,7 +51,7 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
 
     public LinearLayout ll_empty_player;
     private LinearLayout ll_playing;
-    private ImageView iv_now_playing_close;
+    public ImageView iv_now_playing_close;
 
     private ListView lv_player;
     public static NowPlayingAdapter adapter;

@@ -96,11 +96,11 @@ public class FavoritesAdapter extends BaseAdapter {
                 R.drawable.icon_list_holder);
 
 
-        /*UPDATE PLAY AND PAUSE BUTTON*/
+      /*  *//*UPDATE PLAY AND PAUSE BUTTON*//*
         if (favoritesFragment.pause_button_position == position)
             holder.iv_list_play.setImageResource(R.drawable.icon_stop);
         else
-            holder.iv_list_play.setImageResource(R.drawable.icon_play);
+            holder.iv_list_play.setImageResource(R.drawable.icon_play);*/
 
 
         /*PLAY THE AUDIO*/
@@ -108,8 +108,8 @@ public class FavoritesAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
 
-                favoritesFragment.pause_button_position = position;
-                favoritesFragment.updateCurrentUI();
+                HomeActivity.pause_button_position = position;
+                parent.updateCurrentUI();
 
                 parent.player.initPlaylist(playerList, favoritesFragment);
                 Handler handler = new Handler();

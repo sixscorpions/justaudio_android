@@ -6,6 +6,7 @@ import android.content.res.AssetFileDescriptor;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.ViewUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -149,6 +150,16 @@ public class AudioPlayerView extends LinearLayout implements
 
             parent.playerList = (ArrayList<TrackAudioModel>) playlist;
             parent.updateCurrentUI();
+            clearPlayer();
+        }
+    }
+
+
+    public void clearPlayer() {
+        if (audioPlayer != null && audioPlayer.getPlaylist().size() == 0) {
+            audioPlayer.kill();
+            parent.ll_empty_player.setVisibility(View.VISIBLE);
+            parent.player.setVisibility(View.INVISIBLE);
         }
     }
 

@@ -114,7 +114,7 @@ public class CustomDialog {
             public void onClick(View v) {
 
                 if (activity.player.getVisibility() == View.INVISIBLE) {
-                    activity.pause_button_position = 0;
+                    HomeActivity.pause_button_position = 0;
                     List<TrackAudioModel> playlist = new ArrayList<>();
                     playlist.add(mData);
                     activity.player.initPlaylist(playlist, null);
@@ -127,7 +127,6 @@ public class CustomDialog {
                     }, 100);
                 } else
                     activity.player.addAudio(mData);
-
                 dialog.dismiss();
             }
         });
@@ -193,10 +192,10 @@ public class CustomDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                if (activity.pause_button_position == position) {
-                    activity.pause_button_position = -1;
-                } else if (activity.pause_button_position > position) {
-                    activity.pause_button_position = activity.pause_button_position - 1;
+                if (HomeActivity.pause_button_position == position) {
+                    HomeActivity.pause_button_position = -1;
+                } else if (HomeActivity.pause_button_position > position) {
+                    HomeActivity.pause_button_position = HomeActivity.pause_button_position - 1;
                 }
                 activity.player.removeAudio(mData);
             }
@@ -241,16 +240,39 @@ public class CustomDialog {
             }
         });
 
-        /*FEV.*/
-        TextView tv_dialog_fev = (TextView) dialog.findViewById(R.id.tv_dialog_fev);
-        tv_dialog_fev.setTypeface(FontFamily.setHelveticaTypeface(activity));
-        tv_dialog_fev.setVisibility(View.GONE);
 
-        /*REMOVE*/
+        /*ADD TO QUE*/
         TextView tv_dialog_add_que = (TextView) dialog.findViewById(R.id.tv_dialog_add_que);
-        tv_dialog_add_que.setText("Remove from favorite");
         tv_dialog_add_que.setTypeface(FontFamily.setHelveticaTypeface(activity));
         tv_dialog_add_que.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (activity.player.getVisibility() == View.INVISIBLE) {
+                    HomeActivity.pause_button_position = 0;
+                    List<TrackAudioModel> playlist = new ArrayList<>();
+                    playlist.add(mData);
+                    activity.player.initPlaylist(playlist, null);
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            activity.player.playAudio(mData);
+                        }
+                    }, 100);
+                } else
+                    activity.player.addAudio(mData);
+                dialog.dismiss();
+            }
+        });
+
+
+
+        /*REMOVE*/
+        TextView tv_dialog_fev = (TextView) dialog.findViewById(R.id.tv_dialog_fev);
+        tv_dialog_fev.setText("Remove from favorite");
+        tv_dialog_fev.setTypeface(FontFamily.setHelveticaTypeface(activity));
+        tv_dialog_fev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
