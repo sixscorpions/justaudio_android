@@ -149,7 +149,6 @@ public class AudioPlayerView extends LinearLayout implements
                 playlist.remove(trackAudioModel);
 
             parent.playerList = (ArrayList<TrackAudioModel>) playlist;
-            parent.updateCurrentUI();
             clearPlayer();
         }
     }
@@ -160,6 +159,10 @@ public class AudioPlayerView extends LinearLayout implements
             audioPlayer.kill();
             parent.ll_empty_player.setVisibility(View.VISIBLE);
             parent.player.setVisibility(View.INVISIBLE);
+            parent.iv_now_playing_close.performClick();
+            parent.onBackPressed();
+        } else {
+            parent.updateCurrentUI();
         }
     }
 
