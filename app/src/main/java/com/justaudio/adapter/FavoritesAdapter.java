@@ -63,7 +63,7 @@ public class FavoritesAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
 
-            convertView = inflater.inflate(R.layout.row_artist_list_items, view, false);
+            convertView = inflater.inflate(R.layout.row_category_items, view, false);
 
             holder.ll_click = (LinearLayout) convertView.findViewById(R.id.ll_click);
 
@@ -72,9 +72,7 @@ public class FavoritesAdapter extends BaseAdapter {
             holder.pb_list = (ProgressBar) convertView.findViewById(R.id.pb_list);
 
 
-            holder.iv_list_play = (ImageView) convertView.findViewById(R.id.iv_list_play);
 
-            holder.iv_list_more = (ImageView) convertView.findViewById(R.id.iv_list_more);
 
             //TILE TEXT
             holder.tv_list_title = (TextView) convertView.findViewById(R.id.tv_list_title);
@@ -83,6 +81,8 @@ public class FavoritesAdapter extends BaseAdapter {
             //SUB_TITLE
             holder.tv_list_subtext = (TextView) convertView.findViewById(R.id.tv_list_subtext);
             holder.tv_list_subtext.setTypeface(FontFamily.setHelveticaTypeface(parent));
+
+            holder.iv_list_more = (ImageView) convertView.findViewById(R.id.iv_list_more);
 
             convertView.setTag(holder);
         } else

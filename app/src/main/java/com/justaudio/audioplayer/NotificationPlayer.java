@@ -100,9 +100,9 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
         } else {
             NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setSmallIcon(R.drawable.ic_notification_default_white)
+                    .setSmallIcon(R.drawable.ic_notification_default_black)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                            R.drawable.ic_notification_default_white))
+                            R.drawable.ic_notification_default_black))
                     .setContent(createNotificationPlayerView())
                     .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID, openUi,
                             PendingIntent.FLAG_CANCEL_CURRENT))

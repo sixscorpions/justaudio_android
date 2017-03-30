@@ -121,18 +121,13 @@ public class PlayerListFragment extends Fragment {
                 holder = new ViewHolder();
 
 
-                convertView = inflater.inflate(R.layout.row_artist_list_items, null);
+                convertView = inflater.inflate(R.layout.row_category_items, null);
 
                 holder.ll_click = (LinearLayout) convertView.findViewById(R.id.ll_click);
 
                 //IMAGE_VIEW AND PROGRESS BAR
                 holder.iv_list = (ImageView) convertView.findViewById(R.id.iv_list);
                 holder.pb_list = (ProgressBar) convertView.findViewById(R.id.pb_list);
-
-
-                holder.iv_list_play = (ImageView) convertView.findViewById(R.id.iv_list_play);
-
-                holder.iv_list_more = (ImageView) convertView.findViewById(R.id.iv_list_more);
 
                 //TILE TEXT
                 holder.tv_list_title = (TextView) convertView.findViewById(R.id.tv_list_title);
@@ -142,6 +137,9 @@ public class PlayerListFragment extends Fragment {
                 holder.tv_list_subtext = (TextView) convertView.findViewById(R.id.tv_list_subtext);
                 holder.tv_list_subtext.setTypeface(FontFamily.setHelveticaTypeface(parent));
 
+
+                holder.iv_list_more = (ImageView) convertView.findViewById(R.id.iv_list_more);
+
                 convertView.setTag(holder);
             } else
                 holder = (ViewHolder) convertView.getTag();
@@ -150,6 +148,7 @@ public class PlayerListFragment extends Fragment {
             final TrackAudioModel mData = results.get(position);
 
             holder.tv_list_title.setText(mData.getTitle());
+
             UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(),
                     holder.pb_list, R.drawable.icon_list_holder);
 

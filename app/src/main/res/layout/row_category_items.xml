@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_card_height">
+
+        <LinearLayout
+            android:id="@+id/ll_click"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@+id/iv_list_more"
+            android:orientation="horizontal">
+
+            <com.justaudio.views.SquaredFrameLayout
+                android:layout_width="@dimen/list_card_height"
+                android:layout_height="match_parent"
+                android:padding="@dimen/_5dp">
+
+                <com.justaudio.views.CircularImageView
+                    android:id="@+id/iv_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/txt_cd"
+                    android:scaleType="centerCrop"
+                    app:civ_border="false" />
+
+                <ProgressBar
+                    android:id="@+id/pb_list"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+            </com.justaudio.views.SquaredFrameLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/list_title_left_margin"
+                android:layout_marginRight="@dimen/list_title_left_margin"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/tv_list_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="@string/app_name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_list_title_size" />
+
+                <TextView
+                    android:id="@+id/tv_list_subtext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    android:text="@string/app_name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_list_sub_text_size"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_list_more"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/list_title_left_margin"
+            android:layout_marginRight="@dimen/list_title_left_margin"
+            android:contentDescription="@string/txt_cd"
+            android:src="@drawable/icon_more" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/view_list_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1dp"
+        android:background="@drawable/icon_divider" />
+</LinearLayout>
