@@ -168,6 +168,15 @@ public class AudioPlayerView extends LinearLayout implements
 
 
     public void playAudio(TrackAudioModel trackAudioModel) {
+
+        if (parent.fl_player.getVisibility() == View.GONE) {
+            parent.runOnUiThread(new Runnable() {
+                public void run() {
+                    parent.fl_player.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
         showProgressBar();
         seekBar.setProgress(0);
         createJcAudioPlayer();

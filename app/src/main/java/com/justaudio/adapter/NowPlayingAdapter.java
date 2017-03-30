@@ -85,7 +85,7 @@ public class NowPlayingAdapter extends BaseAdapter {
 
 
         /*UPDATE PLAY AND PAUSE BUTTON*/
-        if (parent.pause_button_position == position)
+        if (HomeActivity.pause_button_position == position)
             holder.iv_list_play.setImageResource(R.drawable.icon_stop);
         else
             holder.iv_list_play.setImageResource(R.drawable.icon_play);
@@ -95,7 +95,7 @@ public class NowPlayingAdapter extends BaseAdapter {
         holder.ll_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                parent.pause_button_position = position;
+                HomeActivity.pause_button_position = position;
                 parent.updateCurrentUI();
                 parent.player.playAudio(mData);
             }

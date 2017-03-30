@@ -57,6 +57,7 @@ public class LeftMenuAdapter extends BaseAdapter {
             holder.tv_left_menu = (TextView) convertView.findViewById(R.id.tv_left_menu);
             holder.tv_left_menu.setTypeface(FontFamily.setHelveticaTypeface(context));
 
+            convertView.setTag(holder);
         } else
             holder = (ViewHolder) convertView.getTag();
 

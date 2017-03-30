@@ -96,13 +96,6 @@ public class FavoritesAdapter extends BaseAdapter {
                 R.drawable.icon_list_holder);
 
 
-      /*  *//*UPDATE PLAY AND PAUSE BUTTON*//*
-        if (favoritesFragment.pause_button_position == position)
-            holder.iv_list_play.setImageResource(R.drawable.icon_stop);
-        else
-            holder.iv_list_play.setImageResource(R.drawable.icon_play);*/
-
-
         /*PLAY THE AUDIO*/
         holder.ll_click.setOnClickListener(new View.OnClickListener() {
             @Override

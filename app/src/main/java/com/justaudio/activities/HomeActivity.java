@@ -60,6 +60,7 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
     public ArrayList<TrackAudioModel> playerList;
     public static int pause_button_position = -1;
     private String title = "";
+    public FrameLayout fl_player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,8 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
 
 
         ll_playing = (LinearLayout) findViewById(R.id.ll_playing);
+        fl_player = (FrameLayout) findViewById(R.id.fl_player);
+        fl_player.setVisibility(View.GONE);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer_layout.setFocusable(true);
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

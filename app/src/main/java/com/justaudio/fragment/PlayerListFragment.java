@@ -159,7 +159,7 @@ public class PlayerListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    parent.pause_button_position = position;
+                    HomeActivity.pause_button_position = position;
 
                     parent.player.initPlaylist(results, null);
                     Handler handler = new Handler();
