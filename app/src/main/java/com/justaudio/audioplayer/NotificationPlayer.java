@@ -81,15 +81,46 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     }
 
 
+    private void notificationNew(Intent openUi) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+            Notification foregroundNote = builder.setContentTitle(title)
+                    .setVisibility(Notification.VISIBILITY_PUBLIC)
+                    .setCategory(Notification.CATEGORY_SOCIAL)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                            R.drawable.ic_notification_default_white))
+                    .setSmallIcon(R.drawable.ic_notification_default_white)
+                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
+                            openUi, PendingIntent.FLAG_CANCEL_CURRENT))
+                    .build();
+            foregroundNote.bigContentView = createBigNotificationView();
+            notificationManager.notify(NOTIFICATION_ID, foregroundNote);
+        } else {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+            Notification foregroundNote = builder.setContentTitle(title)
+                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
+                            R.drawable.ic_notification_default_white))
+                    .setSmallIcon(R.drawable.ic_notification_default_white)
+                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
+                            openUi, PendingIntent.FLAG_CANCEL_CURRENT))
+                    .build();
+            foregroundNote.bigContentView = createBigNotificationView();
+            notificationManager.notify(NOTIFICATION_ID, foregroundNote);
+        }
+
+    }
+
+
     private void createNotificationData(Intent openUi) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
                     .setSmallIcon(R.drawable.ic_notification_default_white)
                     .setContentTitle(title)
-                    .setCustomBigContentView(createNotificationPlayerView())
+                    .setAutoCancel(true)
+                    .setCustomContentView(createBigNotificationView())
                     .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
                             openUi, PendingIntent.FLAG_CANCEL_CURRENT))
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
@@ -99,24 +130,25 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
         } else {
             NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context)
-                    .setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setSmallIcon(R.drawable.ic_notification_default_black)
+                    .setSmallIcon(R.drawable.ic_notification_default_white)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                            R.drawable.ic_notification_default_black))
-                    .setContent(createNotificationPlayerView())
+                            R.drawable.ic_notification_default_white))
+                    .setContent(createBigNotificationView())
+                    .setAutoCancel(true)
                     .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID, openUi,
-                            PendingIntent.FLAG_CANCEL_CURRENT))
-                    .setCategory(Notification.CATEGORY_SOCIAL);
+                            PendingIntent.FLAG_CANCEL_CURRENT));
             notificationManager.notify(NOTIFICATION_ID, notificationCompat.build());
         }
     }
 
 
-    public void updateNotification() {
+    void updateNotification() {
         createNotificationPlayer(title, iconResource);
     }
 
-    private RemoteViews createNotificationPlayerView() {
+
+
+    private RemoteViews createBigNotificationView() {
         RemoteViews remoteView;
 
         if (AudioPlayer.getInstance().isPaused()) {

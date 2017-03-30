@@ -45,6 +45,7 @@
     <dimen name="touch_default">50dp</dimen>
     <dimen name="player_height">100dp</dimen>
     <dimen name="icon_with">100dp</dimen>
+    <dimen name="icon_small_with">64dp</dimen>
     <dimen name="icon_height">80dp</dimen>
     <dimen name="text_size">12sp</dimen>
     <dimen name="player_header_height">200dp</dimen>
