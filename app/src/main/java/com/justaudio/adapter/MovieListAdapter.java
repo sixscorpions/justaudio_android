@@ -96,7 +96,7 @@ public class MovieListAdapter extends BaseAdapter {
         });
 
 
-        UILoader.UILPicLoading(holder.iv_movie, dataList.get(position).getMovie_thumbnail_image(),
+        UILoader.UILMoviePicLoading(holder.iv_movie, dataList.get(position).getMovie_thumbnail_image(),
                 holder.spinner, R.drawable.ic_gallery_placeholder);
 
         return convertView;

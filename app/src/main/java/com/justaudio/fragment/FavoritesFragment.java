@@ -118,9 +118,7 @@ public class FavoritesFragment extends Fragment implements JSONResult, IUpdateUi
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem == 0)
-                    swipe_container.setEnabled(true);
-                else swipe_container.setEnabled(false);
+                swipe_container.setEnabled(false);
             }
         });
 

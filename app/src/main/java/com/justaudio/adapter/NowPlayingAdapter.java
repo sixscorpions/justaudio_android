@@ -80,8 +80,7 @@ public class NowPlayingAdapter extends BaseAdapter {
 
         holder.tv_list_title.setText(mData.getTitle());
 
-        UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), holder.pb_list,
-                R.drawable.icon_list_holder);
+        UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), null, R.drawable.icon_list_holder);
 
 
         /*UPDATE PLAY AND PAUSE BUTTON*/

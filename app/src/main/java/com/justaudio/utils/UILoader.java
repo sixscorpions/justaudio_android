@@ -19,10 +19,52 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 public class UILoader {
 
-    public static void UILPicLoading(ImageView ivImageView, String ImageUrl, final ProgressBar progressBar, int placeholder) {
+
+
+
+
+
+    public static void UILMoviePicLoading(ImageView ivImageView, String ImageUrl, final ProgressBar progressBar, int placeholder) {
 
         DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(placeholder)
+                .showImageForEmptyUri(placeholder)
+                .showImageOnFail(placeholder)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
+
+        if (progressBar != null) {
+            ImageLoader.getInstance().displayImage(ImageUrl, ivImageView, options, new SimpleImageLoadingListener() {
+
+                @Override
+                public void onLoadingStarted(String imageUri, View view) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+
+            });
+        } else {
+            ImageLoader.getInstance().displayImage(ImageUrl, ivImageView, options);
+        }
+    }
+
+
+    public static void UILPicLoading(ImageView ivImageView, String ImageUrl, final ProgressBar progressBar, int placeholder) {
+
+        DisplayImageOptions options = new DisplayImageOptions.Builder()
                 .showImageForEmptyUri(placeholder)
                 .showImageOnFail(placeholder)
                 .cacheInMemory(true)
