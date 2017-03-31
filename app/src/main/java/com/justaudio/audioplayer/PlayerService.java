@@ -27,7 +27,7 @@ public class PlayerService extends Service implements
     private static final String TAG = PlayerService.class.getSimpleName();
 
     private final IBinder mBinder = new JcPlayerServiceBinder();
-    private MediaPlayer mediaPlayer;
+    public MediaPlayer mediaPlayer;
     private boolean isPlaying;
     private int duration;
     private int currentTime;

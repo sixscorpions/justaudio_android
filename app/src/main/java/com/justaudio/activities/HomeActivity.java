@@ -1,6 +1,5 @@
 package com.justaudio.activities;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -26,11 +25,9 @@ import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.FavoritesFragment;
 import com.justaudio.fragment.HomeFragment;
 import com.justaudio.fragment.PlayerFragment;
-import com.justaudio.interfaces.IUpdateUi;
 import com.justaudio.services.ApiConfiguration;
 import com.justaudio.services.JSONFevTask;
 import com.justaudio.services.JSONResult;
-import com.justaudio.services.JSONTask;
 import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.CustomDialog;
@@ -38,7 +35,6 @@ import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.ToolbarUtils;
 import com.justaudio.utils.Utils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -60,7 +56,6 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
     public MovieInfoModel audioModel;
     public ArrayList<TrackAudioModel> playerList;
     public static int pause_button_position = -1;
-    private String title = "";
     public FrameLayout fl_player;
 
     @Override
@@ -72,13 +67,9 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
         mAudioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
 
-        ll_playing = (LinearLayout) findViewById(R.id.ll_playing);
-        fl_player = (FrameLayout) findViewById(R.id.fl_player);
-        fl_player.setVisibility(View.GONE);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer_layout.setFocusable(true);
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
 
         /*NOW PLAYING LAYOUT*/
         lv_player = (ListView) findViewById(R.id.listView);
@@ -94,12 +85,8 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
         });
 
 
-        ll_empty_player = (LinearLayout) findViewById(R.id.ll_empty_player);
-        player = (AudioPlayerView) findViewById(R.id.player_view);
-        player.setInitializeActivity(this);
-        AudioUtils.hidePlayerControl(this);
-
-        FrameLayout fl_player = (FrameLayout) findViewById(R.id.fl_player);
+        fl_player = (FrameLayout) findViewById(R.id.fl_player);
+        fl_player.setVisibility(View.GONE);
         fl_player.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +97,15 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
                 }
             }
         });
+
+        ll_playing = (LinearLayout) findViewById(R.id.ll_playing);
+        ll_empty_player = (LinearLayout) findViewById(R.id.ll_empty_player);
+
+
+        player = (AudioPlayerView) findViewById(R.id.player_view);
+        player.setInitializeActivity(this);
+        AudioUtils.hidePlayerControl(this);
+
 
         setLeftMenuData();
     }
@@ -148,14 +144,12 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
     }
 
     private void navigateHomeFragment(String currentTitle) {
-        this.title = currentTitle;
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.INTENT_KEY_TITLE, currentTitle);
         Utils.navigateFragment(new HomeFragment(), HomeFragment.TAG, bundle, this);
     }
 
     private void navigateFavoriteFragment(String currentTitle) {
-        this.title = currentTitle;
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.INTENT_KEY_TITLE, currentTitle);
         Utils.navigateFragment(new FavoritesFragment(), FavoritesFragment.TAG, bundle, this);
@@ -292,7 +286,8 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        player.kill();
+        if (player != null)
+            player.kill();
         mAudioManager.abandonAudioFocus(this);
     }
 

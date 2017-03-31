@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
-import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
-import com.justaudio.utils.AudioUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -33,6 +31,7 @@ class AudioPlayer {
     private boolean paused;
     private int position = 1;
 
+
     AudioPlayer(HomeActivity context, List<TrackAudioModel> list, PlayerService.JcPlayerServiceListener listener) {
         this.context = context;
         this.playlist = list;
@@ -43,37 +42,38 @@ class AudioPlayer {
         initService();
     }
 
-    public void setInstance(AudioPlayer instance) {
-        this.instance = instance;
+    private void setInstance(AudioPlayer instance) {
+        AudioPlayer.instance = instance;
     }
 
-    public void registerNotificationListener(PlayerService.JcPlayerServiceListener notificationListener) {
+    void registerNotificationListener(PlayerService.JcPlayerServiceListener notificationListener) {
         this.listener = notificationListener;
         if (notificationPlayer != null)
             playerService.registerNotificationListener(notificationListener);
     }
 
-    public void registerInvalidPathListener(PlayerService.OnInvalidPathListener registerInvalidPathListener) {
+    void registerInvalidPathListener(PlayerService.OnInvalidPathListener registerInvalidPathListener) {
         this.invalidPathListener = registerInvalidPathListener;
         if (playerService != null)
             playerService.registerInvalidPathListener(invalidPathListener);
     }
 
-    public void registerServiceListener(PlayerService.JcPlayerServiceListener jcPlayerServiceListener) {
+    void registerServiceListener(PlayerService.JcPlayerServiceListener jcPlayerServiceListener) {
         this.listener = jcPlayerServiceListener;
         if (playerService != null)
             playerService.registerServicePlayerListener(jcPlayerServiceListener);
     }
 
-    public static AudioPlayer getInstance() {
+    static AudioPlayer getInstance() {
         return instance;
     }
 
-    public void playAudio(TrackAudioModel TrackAudioModel) throws AudioListNullPointerException {
+    void playAudio(TrackAudioModel TrackAudioModel) throws AudioListNullPointerException {
         if (playlist == null || playlist.size() == 0)
             throw new AudioListNullPointerException();
 
         currentTrackAudioModel = TrackAudioModel;
+
         playerService.play(currentTrackAudioModel);
         updatePositionAudioList();
         playing = true;
@@ -88,7 +88,7 @@ class AudioPlayer {
             mBound = true;
     }
 
-    public void nextAudio() throws AudioListNullPointerException {
+    void nextAudio() throws AudioListNullPointerException {
         if (playlist == null || playlist.size() == 0)
             throw new AudioListNullPointerException();
 
@@ -111,7 +111,7 @@ class AudioPlayer {
         }
     }
 
-    public void previousAudio() throws AudioListNullPointerException {
+    void previousAudio() throws AudioListNullPointerException {
         if (playlist == null || playlist.size() == 0)
             throw new AudioListNullPointerException();
 
@@ -135,13 +135,13 @@ class AudioPlayer {
         }
     }
 
-    public void pauseAudio() {
+    void pauseAudio() {
         playerService.pause(currentTrackAudioModel);
         paused = true;
         playing = false;
     }
 
-    public void continueAudio() throws AudioListNullPointerException {
+    void continueAudio() throws AudioListNullPointerException {
         if (playlist == null || playlist.size() == 0)
             throw new AudioListNullPointerException();
 
@@ -154,17 +154,17 @@ class AudioPlayer {
         }
     }
 
-    public void createNewNotification() {
+    void createNewNotification() {
         if (currentTrackAudioModel != null)
             notificationPlayer.createNotificationPlayer(currentTrackAudioModel.getTitle(),
                     currentTrackAudioModel.getThumbnail_image());
     }
 
-    public void updateNotification() {
+    void updateNotification() {
         notificationPlayer.updateNotification();
     }
 
-    public void seekTo(int time) {
+    void seekTo(int time) {
         if (playerService != null)
             playerService.seekTo(time);
     }
@@ -191,6 +191,7 @@ class AudioPlayer {
         public void onServiceConnected(ComponentName componentName, IBinder service) {
             PlayerService.JcPlayerServiceBinder binder = (PlayerService.JcPlayerServiceBinder) service;
             playerService = binder.getService();
+            playerService.stop();
 
             if (listener != null)
                 playerService.registerServicePlayerListener(listener);
@@ -209,17 +210,17 @@ class AudioPlayer {
         }
     };
 
-    public boolean isPaused() {
+    boolean isPaused() {
         return paused;
     }
 
 
-    public void killTheAppFromBackground() {
+    void killTheAppFromBackground() {
         kill();
         context.finishAffinity();
     }
 
-    public void kill() {
+    void kill() {
         if (playerService != null) {
             playerService.stop();
             playerService.destroy();
@@ -240,11 +241,11 @@ class AudioPlayer {
             AudioPlayer.getInstance().setInstance(null);
     }
 
-    public List<TrackAudioModel> getPlaylist() {
+    List<TrackAudioModel> getPlaylist() {
         return playlist;
     }
 
-    public TrackAudioModel getCurrentAudio() {
+    TrackAudioModel getCurrentAudio() {
         return playerService.getCurrentAudio();
     }
 }

@@ -186,6 +186,7 @@ public class AudioPlayerView extends LinearLayout implements
             audioPlayer.getPlaylist().add(trackAudioModel);
 
         try {
+
             audioPlayer.playAudio(trackAudioModel);
             AudioUtils.showPlayerControl(parent);
             audioPlayer.createNewNotification();
