@@ -1,13 +1,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/list_bottom_strip">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/icon_with"
-        android:background="@drawable/bg_player_dark"
         android:orientation="horizontal"
         tools:ignore="UselessParent">
 
@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="@dimen/_10dp">
+            android:padding="@dimen/_8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,28 +31,19 @@
 
                 <TextView
                     android:id="@+id/txt_current_music_notification"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_30dp"
+                    android:layout_weight="0.95"
                     android:ellipsize="marquee"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:lines="2"
+                    android:lines="1"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:requiresFadingEdge="horizontal"
                     android:scrollHorizontally="true"
                     android:text="@string/app_name"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size" />
-
-
-                <ImageView
-                    android:id="@+id/iv_notification_cancel"
-                    android:layout_width="@dimen/_30dp"
-                    android:layout_height="@dimen/_30dp"
-                    android:contentDescription="@string/txt_cd"
-                    android:src="@drawable/icon_close"
-                    android:visibility="invisible" />
 
 
                 <TextView
@@ -62,50 +53,69 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.3"
                     android:ellipsize="marquee"
-                    android:gravity="center"
+                    android:gravity="end"
                     android:maxLines="1"
                     android:scrollHorizontally="true"
-                    android:text="@string/txt_cd"
-                    android:textColor="@android:color/white"
+                    android:text="@string/txt_empty_time"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/text_size"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/_10dp">
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/_5dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/btn_prev_notification"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:background="@color/transparent"
-                    android:contentDescription="@string/txt_cd"
-                    android:src="@drawable/icon_player_prev_active" />
-
-                <ImageButton
-                    android:id="@+id/btn_pause_notification"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
-                    android:background="@color/transparent"
-                    android:contentDescription="@string/txt_cd"
-                    android:src="@drawable/icon_player_pause" />
+                    android:layout_weight="0.9"
+                    android:gravity="center">
+
+                    <ImageButton
+                        android:id="@+id/btn_prev_notification"
+                        android:layout_width="@dimen/touch_default"
+                        android:layout_height="@dimen/touch_default"
+                        android:layout_marginEnd="@dimen/_40dp"
+                        android:layout_toStartOf="@+id/btn_pause_notification"
+                        android:background="@drawable/ic_previous_white"
+                        android:contentDescription="@string/txt_cd" />
+
+                    <ImageButton
+                        android:id="@+id/btn_pause_notification"
+                        android:layout_width="@dimen/touch_default"
+                        android:layout_height="@dimen/touch_default"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_pause_white"
+                        android:contentDescription="@string/txt_cd" />
 
 
-                <ImageButton
-                    android:id="@+id/btn_next_notification"
+                    <ImageButton
+                        android:id="@+id/btn_next_notification"
+                        android:layout_width="@dimen/touch_default"
+                        android:layout_height="@dimen/touch_default"
+                        android:layout_marginStart="@dimen/_40dp"
+                        android:layout_toEndOf="@+id/btn_pause_notification"
+                        android:background="@drawable/ic_next_white"
+                        android:contentDescription="@string/txt_cd" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/iv_notification_cancel"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:background="@color/transparent"
+                    android:layout_height="wrap_content"
                     android:contentDescription="@string/txt_cd"
-                    android:src="@drawable/icon_playlist_next_active" />
+                    android:src="@drawable/ic_menu_close"
+                    android:visibility="visible" />
+            </LinearLayout>
 
-            </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

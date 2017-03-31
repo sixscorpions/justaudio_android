@@ -25,6 +25,7 @@ import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.FavoritesFragment;
 import com.justaudio.fragment.PlayerListFragment;
 import com.justaudio.utils.AudioUtils;
+import com.justaudio.utils.FontFamily;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class AudioPlayerView extends LinearLayout implements
 
     private TextView txtCurrentMusic;
     private ImageButton btnPrev;
-    private ImageButton btnPlay;
+    public ImageButton btnPlay;
     private ImageButton btnNext;
     private SeekBar seekBar;
 
@@ -75,18 +76,27 @@ public class AudioPlayerView extends LinearLayout implements
         inflate(getContext(), R.layout.layout_audio_player_controller_new, this);
 
         this.progressBarPlayer = (ProgressBar) findViewById(R.id.progress_bar_player);
-        this.btnNext = (ImageButton) findViewById(R.id.btn_next);
-        this.btnPrev = (ImageButton) findViewById(R.id.btn_prev);
-        this.btnPlay = (ImageButton) findViewById(R.id.btn_play);
-        this.txtDuration = (TextView) findViewById(R.id.txt_total_duration);
-        this.txtCurrentDuration = (TextView) findViewById(R.id.txt_current_duration);
-        this.txtCurrentMusic = (TextView) findViewById(R.id.txt_current_music);
-        this.seekBar = (SeekBar) findViewById(R.id.seek_bar);
-        this.btnPlay.setTag(R.drawable.icon_player_play);
 
-        btnNext.setOnClickListener(this);
-        btnPrev.setOnClickListener(this);
+        this.btnPlay = (ImageButton) findViewById(R.id.btn_play);
+        this.btnPlay.setTag(R.drawable.icon_player_play);
         btnPlay.setOnClickListener(this);
+
+        this.txtDuration = (TextView) findViewById(R.id.txt_total_duration);
+        this.txtDuration.setTypeface(FontFamily.setHelveticaTypeface(getContext()));
+
+        this.txtCurrentDuration = (TextView) findViewById(R.id.txt_current_duration);
+        this.txtCurrentDuration.setTypeface(FontFamily.setHelveticaTypeface(getContext()));
+
+        this.txtCurrentMusic = (TextView) findViewById(R.id.txt_current_music);
+        this.txtCurrentMusic.setTypeface(FontFamily.setHelveticaTypeface(getContext()));
+
+        this.btnNext = (ImageButton) findViewById(R.id.btn_next);
+        btnNext.setOnClickListener(this);
+
+        this.btnPrev = (ImageButton) findViewById(R.id.btn_prev);
+        btnPrev.setOnClickListener(this);
+
+        this.seekBar = (SeekBar) findViewById(R.id.seek_bar);
         seekBar.setOnSeekBarChangeListener(this);
     }
 
@@ -157,8 +167,7 @@ public class AudioPlayerView extends LinearLayout implements
     public void clearPlayer() {
         if (audioPlayer != null && audioPlayer.getPlaylist().size() == 0) {
             audioPlayer.kill();
-            parent.ll_empty_player.setVisibility(View.VISIBLE);
-            parent.player.setVisibility(View.INVISIBLE);
+            AudioUtils.hidePlayerControl(parent);
             parent.iv_now_playing_close.performClick();
             parent.onBackPressed();
         } else {
@@ -169,17 +178,10 @@ public class AudioPlayerView extends LinearLayout implements
 
     public void playAudio(TrackAudioModel trackAudioModel) {
 
-        if (parent.fl_player.getVisibility() == View.GONE) {
-            parent.runOnUiThread(new Runnable() {
-                public void run() {
-                    parent.fl_player.setVisibility(View.VISIBLE);
-                }
-            });
-        }
-
         showProgressBar();
         seekBar.setProgress(0);
         createJcAudioPlayer();
+
         if (!audioPlayer.getPlaylist().contains(trackAudioModel))
             audioPlayer.getPlaylist().add(trackAudioModel);
 

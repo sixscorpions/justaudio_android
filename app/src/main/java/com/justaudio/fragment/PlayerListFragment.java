@@ -157,7 +157,6 @@ public class PlayerListFragment extends Fragment {
             holder.ll_click.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     HomeActivity.pause_button_position = position;
 
                     parent.player.initPlaylist(results, null);

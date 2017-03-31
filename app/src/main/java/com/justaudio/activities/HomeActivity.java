@@ -28,6 +28,7 @@ import com.justaudio.fragment.HomeFragment;
 import com.justaudio.fragment.PlayerFragment;
 import com.justaudio.interfaces.IUpdateUi;
 import com.justaudio.services.ApiConfiguration;
+import com.justaudio.services.JSONFevTask;
 import com.justaudio.services.JSONResult;
 import com.justaudio.services.JSONTask;
 import com.justaudio.utils.AppConstants;
@@ -126,11 +127,8 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 drawer_layout.closeDrawers();
                 LeftMenuModel item = (LeftMenuModel) parent.getAdapter().getItem(position);
+
                 String currentTitle = item.getMenuTitle();
-
-                if (title.equalsIgnoreCase(currentTitle))
-                    return;
-
                 switch (currentTitle) {
                     case "Home":
                         navigateHomeFragment(currentTitle);
@@ -211,8 +209,8 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
         String url = String.format(Utils.getServer(this, R.string.REST_ADD_TO_FAVORITES), deviceId) + audioId;
 
 
-        JSONTask jsonDetailTask = new JSONTask(this);
-        jsonDetailTask.setMethod(JSONTask.METHOD.POST);
+        JSONFevTask jsonDetailTask = new JSONFevTask(this);
+        jsonDetailTask.setMethod(JSONFevTask.METHOD.POST);
         jsonDetailTask.setParams(new JSONObject());
         jsonDetailTask.setCode(ApiConfiguration.REST_ADD_TO_FAVORITES_CODE);
         jsonDetailTask.setServerUrl(url);
@@ -229,8 +227,8 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
         String deviceId = Utils.getDeviceID(this);
         String url = String.format(Utils.getServer(this, R.string.REST_DELETE_FROM_FAVORITES), deviceId) + audioId;
 
-        JSONTask jsonDetailTask = new JSONTask(this);
-        jsonDetailTask.setMethod(JSONTask.METHOD.DELETE);
+        JSONFevTask jsonDetailTask = new JSONFevTask(this);
+        jsonDetailTask.setMethod(JSONFevTask.METHOD.DELETE);
         jsonDetailTask.setParams(new JSONObject());
         jsonDetailTask.setCode(ApiConfiguration.REST_DELETE_FROM_FAVORITES_CODE);
         jsonDetailTask.setServerUrl(url);
@@ -241,38 +239,49 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
 
     @Override
     public void successJsonResult(int code, Object result) {
+
         if (code == ApiConfiguration.REST_ADD_TO_FAVORITES_CODE) {
-            JSONObject jObj = (JSONObject) result;
-            Toast.makeText(this, "Added.", Toast.LENGTH_SHORT).show();
+            String status = (String) result;
+            if (status.equalsIgnoreCase("true"))
+                Toast.makeText(this, "Song Added to Favorites", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Failed to Add Song", Toast.LENGTH_SHORT).show();
+
         }
 
         if (code == ApiConfiguration.REST_DELETE_FROM_FAVORITES_CODE) {
-            JSONObject jObj = (JSONObject) result;
-            Toast.makeText(this, "Added.", Toast.LENGTH_SHORT).show();
+            String status = (String) result;
+            if (status.equalsIgnoreCase("true")) {
+                updateRemovedFevAdapter();
+                Toast.makeText(this, "Song Deleted from Favorites", Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(this, "Failed to Delete", Toast.LENGTH_SHORT).show();
         }
         CustomDialog.hideProgressBar(this);
+    }
+
+
+    private void updateRemovedFevAdapter() {
+        FavoritesFragment fragment = (FavoritesFragment) getSupportFragmentManager().
+                findFragmentByTag(FavoritesFragment.TAG);
+        fragment.getMoviesData();
     }
 
     @Override
     public void failedJsonResult(int code) {
+
         if (code == ApiConfiguration.REST_ADD_TO_FAVORITES_CODE)
-            Toast.makeText(this, "Failed.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to Add Song", Toast.LENGTH_SHORT).show();
 
         if (code == ApiConfiguration.REST_DELETE_FROM_FAVORITES_CODE)
-            Toast.makeText(this, "Failed.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to Delete", Toast.LENGTH_SHORT).show();
 
         CustomDialog.hideProgressBar(this);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        //player.createNotification();
-    }
 
     @Override
     public void onAudioFocusChange(int focusChange) {
-
         if (focusChange <= 0) {
             if (player != null)
                 player.pause();

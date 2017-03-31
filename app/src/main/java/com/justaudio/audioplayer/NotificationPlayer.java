@@ -44,8 +44,10 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     public static final String ACTION = "ACTION";
     public static final String PLAYLIST = "PLAYLIST";
     public static final String CURRENT_AUDIO = "CURRENT_AUDIO";
+
     private NotificationManager notificationManager;
     private HomeActivity context;
+
     private String title;
     private String time = "00:00";
     private String iconResource;
@@ -55,11 +57,15 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     }
 
     public void createNotificationPlayer(final String title, String iconResourceResource) {
+
+        AudioPlayer.getInstance().registerNotificationListener(this);
+
+
         this.title = title;
         this.iconResource = iconResourceResource;
         final Intent openUi = new Intent(context, context.getClass());
         openUi.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        AudioPlayer.getInstance().registerNotificationListener(this);
+
 
         if (notificationManager == null)
             notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -69,7 +75,8 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
             public void onServiceConnected(ComponentName name, IBinder service) {
                 Intent intent = new Intent(context, KillNotificationsService.class);
                 ((KillNotificationsService.KillBinder) service).service.startService(intent);
-                createNotificationData(openUi);
+                if (AudioPlayer.getInstance() != null)
+                    createNotificationData(openUi);
             }
 
             @Override
@@ -77,67 +84,47 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
             }
         };
-        context.bindService(new Intent(context, KillNotificationsService.class), mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-
-    private void notificationNew(Intent openUi) {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-            Notification foregroundNote = builder.setContentTitle(title)
-                    .setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setCategory(Notification.CATEGORY_SOCIAL)
-                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                            R.drawable.ic_notification_default_white))
-                    .setSmallIcon(R.drawable.ic_notification_default_white)
-                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
-                            openUi, PendingIntent.FLAG_CANCEL_CURRENT))
-                    .build();
-            foregroundNote.bigContentView = createBigNotificationView();
-            notificationManager.notify(NOTIFICATION_ID, foregroundNote);
-        } else {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-            Notification foregroundNote = builder.setContentTitle(title)
-                    .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                            R.drawable.ic_notification_default_white))
-                    .setSmallIcon(R.drawable.ic_notification_default_white)
-                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
-                            openUi, PendingIntent.FLAG_CANCEL_CURRENT))
-                    .build();
-            foregroundNote.bigContentView = createBigNotificationView();
-            notificationManager.notify(NOTIFICATION_ID, foregroundNote);
-        }
-
+        context.bindService(new Intent(context, KillNotificationsService.class),
+                mConnection, Context.BIND_AUTO_CREATE);
     }
 
 
     private void createNotificationData(Intent openUi) {
 
+        RemoteViews contentView = createBigNotificationView();
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setVisibility(Notification.VISIBILITY_PUBLIC)
-                    .setSmallIcon(R.drawable.ic_notification_default_white)
-                    .setContentTitle(title)
+                    .setCategory(Notification.CATEGORY_SOCIAL)
                     .setAutoCancel(true)
-                    .setCustomContentView(createBigNotificationView())
-                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
-                            openUi, PendingIntent.FLAG_CANCEL_CURRENT))
+                    .setContentTitle(title)
+                    .setSmallIcon(R.drawable.ic_notification_default_white)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                             R.drawable.ic_notification_default_white))
-                    .setCategory(Notification.CATEGORY_SOCIAL);
-            notificationManager.notify(NOTIFICATION_ID, builder.build());
+                    .setContent(contentView)
+                    .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
+                            openUi, PendingIntent.FLAG_CANCEL_CURRENT));
+
+            Notification notification = builder.build();
+            notification.flags |= Notification.FLAG_NO_CLEAR;
+            notificationManager.notify(NOTIFICATION_ID, notification);
 
         } else {
-            NotificationCompat.Builder notificationCompat = new NotificationCompat.Builder(context)
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.ic_notification_default_white)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                             R.drawable.ic_notification_default_white))
-                    .setContent(createBigNotificationView())
                     .setAutoCancel(true)
+                    .setContentTitle(title)
+                    .setContent(contentView)
                     .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID, openUi,
                             PendingIntent.FLAG_CANCEL_CURRENT));
-            notificationManager.notify(NOTIFICATION_ID, notificationCompat.build());
+
+            Notification notification = builder.build();
+            notification.flags |= Notification.FLAG_NO_CLEAR;
+            notificationManager.notify(NOTIFICATION_ID, notification);
         }
     }
 
@@ -147,10 +134,8 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     }
 
 
-
     private RemoteViews createBigNotificationView() {
         RemoteViews remoteView;
-
         if (AudioPlayer.getInstance().isPaused()) {
             remoteView = new RemoteViews(context.getPackageName(), R.layout.notification_play);
             remoteView.setOnClickPendingIntent(R.id.btn_play_notification, buildPendingIntent(PLAY, PLAY_ID));
@@ -177,7 +162,8 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
         Intent playIntent = new Intent(context.getApplicationContext(), PlayerNotificationReceiver.class);
         playIntent.putExtra(ACTION, action);
 
-        return PendingIntent.getBroadcast(context.getApplicationContext(), id, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getBroadcast(context.getApplicationContext(),
+                id, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     @Override

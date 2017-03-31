@@ -157,13 +157,13 @@ public class FavoritesFragment extends Fragment implements JSONResult, IUpdateUi
     /*
     * GET THE DATA FORM THE SERVER
     * */
-    private void getMoviesData() {
+    public void getMoviesData() {
 
         if (getMoviesTask != null)
             getMoviesTask.cancel(true);
 
         String deviceId = Utils.getDeviceID(parent);
-        String url = String.format(Utils.getServer(parent, R.string.REST_ADD_TO_FAVORITES), 1);
+        String url = String.format(Utils.getServer(parent, R.string.REST_ADD_TO_FAVORITES), deviceId);
 
         getMoviesTask = new JSONArrayTask(this);
         getMoviesTask.setMethod(JSONArrayTask.METHOD.GET);
