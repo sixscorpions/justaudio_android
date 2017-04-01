@@ -48,7 +48,6 @@ public class AudioPlayerView extends LinearLayout implements
     private TextView txtDuration;
 
     private TextView txtCurrentDuration;
-    private AssetFileDescriptor assetFileDescriptor;
     private boolean initialized;
     private HomeActivity parent;
     private FavoritesFragment favoritesFragment;
@@ -113,66 +112,6 @@ public class AudioPlayerView extends LinearLayout implements
         audioPlayer = new AudioPlayer(parent, playlist, AudioPlayerView.this);
         audioPlayer.registerInvalidPathListener(this);
         initialized = true;
-    }
-
-
-    /**
-     * Initialize an anonymous playlist, but with a custom title for all audios
-     *
-     * @param playlist List of TrackAudioModel files.
-     * @param title    Default title for all audios
-     */
-    public void initWithTitlePlaylist(List<TrackAudioModel> playlist, String title) {
-        sortPlaylist(playlist);
-        generateTitleAudio(playlist, title);
-        audioPlayer = new AudioPlayer(parent, playlist, AudioPlayerView.this);
-        audioPlayer.registerInvalidPathListener(this);
-        initialized = true;
-    }
-
-    /**
-     * Add an audio for the playlist
-     */
-    public void addAudio(TrackAudioModel trackAudioModel) {
-
-        if (audioPlayer == null)
-            createJcAudioPlayer();
-
-        List<TrackAudioModel> playlist = audioPlayer.getPlaylist();
-        int lastPosition = playlist.size();
-        trackAudioModel.setPosition(lastPosition + 1);
-
-        if (!playlist.contains(trackAudioModel))
-            playlist.add(lastPosition, trackAudioModel);
-    }
-
-    /**
-     * Remove an audio for the playlist
-     *
-     * @param trackAudioModel TrackAudioModel object
-     */
-    public void removeAudio(TrackAudioModel trackAudioModel) {
-        if (audioPlayer != null) {
-            List<TrackAudioModel> playlist = audioPlayer.getPlaylist();
-
-            if (playlist != null && playlist.contains(trackAudioModel))
-                playlist.remove(trackAudioModel);
-
-            parent.playerList = (ArrayList<TrackAudioModel>) playlist;
-            clearPlayer();
-        }
-    }
-
-
-    public void clearPlayer() {
-        if (audioPlayer != null && audioPlayer.getPlaylist().size() == 0) {
-            audioPlayer.kill();
-            AudioUtils.hidePlayerControl(parent);
-            parent.iv_now_playing_close.performClick();
-            parent.onBackPressed();
-        } else {
-            parent.updateCurrentUI();
-        }
     }
 
 
@@ -247,6 +186,51 @@ public class AudioPlayerView extends LinearLayout implements
         parent.updatePreUI();
     }
 
+    /**
+     * Add an audio for the playlist
+     */
+    public void addAudio(TrackAudioModel trackAudioModel) {
+
+        if (audioPlayer == null)
+            createJcAudioPlayer();
+
+        List<TrackAudioModel> playlist = audioPlayer.getPlaylist();
+        int lastPosition = playlist.size();
+        trackAudioModel.setPosition(lastPosition + 1);
+
+        if (!playlist.contains(trackAudioModel))
+            playlist.add(lastPosition, trackAudioModel);
+    }
+
+    /**
+     * Remove an audio for the playlist
+     *
+     * @param trackAudioModel TrackAudioModel object
+     */
+    public void removeAudio(TrackAudioModel trackAudioModel) {
+        if (audioPlayer != null) {
+            List<TrackAudioModel> playlist = audioPlayer.getPlaylist();
+
+            if (playlist != null && playlist.contains(trackAudioModel))
+                playlist.remove(trackAudioModel);
+
+            parent.playerList = (ArrayList<TrackAudioModel>) playlist;
+            updatePlayer();
+        }
+    }
+
+
+    public void updatePlayer() {
+        if (audioPlayer != null && audioPlayer.getPlaylist().size() == 0) {
+            audioPlayer.kill();
+            AudioUtils.hidePlayerControl(parent);
+            parent.iv_now_playing_close.performClick();
+            parent.onBackPressed();
+        } else {
+            parent.updateCurrentUI();
+        }
+    }
+
     @Override
     public void onClick(View view) {
         if (initialized)
@@ -298,15 +282,6 @@ public class AudioPlayerView extends LinearLayout implements
         for (int i = 0; i < playlist.size(); i++) {
             TrackAudioModel trackAudioModel = playlist.get(i);
             trackAudioModel.setPosition(i);
-        }
-    }
-
-    private void generateTitleAudio(List<TrackAudioModel> playlist, String title) {
-        for (int i = 0; i < playlist.size(); i++) {
-            if (title.equals(getContext().getString(R.string.txt_cd)))
-                playlist.get(i).setTitle(getContext().getString(R.string.txt_cancel) + " " + String.valueOf(i + 1));
-            else
-                playlist.get(i).setTitle(title);
         }
     }
 

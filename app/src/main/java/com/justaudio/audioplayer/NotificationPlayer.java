@@ -103,7 +103,7 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
                     .setSmallIcon(R.drawable.ic_notification_default_white)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                             R.drawable.ic_notification_default_white))
-                    .setContent(contentView)
+                    .setCustomContentView(contentView)
                     .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
                             openUi, PendingIntent.FLAG_CANCEL_CURRENT));
 
@@ -118,7 +118,7 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
                             R.drawable.ic_notification_default_white))
                     .setAutoCancel(true)
                     .setContentTitle(title)
-                    .setContent(contentView)
+                    .setCustomContentView(contentView)
                     .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID, openUi,
                             PendingIntent.FLAG_CANCEL_CURRENT));
 
@@ -206,7 +206,7 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     @Override
     public void updateTitle(String title) {
         this.title = title;
-        createNotificationPlayer(title, iconResource);
+        //createNotificationPlayer(title, iconResource);
     }
 
     public void destroyNotificationIfExists() {

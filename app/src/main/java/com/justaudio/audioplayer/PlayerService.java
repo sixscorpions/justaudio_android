@@ -207,12 +207,6 @@ public class PlayerService extends Service implements
 
     }
 
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.cancel(NotificationPlayer.NOTIFICATION_ID);
-    }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
