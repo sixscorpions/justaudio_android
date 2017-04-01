@@ -39,7 +39,7 @@ public class CustomDialog {
     /*SHOW PROGRESS BAR*/
     public static Dialog showProgressDialog(BaseActivity baseActivity, boolean cancelable) {
 
-        Dialog mDialog = new Dialog(baseActivity);
+        Dialog mDialog = new Dialog(baseActivity, R.style.NewDialog);
         mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         LayoutInflater mInflater = LayoutInflater.from(baseActivity);
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -72,7 +72,6 @@ public class CustomDialog {
 
     public static void showMoreAddDialog(final HomeActivity activity, final TrackAudioModel mData) {
 
-
         final Dialog dialog = new Dialog(activity);
         dialog.getWindow().getAttributes().windowAnimations = R.style.anim_list_dialog;
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -82,6 +81,12 @@ public class CustomDialog {
         dialog.getWindow().setLayout(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+
+        /*TITLE*/
+        TextView tv_info_title = (TextView) dialog.findViewById(R.id.tv_info_title);
+        tv_info_title.setTypeface(FontFamily.setHelveticaTypeface(activity), Typeface.BOLD);
+        tv_info_title.setText("" + mData.getTitle());
 
 
         /*CANCEL*/
@@ -150,7 +155,6 @@ public class CustomDialog {
 
     public static void showMoreRemoveDialog(final HomeActivity activity, final TrackAudioModel mData, final int position) {
 
-        Log.d("position", "" + position);
 
         final Dialog dialog = new Dialog(activity);
         dialog.getWindow().getAttributes().windowAnimations = R.style.anim_list_dialog;
@@ -162,6 +166,10 @@ public class CustomDialog {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+       /*TITLE*/
+        TextView tv_info_title = (TextView) dialog.findViewById(R.id.tv_info_title);
+        tv_info_title.setTypeface(FontFamily.setHelveticaTypeface(activity), Typeface.BOLD);
+        tv_info_title.setText("" + mData.getTitle());
 
         /*CANCEL*/
         ImageView iv_dialog_close = (ImageView) dialog.findViewById(R.id.iv_info_close);
@@ -230,6 +238,11 @@ public class CustomDialog {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
+
+        /*TITLE*/
+        TextView tv_info_title = (TextView) dialog.findViewById(R.id.tv_info_title);
+        tv_info_title.setTypeface(FontFamily.setHelveticaTypeface(activity), Typeface.BOLD);
+        tv_info_title.setText("" + mData.getTitle());
 
         /*CANCEL*/
         ImageView iv_dialog_close = (ImageView) dialog.findViewById(R.id.iv_info_close);

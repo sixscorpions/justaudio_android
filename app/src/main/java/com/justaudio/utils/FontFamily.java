@@ -17,30 +17,20 @@ public class FontFamily {
 
 
     /**
-     * ARIAL REGULAR
+     * ROBOTO REGULAR
      **/
     public static Typeface setHelveticaTypeface(Context context) {
-        return Typeface.createFromAsset(context.getAssets(), "fonts/Helvetica_Reg.ttf");
+        return Typeface.createFromAsset(context.getAssets(), "fonts/roboto_reguler.ttf");
     }
 
 
-    /*
-    SET THE VIEWPAGER TYPE FACE
-    * */
-    public static void setViewPageTypeface(BaseActivity parent, TabLayout tabLayout) {
-        ViewGroup vg = (ViewGroup) tabLayout.getChildAt(0);
-        int tabsCount = vg.getChildCount();
-        for (int j = 0; j < tabsCount; j++) {
-            ViewGroup vgTab = (ViewGroup) vg.getChildAt(j);
-            int tabChildsCount = vgTab.getChildCount();
-            for (int i = 0; i < tabChildsCount; i++) {
-                View tabViewChild = vgTab.getChildAt(i);
-                if (tabViewChild instanceof TextView) {
-                    ((TextView) tabViewChild).setTypeface(FontFamily.setHelveticaTypeface(parent), Typeface.BOLD);
-                }
-            }
-        }
+    public static String getServerString(String value) {
+        String str;
+        if (value == null || value.equals("") || value.equals("null")
+                || value.trim().length() == 0) {
+            str = "- -";
+        } else
+            str = value;
+        return str;
     }
-
-
 }

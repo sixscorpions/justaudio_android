@@ -53,7 +53,7 @@
                 <LinearLayout
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.85"
+                    android:layout_weight="0.8"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -78,14 +78,20 @@
                         android:visibility="gone" />
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/iv_list_play"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/iv_play_list_size"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="0.15"
-                    android:contentDescription="@string/txt_cd"
-                    android:src="@drawable/icon_play_small" />
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.justaudio.views.GifImageView
+                        android:id="@+id/iv_list_play"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+
 
             </LinearLayout>
         </LinearLayout>

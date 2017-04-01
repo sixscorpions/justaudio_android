@@ -75,29 +75,8 @@ public class MovieListAdapter extends BaseAdapter {
 
         holder.tv_movie_name.setText(model.getMovie_name());
 
-        /*FEV. ICON*/
-        if (model.isFav())
-            holder.iv_movie_fev.setImageDrawable(Utils.getDrawable(mContext, R.drawable.icon_star_select));
-        else
-            holder.iv_movie_fev.setImageDrawable(Utils.getDrawable(mContext, R.drawable.icon_star_unselect));
-        holder.iv_movie_fev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isClicked) {
-                    isClicked = false;
-                    holder.iv_movie_fev.setImageDrawable(Utils.getDrawable
-                            (mContext, R.drawable.icon_star_unselect));
-                } else {
-                    isClicked = true;
-                    holder.iv_movie_fev.setImageDrawable(Utils.getDrawable
-                            (mContext, R.drawable.icon_star_select));
-                }
-            }
-        });
-
-
         UILoader.UILMoviePicLoading(holder.iv_movie, dataList.get(position).getMovie_thumbnail_image(),
-                holder.spinner, R.drawable.ic_gallery_placeholder);
+                null, R.drawable.icon_list_holder);
 
         return convertView;
     }

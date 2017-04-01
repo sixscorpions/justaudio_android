@@ -100,9 +100,9 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
                     .setCategory(Notification.CATEGORY_SOCIAL)
                     .setAutoCancel(true)
                     .setContentTitle(title)
-                    .setSmallIcon(R.drawable.ic_notification_default_white)
+                    .setSmallIcon(R.drawable.icon_notification)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                            R.drawable.ic_notification_default_white))
+                            R.drawable.icon_notification))
                     .setCustomContentView(contentView)
                     .setContentIntent(PendingIntent.getActivity(context, NOTIFICATION_ID,
                             openUi, PendingIntent.FLAG_CANCEL_CURRENT));
@@ -115,7 +115,7 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.ic_notification_default_white)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
-                            R.drawable.ic_notification_default_white))
+                            R.drawable.icon_notification))
                     .setAutoCancel(true)
                     .setContentTitle(title)
                     .setCustomContentView(contentView)
@@ -149,7 +149,7 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
         remoteView.setTextViewText(R.id.txt_current_music_notification, title);
         remoteView.setTextViewText(R.id.txt_duration_notification, time);
-        remoteView.setImageViewResource(R.id.icon_player, R.mipmap.ic_launcher);
+        remoteView.setImageViewResource(R.id.icon_player, R.drawable.icon_list_holder);
         //UILoader.UILNotificationPicLoading(remoteView, R.id.icon_player, iconResource);
         remoteView.setOnClickPendingIntent(R.id.btn_next_notification, buildPendingIntent(NEXT, NEXT_ID));
         remoteView.setOnClickPendingIntent(R.id.btn_prev_notification, buildPendingIntent(PREVIOUS, PREVIOUS_ID));

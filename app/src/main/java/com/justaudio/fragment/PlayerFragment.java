@@ -3,12 +3,14 @@ package com.justaudio.fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -89,6 +91,18 @@ public class PlayerFragment extends Fragment implements JSONResult {
 
         ll_main = (LinearLayout) view.findViewById(R.id.ll_main);
 
+        /*SET THE HEADER HEIGHT*/
+        FrameLayout fl_header = (FrameLayout) view.findViewById(R.id.fl_header);
+        int screenWidth = Utils.getDeviceWidth(parent);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(100, 100));
+        if (screenWidth <= 320) {
+            layoutParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(screenWidth, 200));
+        } else if (screenWidth > 320) {
+            layoutParams = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
+                    screenWidth, screenWidth * 200 / 320));
+        }
+        fl_header.setLayoutParams(layoutParams);
+
 
         ImageView iv_action_back = (ImageView) view.findViewById(R.id.iv_action_back);
         iv_action_back.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +111,6 @@ public class PlayerFragment extends Fragment implements JSONResult {
                 parent.onBackPressed();
             }
         });
-
 
         /*BACKGROUND IMAGE_VIEW*/
         iv_parallax = (ImageView) view.findViewById(R.id.iv_parallax);
@@ -240,7 +253,7 @@ public class PlayerFragment extends Fragment implements JSONResult {
 
 
         UILoader.UILDetailPicLoading(iv_parallax, model.getMovie_background_image(),
-                R.drawable.ic_gallery_placeholder);
+                R.drawable.icon_detail_holder, parent);
 
         tv_movie_name.setText("" + model.getMovie_name());
 
@@ -253,13 +266,13 @@ public class PlayerFragment extends Fragment implements JSONResult {
             }
         });
 
-        tv_info_genre_value.setText("" + model.getGenre());
-        tv_info_director_value.setText("" + model.getDirector());
-        tv_info_language_value.setText("" + model.getMovie_lang());
-        tv_info_cast_value.setText("" + model.getCast());
-        tv_info_synopsis_value.setText("" + model.getSynopsis());
-        tv_info_production_value.setText("" + model.getProducation());
-        tv_info_music_value.setText("" + model.getMusic());
+        tv_info_genre_value.setText(FontFamily.getServerString(model.getGenre()));
+        tv_info_director_value.setText(FontFamily.getServerString(model.getDirector()));
+        tv_info_language_value.setText(FontFamily.getServerString(model.getMovie_lang()));
+        tv_info_cast_value.setText(FontFamily.getServerString(model.getCast()));
+        tv_info_synopsis_value.setText(FontFamily.getServerString(model.getSynopsis()));
+        tv_info_production_value.setText(FontFamily.getServerString(model.getProducation()));
+        tv_info_music_value.setText(FontFamily.getServerString(model.getMusic()));
 
         initializeTheTabs(model);
     }

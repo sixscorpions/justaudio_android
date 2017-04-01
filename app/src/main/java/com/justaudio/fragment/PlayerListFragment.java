@@ -149,8 +149,7 @@ public class PlayerListFragment extends Fragment {
 
             holder.tv_list_title.setText(mData.getTitle());
 
-            UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(),
-                    holder.pb_list, R.drawable.icon_list_holder);
+            UILoader.UILCateListLoading(holder.iv_list, mData.getThumbnail_image(), null, R.drawable.icon_list_holder);
 
 
             /*PLAY THE AUDIO*/

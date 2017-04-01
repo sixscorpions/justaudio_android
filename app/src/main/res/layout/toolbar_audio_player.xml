@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/iv_parallax"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/player_header_height"
+            android:layout_height="match_parent"
             android:contentDescription="@string/txt_cd"
             android:fitsSystemWindows="true"
             android:scaleType="fitXY"

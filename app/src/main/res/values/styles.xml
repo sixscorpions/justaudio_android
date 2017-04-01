@@ -38,14 +38,14 @@
     </style>
 
     <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@color/transparent</item>
+        <item name="tabIndicatorColor">#9e2b0e</item>
         <item name="tabTextColor">@color/white</item>
-        <item name="tabSelectedTextColor">@color/colorPrimary</item>
-        <item name="tabIndicatorHeight">@dimen/_0dp</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+        <item name="tabIndicatorHeight">3dp</item>
     </style>
 
     <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">@dimen/tv_tab_size</item>
         <item name="textAllCaps">false</item>
     </style>
 
@@ -64,9 +64,9 @@
         <item name="android:layout_weight">0.4</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:textSize">@dimen/tv_tab_size</item>
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
     <style name="tv_movie_info_value">
@@ -75,7 +75,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/tv_tab_size</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
@@ -83,9 +83,9 @@
     <style name="tv_info_dialog">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:textSize">15sp</item>
-        <item name="android:padding">@dimen/_20dp</item>
+        <item name="android:padding">18dp</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
 
@@ -94,4 +94,17 @@
         <item name="android:windowEnterAnimation">@anim/share_dialog_slide_up</item>
         <item name="android:windowExitAnimation">@anim/share_dialog_slide_down</item>
     </style>
+
+    <style name="NewDialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowTitleStyle">@null</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

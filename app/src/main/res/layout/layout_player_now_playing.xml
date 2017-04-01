@@ -6,7 +6,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/tab_height"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/bg_tab"
         android:paddingLeft="@dimen/_10dp"
         android:paddingRight="@dimen/_10dp">
 

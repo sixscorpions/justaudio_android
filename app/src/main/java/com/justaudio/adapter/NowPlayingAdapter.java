@@ -15,6 +15,7 @@ import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.utils.CustomDialog;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.UILoader;
+import com.justaudio.views.GifImageView;
 
 /**
  * Created by ${VIDYA}
@@ -60,7 +61,8 @@ public class NowPlayingAdapter extends BaseAdapter {
             holder.pb_list = (ProgressBar) convertView.findViewById(R.id.pb_list);
 
 
-            holder.iv_list_play = (ImageView) convertView.findViewById(R.id.iv_list_play);
+            holder.iv_list_play = (GifImageView) convertView.findViewById(R.id.iv_list_play);
+            holder.iv_list_play.setImageResource(R.drawable.icon_gif_play);
 
             holder.iv_list_more = (ImageView) convertView.findViewById(R.id.iv_list_more);
 
@@ -80,14 +82,14 @@ public class NowPlayingAdapter extends BaseAdapter {
 
         holder.tv_list_title.setText(mData.getTitle());
 
+
         UILoader.UILPicLoading(holder.iv_list, mData.getThumbnail_image(), null, R.drawable.icon_list_holder);
 
 
-        /*UPDATE PLAY AND PAUSE BUTTON*/
-        if (HomeActivity.pause_button_position == position)
-            holder.iv_list_play.setImageResource(R.drawable.icon_stop);
-        else
-            holder.iv_list_play.setImageResource(R.drawable.icon_play);
+        if (HomeActivity.pause_button_position == position) {
+            holder.iv_list_play.setVisibility(View.VISIBLE);
+        } else
+            holder.iv_list_play.setVisibility(View.GONE);
 
 
         /*PLAY THE AUDIO*/
@@ -114,7 +116,7 @@ public class NowPlayingAdapter extends BaseAdapter {
 
     private class ViewHolder {
         ImageView iv_list;
-        ImageView iv_list_play;
+        GifImageView iv_list_play;
         ImageView iv_list_more;
 
         ProgressBar pb_list;

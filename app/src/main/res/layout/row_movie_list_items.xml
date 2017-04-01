@@ -19,16 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/txt_cd"
-            android:src="@drawable/test" />
+            android:contentDescription="@string/txt_cd" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="@dimen/list_bottom_strip_height"
             android:layout_gravity="bottom"
-            android:orientation="horizontal"
+            android:alpha="0.9"
             android:background="@color/list_bottom_strip"
+            android:orientation="horizontal"
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
@@ -36,8 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/txt_cd"
-                android:visibility="gone"
-                android:src="@drawable/icon_star_unselect" />
+                android:src="@drawable/icon_star_unselect"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_movie_name"
@@ -45,8 +45,9 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:lines="2"
-                android:paddingLeft="@dimen/_5dp"
-                android:paddingRight="@dimen/_5dp"
+                android:paddingLeft="@dimen/_10dp"
+                android:paddingRight="@dimen/_10dp"
+                android:textSize="@dimen/_13sp"
                 android:textColor="@color/white"
                 android:visibility="visible"
                 tools:ignore="RtlSymmetry" />
@@ -59,6 +60,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:visibility="gone"
-        android:indeterminate="false" />
+        android:indeterminate="false"
+        android:visibility="gone" />
 </com.justaudio.views.SquaredFrameLayout>

@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@drawable/bg_player_dark"
         android:orientation="vertical"
         tools:ignore="UselessParent">
@@ -27,7 +27,7 @@
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -73,7 +73,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp">
+            android:layout_height="40dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -99,8 +99,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/_30dp"
-                    android:layout_marginRight="@dimen/_30dp">
+                    android:layout_marginLeft="@dimen/_20dp"
+                    android:layout_marginRight="@dimen/_20dp">
 
                     <ImageButton
                         android:id="@+id/btn_play"

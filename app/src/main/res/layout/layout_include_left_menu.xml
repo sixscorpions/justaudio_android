@@ -11,8 +11,16 @@
     <LinearLayout
         android:id="@+id/ll_header"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="@dimen/_100dp"
+        android:gravity="center"
         android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:contentDescription="@string/txt_cd"
+            android:src="@drawable/icon_left_menu_logo" />
 
     </LinearLayout>
 
@@ -22,10 +30,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/ll_bottom"
-        android:divider="@color/transparent"
-        android:dividerHeight="0dip"
         android:layout_below="@+id/ll_header"
-        android:clickable="true" />
+        android:clickable="true"
+        android:divider="@color/transparent"
+        android:dividerHeight="0dip" />
 
 
     <LinearLayout
