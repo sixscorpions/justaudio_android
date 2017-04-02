@@ -59,6 +59,8 @@ public class PlayerService extends Service implements
         void onTimeChanged(long currentTime);
 
         void updateTitle(String title);
+
+        void updateImage(String image);
     }
 
     public interface OnInvalidPathListener {
@@ -313,6 +315,7 @@ public class PlayerService extends Service implements
         if (jcPlayerServiceListeners != null)
             for (JcPlayerServiceListener jcPlayerServiceListener : jcPlayerServiceListeners) {
                 jcPlayerServiceListener.updateTitle(currentTrackAudioModel.getTitle());
+                jcPlayerServiceListener.updateImage(currentTrackAudioModel.getThumbnail_image());
                 jcPlayerServiceListener.onPreparedAudio(currentTrackAudioModel.getTitle(),
                         mediaPlayer.getDuration());
             }

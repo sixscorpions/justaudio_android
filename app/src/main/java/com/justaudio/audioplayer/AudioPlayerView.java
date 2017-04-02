@@ -26,6 +26,7 @@ import com.justaudio.fragment.FavoritesFragment;
 import com.justaudio.fragment.PlayerListFragment;
 import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.FontFamily;
+import com.justaudio.utils.UILoader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -398,6 +399,17 @@ public class AudioPlayerView extends LinearLayout implements
             @Override
             public void run() {
                 txtCurrentDuration.setText(String.valueOf(sMinutes + ":" + sSeconds));
+            }
+        });
+    }
+
+    @Override
+    public void updateImage(final String image) {
+        parent.iv_player_image.post(new Runnable() {
+            @Override
+            public void run() {
+                UILoader.UILPicLoading(parent.iv_player_image, image, null,
+                        R.drawable.icon_list_holder);
             }
         });
     }

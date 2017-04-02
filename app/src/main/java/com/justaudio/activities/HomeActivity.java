@@ -52,6 +52,7 @@ public class HomeActivity extends BaseActivity implements JSONResult {
     public LinearLayout ll_empty_player;
     private LinearLayout ll_playing;
     public ImageView iv_now_playing_close;
+    public ImageView iv_player_image;
 
     private ListView lv_player;
     public static NowPlayingAdapter adapter;
@@ -98,6 +99,7 @@ public class HomeActivity extends BaseActivity implements JSONResult {
         });
 
 
+        iv_player_image = (ImageView) findViewById(R.id.iv_player_image);
         fl_player = (FrameLayout) findViewById(R.id.fl_player);
         fl_player.setVisibility(View.GONE);
         fl_player.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +120,6 @@ public class HomeActivity extends BaseActivity implements JSONResult {
         player = (AudioPlayerView) findViewById(R.id.player_view);
         player.setInitializeActivity(this);
         AudioUtils.hidePlayerControl(this);
-
 
         setLeftMenuData();
     }

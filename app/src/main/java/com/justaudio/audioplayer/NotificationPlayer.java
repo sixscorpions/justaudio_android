@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
@@ -17,7 +19,10 @@ import android.widget.RemoteViews;
 
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
+import com.justaudio.services.NetworkUtils;
 import com.justaudio.utils.UILoader;
+
+import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -30,20 +35,20 @@ import java.net.URLConnection;
  */
 public class NotificationPlayer implements PlayerService.JcPlayerServiceListener {
 
-    public static final int NOTIFICATION_ID = 100;
-    public static final int NEXT_ID = 0;
-    public static final int PREVIOUS_ID = 1;
-    public static final int PLAY_ID = 2;
-    public static final int PAUSE_ID = 3;
-    public static final int CLOSE_ID = 4;
-    public static final String NEXT = "NEXT";
-    public static final String CLOSE = "CLOSE";
-    public static final String PREVIOUS = "PREVIOUS";
-    public static final String PAUSE = "PAUSE";
-    public static final String PLAY = "PLAY";
-    public static final String ACTION = "ACTION";
-    public static final String PLAYLIST = "PLAYLIST";
-    public static final String CURRENT_AUDIO = "CURRENT_AUDIO";
+    private static final int NOTIFICATION_ID = 100;
+    private static final int NEXT_ID = 0;
+    private static final int PREVIOUS_ID = 1;
+    private static final int PLAY_ID = 2;
+    private static final int PAUSE_ID = 3;
+    private static final int CLOSE_ID = 4;
+    static final String NEXT = "NEXT";
+    static final String CLOSE = "CLOSE";
+    static final String PREVIOUS = "PREVIOUS";
+    static final String PAUSE = "PAUSE";
+    static final String PLAY = "PLAY";
+    static final String ACTION = "ACTION";
+    static final String PLAYLIST = "PLAYLIST";
+    static final String CURRENT_AUDIO = "CURRENT_AUDIO";
 
     private NotificationManager notificationManager;
     private HomeActivity context;
@@ -51,12 +56,13 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     private String title;
     private String time = "00:00";
     private String iconResource;
+    private String imagePath;
 
-    public NotificationPlayer(HomeActivity context) {
+    NotificationPlayer(HomeActivity context) {
         this.context = context;
     }
 
-    public void createNotificationPlayer(final String title, String iconResourceResource) {
+    void createNotificationPlayer(final String title, String iconResourceResource) {
 
         AudioPlayer.getInstance().registerNotificationListener(this);
 
@@ -149,8 +155,15 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
         remoteView.setTextViewText(R.id.txt_current_music_notification, title);
         remoteView.setTextViewText(R.id.txt_duration_notification, time);
-        remoteView.setImageViewResource(R.id.icon_player, R.drawable.icon_list_holder);
-        //UILoader.UILNotificationPicLoading(remoteView, R.id.icon_player, iconResource);
+        try {
+            Drawable d = context.iv_player_image.getDrawable();
+            Bitmap bitmap = ((BitmapDrawable) d).getBitmap();
+            remoteView.setImageViewBitmap(R.id.icon_player, bitmap);
+        } catch (NullPointerException e) {
+            remoteView.setImageViewResource(R.id.icon_player, R.drawable.icon_list_holder);
+        }
+
+
         remoteView.setOnClickPendingIntent(R.id.btn_next_notification, buildPendingIntent(NEXT, NEXT_ID));
         remoteView.setOnClickPendingIntent(R.id.btn_prev_notification, buildPendingIntent(PREVIOUS, PREVIOUS_ID));
 
@@ -206,7 +219,18 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     @Override
     public void updateTitle(String title) {
         this.title = title;
-        //createNotificationPlayer(title, iconResource);
+        createNotificationPlayer(title, iconResource);
+    }
+
+    @Override
+    public void updateImage(final String image) {
+        context.iv_player_image.post(new Runnable() {
+            @Override
+            public void run() {
+                UILoader.UILPicLoading(context.iv_player_image, image, null,
+                        R.drawable.icon_list_holder);
+            }
+        });
     }
 
     public void destroyNotificationIfExists() {
