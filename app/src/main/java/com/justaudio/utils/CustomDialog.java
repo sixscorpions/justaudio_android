@@ -319,8 +319,8 @@ public class CustomDialog {
         String link = "https://play.google.com/store/apps/details?id=com.justaudio";
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "Check out " + Utils.getStrings(parent, R.string.app_name) + "for your smartphone." +
-                "Download it today from " + link;
+        String shareBody = "Check out " + Utils.getStrings(parent, R.string.app_name) + " for your smartphone." +
+                "Download it today from " + "\n"+link;
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         parent.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }

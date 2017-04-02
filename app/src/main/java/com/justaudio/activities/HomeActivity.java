@@ -52,7 +52,6 @@ public class HomeActivity extends BaseActivity implements JSONResult {
     public LinearLayout ll_empty_player;
     private LinearLayout ll_playing;
     public ImageView iv_now_playing_close;
-    private ImageView iv_now_playing_clear;
 
     private ListView lv_player;
     public static NowPlayingAdapter adapter;
@@ -63,6 +62,7 @@ public class HomeActivity extends BaseActivity implements JSONResult {
     public FrameLayout fl_player;
 
     public static AudioManager mAudioManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,8 @@ public class HomeActivity extends BaseActivity implements JSONResult {
                 drawer_layout.setVisibility(View.VISIBLE);
             }
         });
-        iv_now_playing_clear = (ImageView) findViewById(R.id.iv_now_playing_clear);
+
+        ImageView iv_now_playing_clear = (ImageView) findViewById(R.id.iv_now_playing_clear);
         iv_now_playing_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,6 +123,11 @@ public class HomeActivity extends BaseActivity implements JSONResult {
         setLeftMenuData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils.hideSoftKeyPad(this);
+    }
 
     private void setLeftMenuData() {
 
