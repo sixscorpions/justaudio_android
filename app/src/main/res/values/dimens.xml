@@ -64,4 +64,5 @@
     <dimen name="_100dp">100dp</dimen>
     <dimen name="seekbar_cornor_radius">4dp</dimen>
     <dimen name="seekbar_width">4dp</dimen>
+    <dimen name="_35dp">35dp</dimen>
 </resources>

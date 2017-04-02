@@ -174,12 +174,12 @@ public class UILoader {
         ImageLoader.getInstance().loadImage(ImageUrl, options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String s, View view) {
-                ivImageView.setImageViewResource(resource, R.drawable.ic_gallery_placeholder);
+                ivImageView.setImageViewResource(resource, R.drawable.icon_list_holder);
             }
 
             @Override
             public void onLoadingFailed(String s, View view, FailReason failReason) {
-                ivImageView.setImageViewResource(resource, R.drawable.ic_gallery_placeholder);
+                ivImageView.setImageViewResource(resource, R.drawable.icon_list_holder);
             }
 
             @Override
@@ -189,7 +189,7 @@ public class UILoader {
 
             @Override
             public void onLoadingCancelled(String s, View view) {
-                ivImageView.setImageViewResource(resource, R.drawable.ic_gallery_placeholder);
+                ivImageView.setImageViewResource(resource, R.drawable.icon_list_holder);
             }
         });
     }

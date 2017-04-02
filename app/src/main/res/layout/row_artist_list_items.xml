@@ -86,10 +86,12 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <com.justaudio.views.GifImageView
+                    <ImageView
                         android:id="@+id/iv_list_play"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_width="@dimen/_40dp"
+                        android:layout_height="@dimen/_40dp"
+                        android:contentDescription="@string/txt_cd"
+                        android:src="@drawable/icon_hint_play" />
                 </LinearLayout>
 
 

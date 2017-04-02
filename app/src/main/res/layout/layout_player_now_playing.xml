@@ -10,6 +10,14 @@
         android:paddingLeft="@dimen/_10dp"
         android:paddingRight="@dimen/_10dp">
 
+        <ImageView
+            android:id="@+id/iv_now_playing_close"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:contentDescription="@string/txt_cd"
+            android:src="@drawable/icon_close" />
+
         <TextView
             android:id="@+id/tv_now_playing"
             android:layout_width="wrap_content"
@@ -21,12 +29,12 @@
             android:textSize="@dimen/txt_toolbar_title_size" />
 
         <ImageView
-            android:id="@+id/iv_now_playing_close"
-            android:layout_width="wrap_content"
+            android:id="@+id/iv_now_playing_clear"
+            android:layout_width="@dimen/_35dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:contentDescription="@string/txt_cd"
-            android:src="@drawable/icon_close" />
+            android:src="@drawable/icon_clear_player" />
     </FrameLayout>
 
     <LinearLayout

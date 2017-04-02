@@ -244,6 +244,16 @@ public class AudioPlayerView extends LinearLayout implements
 
     }
 
+
+    public void clearPlayer() {
+        if (audioPlayer != null) {
+            audioPlayer.kill();
+            AudioUtils.hidePlayerControl(parent);
+            parent.iv_now_playing_close.performClick();
+            parent.onBackPressed();
+        }
+    }
+
     @Override
     public void onClick(View view) {
         if (initialized)
@@ -343,6 +353,7 @@ public class AudioPlayerView extends LinearLayout implements
         resetPlayerInfo();
         try {
             audioPlayer.nextAudio();
+            parent.updateNextUI();
         } catch (Exception e) {
             e.printStackTrace();
         }

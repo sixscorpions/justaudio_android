@@ -61,8 +61,7 @@ public class NowPlayingAdapter extends BaseAdapter {
             holder.pb_list = (ProgressBar) convertView.findViewById(R.id.pb_list);
 
 
-            holder.iv_list_play = (GifImageView) convertView.findViewById(R.id.iv_list_play);
-            holder.iv_list_play.setImageResource(R.drawable.icon_gif_play);
+            holder.iv_list_play = (ImageView) convertView.findViewById(R.id.iv_list_play);
 
             holder.iv_list_more = (ImageView) convertView.findViewById(R.id.iv_list_more);
 
@@ -116,7 +115,7 @@ public class NowPlayingAdapter extends BaseAdapter {
 
     private class ViewHolder {
         ImageView iv_list;
-        GifImageView iv_list_play;
+        ImageView iv_list_play;
         ImageView iv_list_more;
 
         ProgressBar pb_list;

@@ -1,13 +1,17 @@
 package com.justaudio.activities;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,7 +23,6 @@ import com.justaudio.R;
 import com.justaudio.adapter.LeftMenuAdapter;
 import com.justaudio.adapter.NowPlayingAdapter;
 import com.justaudio.audioplayer.AudioPlayerView;
-import com.justaudio.audioplayer.PlayerNotificationReceiver;
 import com.justaudio.dto.LeftMenuModel;
 import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TrackAudioModel;
@@ -49,6 +52,7 @@ public class HomeActivity extends BaseActivity implements JSONResult {
     public LinearLayout ll_empty_player;
     private LinearLayout ll_playing;
     public ImageView iv_now_playing_close;
+    private ImageView iv_now_playing_clear;
 
     private ListView lv_player;
     public static NowPlayingAdapter adapter;
@@ -82,6 +86,13 @@ public class HomeActivity extends BaseActivity implements JSONResult {
             public void onClick(View v) {
                 ll_playing.setVisibility(View.GONE);
                 drawer_layout.setVisibility(View.VISIBLE);
+            }
+        });
+        iv_now_playing_clear = (ImageView) findViewById(R.id.iv_now_playing_clear);
+        iv_now_playing_clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showClearPlayerDialog();
             }
         });
 
@@ -196,10 +207,52 @@ public class HomeActivity extends BaseActivity implements JSONResult {
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private Dialog showClearPlayerDialog() {
+
+        final Dialog mDialog = new Dialog(this);
+        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mDialog.setContentView(R.layout.dialog_network_check);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mDialog.setCanceledOnTouchOutside(false);
+        mDialog.setCancelable(true);
+
+        TextView tv_alert_dialog_title = (TextView) mDialog.findViewById(R.id.tv_alert_dialog_title);
+        tv_alert_dialog_title.setTypeface(FontFamily.setHelveticaTypeface(this), Typeface.BOLD);
+        tv_alert_dialog_title.setText("Clear Player");
+
+        TextView tv_dialog_content = (TextView) mDialog.findViewById(R.id.tv_dialog_content);
+        tv_dialog_content.setTypeface(FontFamily.setHelveticaTypeface(this));
+        tv_dialog_content.setText("Do you want to clear the Player.");
+
+        /*YES*/
+        Button btn_dialog_cancel = (Button) mDialog.findViewById(R.id.btn_dialog_cancel);
+        btn_dialog_cancel.setTypeface(FontFamily.setHelveticaTypeface(this), Typeface.BOLD);
+        btn_dialog_cancel.setText("YES");
+        btn_dialog_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+                if (player != null)
+                    player.clearPlayer();
+            }
+        });
+
+        /*NO*/
+        Button btn_dialog_ok = (Button) mDialog.findViewById(R.id.btn_dialog_ok);
+        btn_dialog_ok.setTypeface(FontFamily.setHelveticaTypeface(this), Typeface.BOLD);
+        btn_dialog_ok.setText("NO");
+        btn_dialog_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDialog.dismiss();
+            }
+        });
+
+
+        mDialog.show();
+        return mDialog;
     }
+
 
     public void addToFavorites(long audioId) {
 

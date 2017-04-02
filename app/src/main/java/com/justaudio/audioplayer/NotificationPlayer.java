@@ -113,7 +113,7 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
         } else {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_notification_default_white)
+                    .setSmallIcon(R.drawable.icon_notification)
                     .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                             R.drawable.icon_notification))
                     .setAutoCancel(true)
