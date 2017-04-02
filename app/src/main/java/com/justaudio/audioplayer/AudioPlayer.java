@@ -73,11 +73,12 @@ class AudioPlayer {
             throw new AudioListNullPointerException();
 
         currentTrackAudioModel = TrackAudioModel;
-
-        playerService.play(currentTrackAudioModel);
-        updatePositionAudioList();
-        playing = true;
-        paused = false;
+        if (playerService != null) {
+            playerService.play(currentTrackAudioModel);
+            updatePositionAudioList();
+            playing = true;
+            paused = false;
+        }
     }
 
 

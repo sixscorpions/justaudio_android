@@ -1,8 +1,8 @@
 package com.justaudio.audioplayer;
 
 /**
- * This is the origin of Audio file.
- * Created by Joielechong on 28 November 2016.
+ *
+ * Created by VIDYA
  */
 public enum Origin {
   URL, // url like http:/www.example.com/sample.mp3

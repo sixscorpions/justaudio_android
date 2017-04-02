@@ -1,7 +1,7 @@
 package com.justaudio.audioplayer;
 
 /**
- * Created by jean on 01/09/16.
+ * Created by VIDYA
  */
 
 public class AudioUrlInvalidException extends IllegalStateException {

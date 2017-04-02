@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -19,16 +18,7 @@ import android.widget.RemoteViews;
 
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
-import com.justaudio.services.NetworkUtils;
 import com.justaudio.utils.UILoader;
-
-import org.json.JSONException;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 
 /**
  * Created by VIDYA

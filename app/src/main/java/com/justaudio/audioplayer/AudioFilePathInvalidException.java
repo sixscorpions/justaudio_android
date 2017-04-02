@@ -1,8 +1,8 @@
 package com.justaudio.audioplayer;
 
 /**
- * Invalid audio file path exception.
- * Created by Joielechong on 29 November 2016.
+ *
+ * Created by VIDYA
  */
 
 public class AudioFilePathInvalidException extends Exception {

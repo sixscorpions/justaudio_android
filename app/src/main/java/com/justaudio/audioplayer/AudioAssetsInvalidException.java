@@ -1,8 +1,8 @@
 package com.justaudio.audioplayer;
 
 /**
- * Invalid assets file exception.
- * Created by Joielechong on 29 November 2016.
+ *
+ * Created by Joielechong VIDYA
  */
 
 public class AudioAssetsInvalidException extends Exception {

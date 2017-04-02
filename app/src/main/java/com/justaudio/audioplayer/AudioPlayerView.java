@@ -2,11 +2,8 @@ package com.justaudio.audioplayer;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.ViewUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -16,14 +13,12 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.FavoritesFragment;
-import com.justaudio.fragment.PlayerListFragment;
 import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.UILoader;

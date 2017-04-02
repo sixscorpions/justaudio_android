@@ -1,8 +1,8 @@
 package com.justaudio.audioplayer;
 
 /**
- * Invalid raw resource file id exception.
- * Created by Joielechong on 29 November 2016.
+ *
+ * Created by VIDYA
  */
 public class AudioRawInvalidException extends Exception {
     public AudioRawInvalidException(String rawId){
