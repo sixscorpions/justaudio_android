@@ -3,6 +3,7 @@ package com.justaudio.audioplayer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 
 import com.justaudio.activities.HomeActivity;
 
@@ -20,6 +21,7 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
 
         switch (action) {
             case NotificationPlayer.PLAY:
+
                 try {
                     audioPlayer.continueAudio();
                     audioPlayer.updateNotification();
@@ -78,4 +80,5 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
                 break;
         }
     }
+
 }

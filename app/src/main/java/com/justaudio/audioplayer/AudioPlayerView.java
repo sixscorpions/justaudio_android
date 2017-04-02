@@ -166,7 +166,13 @@ public class AudioPlayerView extends LinearLayout implements
     }
 
     public void pause() {
-        audioPlayer.pauseAudio();
+        try {
+            if (audioPlayer != null)
+                audioPlayer.pauseAudio();
+        } catch (AudioListNullPointerException e) {
+            dismissProgressBar();
+        }
+
     }
 
     public void previous() {
@@ -211,6 +217,11 @@ public class AudioPlayerView extends LinearLayout implements
         if (audioPlayer != null) {
             List<TrackAudioModel> playlist = audioPlayer.getPlaylist();
 
+            if (getCurrentAudio() == trackAudioModel) {
+                if (audioPlayer.getPlaylist().size() != 0)
+                    next();
+            }
+
             if (playlist != null && playlist.contains(trackAudioModel))
                 playlist.remove(trackAudioModel);
 
@@ -221,7 +232,8 @@ public class AudioPlayerView extends LinearLayout implements
 
 
     public void updatePlayer() {
-        if (audioPlayer != null && audioPlayer.getPlaylist().size() == 0) {
+
+        if (audioPlayer.getPlaylist().size() == 0) {
             audioPlayer.kill();
             AudioUtils.hidePlayerControl(parent);
             parent.iv_now_playing_close.performClick();
@@ -229,6 +241,7 @@ public class AudioPlayerView extends LinearLayout implements
         } else {
             parent.updateCurrentUI();
         }
+
     }
 
     @Override

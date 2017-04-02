@@ -230,7 +230,7 @@ class AudioPlayer {
             try {
                 context.unbindService(mConnection);
             } catch (IllegalArgumentException e) {
-                //TODO: Add readable exception here
+                e.printStackTrace();
             }
 
         if (notificationPlayer != null) {

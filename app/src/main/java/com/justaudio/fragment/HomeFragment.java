@@ -17,16 +17,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.adapter.MovieListAdapter;
-import com.justaudio.R;
 import com.justaudio.dto.MovieListModel;
 import com.justaudio.services.ApiConfiguration;
 import com.justaudio.services.JSONArrayTask;
 import com.justaudio.services.JSONResult;
 import com.justaudio.services.NetworkUtils;
 import com.justaudio.utils.AppConstants;
-import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.ToolbarUtils;
 import com.justaudio.utils.Utils;
@@ -115,9 +114,7 @@ public class HomeFragment extends Fragment implements JSONResult {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (firstVisibleItem == 0)
-                    swipe_container.setEnabled(true);
-                else swipe_container.setEnabled(false);
+                swipe_container.setEnabled(false);
             }
         });
 

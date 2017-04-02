@@ -19,6 +19,7 @@ import com.justaudio.R;
 import com.justaudio.adapter.LeftMenuAdapter;
 import com.justaudio.adapter.NowPlayingAdapter;
 import com.justaudio.audioplayer.AudioPlayerView;
+import com.justaudio.audioplayer.PlayerNotificationReceiver;
 import com.justaudio.dto.LeftMenuModel;
 import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TrackAudioModel;
@@ -40,11 +41,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class HomeActivity extends BaseActivity implements JSONResult, AudioManager.OnAudioFocusChangeListener {
+public class HomeActivity extends BaseActivity implements JSONResult {
 
     public DrawerLayout drawer_layout;
     public AudioPlayerView player;
-    private AudioManager mAudioManager;
 
     public LinearLayout ll_empty_player;
     private LinearLayout ll_playing;
@@ -58,13 +58,14 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
     public static int pause_button_position = -1;
     public FrameLayout fl_player;
 
+    public static AudioManager mAudioManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        mAudioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
 
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -195,6 +196,11 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     public void addToFavorites(long audioId) {
 
         CustomDialog.showProgressDialog(this, false);
@@ -275,20 +281,10 @@ public class HomeActivity extends BaseActivity implements JSONResult, AudioManag
 
 
     @Override
-    public void onAudioFocusChange(int focusChange) {
-        if (focusChange <= 0) {
-            if (player != null)
-                player.pause();
-        }
-    }
-
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (player != null)
             player.kill();
-        mAudioManager.abandonAudioFocus(this);
     }
 
     private int closeCount;

@@ -11,6 +11,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
 
 import java.io.File;
@@ -22,7 +23,8 @@ public class PlayerService extends Service implements
         MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener,
         MediaPlayer.OnBufferingUpdateListener,
-        MediaPlayer.OnErrorListener {
+        MediaPlayer.OnErrorListener,
+        AudioManager.OnAudioFocusChangeListener {
 
     private static final String TAG = PlayerService.class.getSimpleName();
 
@@ -35,7 +37,6 @@ public class PlayerService extends Service implements
     private List<JcPlayerServiceListener> jcPlayerServiceListeners;
     private List<OnInvalidPathListener> invalidPathListeners;
     private JcPlayerServiceListener notificationListener;
-    private AssetFileDescriptor assetFileDescriptor = null; // For Asset and Raw file.
 
 
     public class JcPlayerServiceBinder extends Binder {
@@ -112,7 +113,8 @@ public class PlayerService extends Service implements
         for (JcPlayerServiceListener jcPlayerServiceListener : jcPlayerServiceListeners)
             jcPlayerServiceListener.onPaused();
 
-        if (notificationListener != null) notificationListener.onPaused();
+        if (notificationListener != null)
+            notificationListener.onPaused();
     }
 
     public void destroy() {
@@ -128,9 +130,16 @@ public class PlayerService extends Service implements
         }
 
         isPlaying = false;
+
+        if (HomeActivity.mAudioManager != null)
+            HomeActivity.mAudioManager.abandonAudioFocus(this);
     }
 
     public void play(TrackAudioModel trackAudioModel) {
+
+        HomeActivity.mAudioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN);
+
         this.currentTrackAudioModel = trackAudioModel;
 
         if (isAudioFileValid(trackAudioModel.getPath(), trackAudioModel.getOrigin())) {
@@ -169,7 +178,8 @@ public class PlayerService extends Service implements
             for (JcPlayerServiceListener jcPlayerServiceListener : jcPlayerServiceListeners)
                 jcPlayerServiceListener.onPlaying();
 
-            if (notificationListener != null) notificationListener.onPlaying();
+            if (notificationListener != null)
+                notificationListener.onPlaying();
 
         } else
             throwError(trackAudioModel.getPath(), trackAudioModel.getOrigin());
@@ -254,6 +264,7 @@ public class PlayerService extends Service implements
 
 
     private boolean isAudioFileValid(String path, Origin origin) {
+        AssetFileDescriptor assetFileDescriptor;
         if (origin == Origin.URL) {
             return path.startsWith("http") || path.startsWith("https");
 
@@ -310,6 +321,32 @@ public class PlayerService extends Service implements
             notificationListener.updateTitle(currentTrackAudioModel.getTitle());
             notificationListener.onPreparedAudio(currentTrackAudioModel.getTitle(), mediaPlayer.getDuration());
         }
+    }
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+
+        switch (focusChange) {
+            case (AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK):
+                // Lower the volume while ducking.
+                if (mediaPlayer != null)
+                    mediaPlayer.setVolume(0.2f, 0.2f);
+                break;
+            case (AudioManager.AUDIOFOCUS_LOSS_TRANSIENT):
+                pause(getCurrentAudio());
+                break;
+            case (AudioManager.AUDIOFOCUS_LOSS):
+                pause(getCurrentAudio());
+                //stop();
+                break;
+            case (AudioManager.AUDIOFOCUS_GAIN):
+                // Return the volume to normal and resume if paused.
+                if (mediaPlayer != null)
+                    mediaPlayer.setVolume(1f, 1f);
+                play(getCurrentAudio());
+                break;
+        }
+
     }
 
     public TrackAudioModel getCurrentAudio() {
