@@ -1,10 +1,14 @@
 package com.justaudio.utils;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
@@ -310,15 +314,28 @@ public class CustomDialog {
     }
 
 
-    private static void shareContent(BaseActivity parent) {
+    public static void shareContent(BaseActivity parent) {
 
-        String link = "https://play.google.com/store/search?q=justaudio&hl=en";
+        String link = "https://play.google.com/store/apps/details?id=com.justaudio";
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         String shareBody = "Check out " + Utils.getStrings(parent, R.string.app_name) + "for your smartphone." +
                 "Download it today from " + link;
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         parent.startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
+
+    public static void rateUsOurApp(BaseActivity parent) {
+        Uri uri = Uri.parse("market://details?id=" + parent.getPackageName());
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            parent.startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            parent.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + parent.getPackageName())));
+        }
     }
 
 

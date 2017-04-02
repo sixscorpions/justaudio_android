@@ -144,6 +144,12 @@ public class HomeActivity extends BaseActivity implements JSONResult {
                     case "Favorites":
                         navigateFavoriteFragment(currentTitle);
                         break;
+                    case "Share":
+                        CustomDialog.shareContent(HomeActivity.this);
+                        break;
+                    case "Rate Us":
+                        CustomDialog.rateUsOurApp(HomeActivity.this);
+                        break;
                 }
 
             }

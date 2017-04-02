@@ -95,10 +95,9 @@ public class ToolbarUtils {
     public static ArrayList<LeftMenuModel> getLeftMenuList() {
         ArrayList<LeftMenuModel> mLeftMenu = new ArrayList<>();
         mLeftMenu.add(new LeftMenuModel("Home"));
-        mLeftMenu.add(new LeftMenuModel("New Releases"));
-        mLeftMenu.add(new LeftMenuModel("Playlists"));
+        // mLeftMenu.add(new LeftMenuModel("New Releases"));
         mLeftMenu.add(new LeftMenuModel("Favorites"));
-        mLeftMenu.add(new LeftMenuModel("Settings"));
+        //mLeftMenu.add(new LeftMenuModel("Settings"));
         mLeftMenu.add(new LeftMenuModel("Share"));
         mLeftMenu.add(new LeftMenuModel("Rate Us"));
         return mLeftMenu;
