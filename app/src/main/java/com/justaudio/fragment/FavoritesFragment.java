@@ -123,7 +123,8 @@ public class FavoritesFragment extends Fragment implements JSONResult, IUpdateUi
         });
 
 
-        ll_no_data = ToolbarUtils.initializeNoDataView(parent, view);
+        ll_no_data = ToolbarUtils.initializeNoDataView(parent, view, "Favorites list is empty");
+
 
         swipe_container.post(new Runnable() {
             @Override

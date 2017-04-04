@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -202,6 +203,9 @@ public class AudioPlayerView extends LinearLayout implements
 
         if (!playlist.contains(trackAudioModel))
             playlist.add(lastPosition, trackAudioModel);
+
+        Toast.makeText(parent, "Added to queue", Toast.LENGTH_SHORT).show();
+
     }
 
     /**
@@ -210,6 +214,9 @@ public class AudioPlayerView extends LinearLayout implements
      * @param trackAudioModel TrackAudioModel object
      */
     public void removeAudio(TrackAudioModel trackAudioModel) {
+
+        Toast.makeText(parent, "Removed from queue", Toast.LENGTH_SHORT).show();
+
         if (audioPlayer != null) {
             List<TrackAudioModel> playlist = audioPlayer.getPlaylist();
 

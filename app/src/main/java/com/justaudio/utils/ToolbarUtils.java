@@ -61,12 +61,15 @@ public class ToolbarUtils {
         }
     }
 
-    public static LinearLayout initializeNoDataView(BaseActivity parent, View view) {
+    public static LinearLayout initializeNoDataView(BaseActivity parent, View view, String text) {
         /*LAYOUT NO DATA*/
         LinearLayout ll_no_data = (LinearLayout) view.findViewById(R.id.ll_no_data);
 
         TextView tv_no_data = (TextView) view.findViewById(R.id.tv_no_data);
         tv_no_data.setTypeface(FontFamily.setHelveticaTypeface(parent), Typeface.BOLD);
+        if (!Utils.isValueNullOrEmpty(text))
+            tv_no_data.setText(text);
+
         return ll_no_data;
     }
 
@@ -95,9 +98,9 @@ public class ToolbarUtils {
     public static ArrayList<LeftMenuModel> getLeftMenuList() {
         ArrayList<LeftMenuModel> mLeftMenu = new ArrayList<>();
         mLeftMenu.add(new LeftMenuModel("Home"));
-        // mLeftMenu.add(new LeftMenuModel("New Releases"));
         mLeftMenu.add(new LeftMenuModel("Favorites"));
         //mLeftMenu.add(new LeftMenuModel("Settings"));
+        mLeftMenu.add(new LeftMenuModel("Feedback"));
         mLeftMenu.add(new LeftMenuModel("Share"));
         mLeftMenu.add(new LeftMenuModel("Rate Us"));
         return mLeftMenu;

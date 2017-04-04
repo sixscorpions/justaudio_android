@@ -119,7 +119,7 @@ public class HomeFragment extends Fragment implements JSONResult {
         });
 
 
-        ll_no_data = ToolbarUtils.initializeNoDataView(parent, view);
+        ll_no_data = ToolbarUtils.initializeNoDataView(parent, view, "");
 
         swipe_container.post(new Runnable() {
             @Override

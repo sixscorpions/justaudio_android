@@ -7,9 +7,11 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -36,6 +38,7 @@ import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.CustomDialog;
 import com.justaudio.utils.FontFamily;
+import com.justaudio.utils.ShareUtils;
 import com.justaudio.utils.ToolbarUtils;
 import com.justaudio.utils.Utils;
 
@@ -151,6 +154,9 @@ public class HomeActivity extends BaseActivity implements JSONResult {
                     case "Favorites":
                         navigateFavoriteFragment(currentTitle);
                         break;
+                    case "Feedback":
+                        ShareUtils.shareWithGMAIL(HomeActivity.this);
+                        break;
                     case "Share":
                         CustomDialog.shareContent(HomeActivity.this);
                         break;
@@ -166,6 +172,20 @@ public class HomeActivity extends BaseActivity implements JSONResult {
         /*TEXT VERSION NUMBER*/
         TextView tv_version = (TextView) findViewById(R.id.tv_version);
         tv_version.setTypeface(FontFamily.setHelveticaTypeface(this), Typeface.BOLD);
+    }
+
+    @Override
+    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
+        super.onActivityResult(arg0, arg1, arg2);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager inputManager = (InputMethodManager) HomeActivity.this.
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(drawer_layout.getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }, 300);
     }
 
     private void navigateHomeFragment(String currentTitle) {
@@ -309,9 +329,9 @@ public class HomeActivity extends BaseActivity implements JSONResult {
         if (code == ApiConfiguration.REST_ADD_TO_FAVORITES_CODE) {
             String status = (String) result;
             if (status.equalsIgnoreCase("true"))
-                Toast.makeText(this, "Song Added to Favorites", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Added to favorites", Toast.LENGTH_SHORT).show();
             else
-                Toast.makeText(this, "Failed to Add Song", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed to Add", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -319,9 +339,9 @@ public class HomeActivity extends BaseActivity implements JSONResult {
             String status = (String) result;
             if (status.equalsIgnoreCase("true")) {
                 updateRemovedFevAdapter();
-                Toast.makeText(this, "Song Deleted from Favorites", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Removed from favorites", Toast.LENGTH_SHORT).show();
             } else
-                Toast.makeText(this, "Failed to Delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed to Remove", Toast.LENGTH_SHORT).show();
         }
         CustomDialog.hideProgressBar(this);
     }
