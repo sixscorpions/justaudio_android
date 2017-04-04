@@ -75,7 +75,8 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
                     HomeActivity.adapter.notifyDataSetChanged();
                 break;
             case NotificationPlayer.CLOSE:
-                audioPlayer.killTheAppFromBackground();
+                if (audioPlayer != null)
+                    audioPlayer.killTheAppFromBackground();
                 break;
         }
     }
