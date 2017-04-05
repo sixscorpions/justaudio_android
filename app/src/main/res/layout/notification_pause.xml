@@ -36,7 +36,7 @@
                     android:layout_weight="0.95"
                     android:ellipsize="marquee"
                     android:focusable="true"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:lines="1"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:requiresFadingEdge="horizontal"
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/txt_cd"
                     android:src="@drawable/ic_menu_close"
-                    android:visibility="visible" />
+                    android:visibility="invisible" />
             </LinearLayout>
 
 

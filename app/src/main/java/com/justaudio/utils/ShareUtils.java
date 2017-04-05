@@ -23,7 +23,7 @@ public class ShareUtils {
 
         String subject = "Feedback ?";
         String body = "";
-        String toMail = "vidya@gmail.com";
+        String toMail = "bandla7@gmail.com";
 
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setData(Uri.parse("mailto:"));
