@@ -30,6 +30,7 @@ import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.FavoritesFragment;
 import com.justaudio.fragment.HomeFragment;
+import com.justaudio.fragment.HomeNewFragment;
 import com.justaudio.fragment.PlayerFragment;
 import com.justaudio.services.ApiConfiguration;
 import com.justaudio.services.JSONFevTask;
@@ -191,7 +192,7 @@ public class HomeActivity extends BaseActivity implements JSONResult {
     private void navigateHomeFragment(String currentTitle) {
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.INTENT_KEY_TITLE, currentTitle);
-        Utils.navigateFragment(new HomeFragment(), HomeFragment.TAG, bundle, this);
+        Utils.navigateFragment(new HomeNewFragment(), HomeNewFragment.TAG, bundle, this);
     }
 
     private void navigateFavoriteFragment(String currentTitle) {
@@ -388,7 +389,7 @@ public class HomeActivity extends BaseActivity implements JSONResult {
                     = fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
             String fragName = backStackEntry.getName();
             switch (fragName) {
-                case HomeFragment.TAG:
+                case HomeNewFragment.TAG:
                     closeCount++;
                     if (closeCount > 1)
                         minimizeApp();

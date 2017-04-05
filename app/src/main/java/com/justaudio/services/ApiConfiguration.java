@@ -48,6 +48,8 @@ public class ApiConfiguration {
     public static final int REST_ADD_TO_FAVORITES_CODE = 3;
     public static final int REST_DELETE_FROM_FAVORITES_CODE = 4;
     public static final int REST_GET_FEV_LIST_CODE = 5;
+    public static final int REST_GET_MOVIES_LIST_CODE = 6;
+    public static final int REST_GET_TV_SHOWS_LIST_CODE = 7;
 
 
 }
