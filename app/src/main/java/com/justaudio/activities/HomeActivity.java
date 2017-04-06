@@ -29,7 +29,6 @@ import com.justaudio.dto.LeftMenuModel;
 import com.justaudio.dto.MovieInfoModel;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.FavoritesFragment;
-import com.justaudio.fragment.HomeFragment;
 import com.justaudio.fragment.HomeNewFragment;
 import com.justaudio.fragment.PlayerFragment;
 import com.justaudio.services.ApiConfiguration;
@@ -173,6 +172,8 @@ public class HomeActivity extends BaseActivity implements JSONResult {
         /*TEXT VERSION NUMBER*/
         TextView tv_version = (TextView) findViewById(R.id.tv_version);
         tv_version.setTypeface(FontFamily.setHelveticaTypeface(this), Typeface.BOLD);
+        tv_version.setText(Utils.getVersionName(this));
+
     }
 
     @Override

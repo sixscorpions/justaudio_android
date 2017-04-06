@@ -23,7 +23,7 @@ import com.justaudio.utils.UILoader;
 /**
  * Created by VIDYA
  */
-public class NotificationPlayer implements PlayerService.JcPlayerServiceListener {
+class NotificationPlayer implements PlayerService.JcPlayerServiceListener {
 
     private static final int NOTIFICATION_ID = 100;
     private static final int NEXT_ID = 0;
@@ -53,35 +53,36 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
     }
 
     void createNotificationPlayer(final String title, String iconResourceResource) {
-
-        AudioPlayer.getInstance().registerNotificationListener(this);
-
-
         this.title = title;
         this.iconResource = iconResourceResource;
-        final Intent openUi = new Intent(context, context.getClass());
-        openUi.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        if (AudioPlayer.getInstance() != null) {
+            AudioPlayer.getInstance().registerNotificationListener(this);
+            final Intent openUi = new Intent(context, context.getClass());
+            openUi.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            if (notificationManager == null)
+                notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            ServiceConnection mConnection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    Intent intent = new Intent(context, KillNotificationsService.class);
+                    if (service != null) {
+                        ((KillNotificationsService.KillBinder) service).service.startService(intent);
+                        createNotificationData(openUi);
+                    }
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+
+                }
+            };
+            context.bindService(new Intent(context, KillNotificationsService.class),
+                    mConnection, Context.BIND_AUTO_CREATE);
+        }
 
 
-        if (notificationManager == null)
-            notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        ServiceConnection mConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                Intent intent = new Intent(context, KillNotificationsService.class);
-                ((KillNotificationsService.KillBinder) service).service.startService(intent);
-                if (AudioPlayer.getInstance() != null)
-                    createNotificationData(openUi);
-            }
-
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-
-            }
-        };
-        context.bindService(new Intent(context, KillNotificationsService.class),
-                mConnection, Context.BIND_AUTO_CREATE);
     }
 
 
@@ -105,7 +106,8 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
             Notification notification = builder.build();
             notification.flags |= Notification.FLAG_NO_CLEAR;
-            notificationManager.notify(NOTIFICATION_ID, notification);
+            if (notificationManager != null)
+                notificationManager.notify(NOTIFICATION_ID, notification);
 
         } else {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
@@ -120,7 +122,8 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
             Notification notification = builder.build();
             notification.flags |= Notification.FLAG_NO_CLEAR;
-            notificationManager.notify(NOTIFICATION_ID, notification);
+            if (notificationManager != null)
+                notificationManager.notify(NOTIFICATION_ID, notification);
         }
     }
 
@@ -132,7 +135,8 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
 
     private RemoteViews createBigNotificationView() {
         RemoteViews remoteView;
-        if (AudioPlayer.getInstance().isPaused()) {
+
+        if (AudioPlayer.getInstance() != null && AudioPlayer.getInstance().isPaused()) {
             remoteView = new RemoteViews(context.getPackageName(), R.layout.notification_play);
             remoteView.setOnClickPendingIntent(R.id.btn_play_notification, buildPendingIntent(PLAY, PLAY_ID));
             remoteView.setOnClickPendingIntent(R.id.iv_notification_cancel, buildPendingIntent(CLOSE, CLOSE_ID));
@@ -223,10 +227,11 @@ public class NotificationPlayer implements PlayerService.JcPlayerServiceListener
         });
     }
 
-    public void destroyNotificationIfExists() {
+    void destroyNotificationIfExists() {
         if (notificationManager != null)
             try {
                 notificationManager.cancel(NOTIFICATION_ID);
+                notificationManager = null;
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }

@@ -36,7 +36,6 @@ public class PlayerListFragment extends Fragment {
     private ListView listView;
     private PlayerListAdapter adapter;
     private int mPosition = -1;
-    private ArrayList<TrackAudioModel> results;
 
 
     @Override
@@ -65,25 +64,24 @@ public class PlayerListFragment extends Fragment {
         tv_no_result.setTextColor(Utils.getColor(parent, R.color.white));
 
 
-        results = parent.audioModel.getTabList().get(mPosition).getAudioList();
+        ArrayList<TrackAudioModel> results = parent.audioModel.getTabList()
+                .get(mPosition).getAudioList();
         if (results.size() > 0) {
             listView.setVisibility(View.VISIBLE);
             tv_no_result.setVisibility(View.GONE);
-            setListData();
+            setListData(results);
         } else {
             listView.setVisibility(View.GONE);
             tv_no_result.setVisibility(View.VISIBLE);
         }
     }
 
-
-    private void setListData() {
-
+    private void setListData(ArrayList<TrackAudioModel> results) {
         if (adapter == null) {
-            adapter = new PlayerListAdapter(parent);
+            PlayerListAdapter adapter = new PlayerListAdapter(parent, results);
             listView.setAdapter(adapter);
         } else
-            adapter.updateAdapter();
+            adapter.updateAdapter(results);
     }
 
 
@@ -91,21 +89,23 @@ public class PlayerListFragment extends Fragment {
 
         private LayoutInflater inflater;
         private HomeActivity parent;
+        private ArrayList<TrackAudioModel> categoryList;
 
-        private PlayerListAdapter(HomeActivity context) {
+        private PlayerListAdapter(HomeActivity context, ArrayList<TrackAudioModel> results) {
             parent = context;
             inflater = LayoutInflater.from(context.getApplicationContext());
+            categoryList = results;
         }
 
 
         @Override
         public int getCount() {
-            return results.size();
+            return categoryList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return results.get(position);
+            return categoryList.get(position);
         }
 
         @Override
@@ -145,7 +145,7 @@ public class PlayerListFragment extends Fragment {
                 holder = (ViewHolder) convertView.getTag();
 
 
-            final TrackAudioModel mData = results.get(position);
+            final TrackAudioModel mData = categoryList.get(position);
 
             holder.tv_list_title.setText(mData.getTitle());
 
@@ -158,12 +158,12 @@ public class PlayerListFragment extends Fragment {
                 public void onClick(View v) {
                     HomeActivity.pause_button_position = position;
 
-                    parent.player.initPlaylist(results, null);
+                    parent.player.initPlaylist(categoryList, null);
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            TrackAudioModel mData = results.get(position);
+                            TrackAudioModel mData = categoryList.get(position);
                             parent.player.playAudio(mData);
                         }
                     }, 100);
@@ -184,7 +184,6 @@ public class PlayerListFragment extends Fragment {
 
         private class ViewHolder {
             ImageView iv_list;
-            ImageView iv_list_play;
             ImageView iv_list_more;
 
             ProgressBar pb_list;
@@ -195,7 +194,8 @@ public class PlayerListFragment extends Fragment {
             LinearLayout ll_click;
         }
 
-        void updateAdapter() {
+        void updateAdapter(ArrayList<TrackAudioModel> results) {
+            categoryList = results;
             listView.setAdapter(null);
             adapter.notifyDataSetChanged();
             listView.setAdapter(adapter);

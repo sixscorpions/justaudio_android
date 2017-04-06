@@ -36,6 +36,8 @@ public class HomeNewFragment extends Fragment {
 
     private String title;
 
+    public ViewPager mViewPager;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,7 +79,7 @@ public class HomeNewFragment extends Fragment {
             }
         });
 
-        ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
 

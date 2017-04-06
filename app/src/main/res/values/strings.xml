@@ -3,19 +3,9 @@
 
 
     <string name="txt_cd">image</string>
-    <string name="txt_app_version">Version 1.0.3</string>
+    <string name="txt_app_version">Version </string>
     <string name="txt_cancel">Cancel</string>
     <string name="txt_ok">OK</string>
-
-    <string-array name="navDrawerItems">
-        <item>Home</item>
-        <item>New Releases</item>
-        <item>Playlist</item>
-        <item>Favaroites</item>
-        <item>Settings</item>
-        <item>Share</item>
-        <item>Rate Us</item>
-    </string-array>
 
 
     <!--NETWORK CONNECTION-->

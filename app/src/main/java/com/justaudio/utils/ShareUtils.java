@@ -45,18 +45,20 @@ public class ShareUtils {
 
             if (best != null) {
                 emailIntent.setClassName(best.activityInfo.packageName, best.activityInfo.name);
-                parent.startActivityForResult(emailIntent,1);
+                parent.startActivityForResult(emailIntent, 1);
             } else {
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.putExtra(Intent.EXTRA_SUBJECT, subject);
                 i.putExtra(Intent.EXTRA_TEXT, body);
-                parent.startActivityForResult(i,1);
+                parent.startActivity(Intent.createChooser(emailIntent,
+                        "Send Email Using: "));
             }
         } catch (Exception e) {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.putExtra(Intent.EXTRA_SUBJECT, subject);
             i.putExtra(Intent.EXTRA_TEXT, body);
-            parent.startActivityForResult(i,1);
+            parent.startActivity(Intent.createChooser(emailIntent,
+                    "Send Email Using: "));
         }
     }
 }

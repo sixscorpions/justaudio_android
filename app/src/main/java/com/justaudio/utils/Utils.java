@@ -3,6 +3,8 @@ package com.justaudio.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
@@ -149,5 +151,19 @@ public class Utils {
     public static String getDeviceID(BaseActivity parent) {
         return Settings.Secure.getString(parent.getApplicationContext().getContentResolver(),
                 Settings.Secure.ANDROID_ID);
+    }
+
+    public static String getVersionName(BaseActivity parent) {
+        String version;
+        try {
+            PackageManager manager = parent.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(parent.getPackageName(), 0);
+            version = Utils.getStrings(parent, R.string.txt_app_version)
+                    + " " + info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            version = Utils.getStrings(parent, R.string.txt_app_version);
+        }
+        return version;
     }
 }

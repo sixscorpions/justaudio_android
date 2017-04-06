@@ -20,6 +20,7 @@ import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.FavoritesFragment;
+import com.justaudio.fragment.HomeNewFragment;
 import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.UILoader;
@@ -240,7 +241,12 @@ public class AudioPlayerView extends LinearLayout implements
             audioPlayer.kill();
             AudioUtils.hidePlayerControl(parent);
             parent.iv_now_playing_close.performClick();
-            parent.onBackPressed();
+
+            HomeNewFragment myFragment = (HomeNewFragment) parent.getSupportFragmentManager().
+                    findFragmentByTag(HomeNewFragment.TAG);
+            if (myFragment != null && !myFragment.isVisible())
+                parent.onBackPressed();
+
         } else {
             parent.updateCurrentUI();
         }
@@ -253,7 +259,11 @@ public class AudioPlayerView extends LinearLayout implements
             audioPlayer.kill();
             AudioUtils.hidePlayerControl(parent);
             parent.iv_now_playing_close.performClick();
-            parent.onBackPressed();
+            HomeNewFragment myFragment = (HomeNewFragment) parent.getSupportFragmentManager().
+                    findFragmentByTag(HomeNewFragment.TAG);
+            if (myFragment != null && !myFragment.isVisible())
+                parent.onBackPressed();
+
         }
     }
 

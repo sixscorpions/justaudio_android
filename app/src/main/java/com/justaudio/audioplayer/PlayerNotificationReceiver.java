@@ -20,7 +20,6 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
 
         switch (action) {
             case NotificationPlayer.PLAY:
-
                 try {
                     audioPlayer.continueAudio();
                     audioPlayer.updateNotification();
@@ -30,8 +29,10 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
                 break;
 
             case NotificationPlayer.PAUSE:
-                audioPlayer.pauseAudio();
-                audioPlayer.updateNotification();
+                if (audioPlayer != null) {
+                    audioPlayer.pauseAudio();
+                    audioPlayer.updateNotification();
+                }
                 break;
 
             case NotificationPlayer.NEXT:
