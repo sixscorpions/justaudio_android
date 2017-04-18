@@ -21,6 +21,7 @@ import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.FavoritesFragment;
 import com.justaudio.fragment.HomeNewFragment;
+import com.justaudio.services.NetworkUtils;
 import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.UILoader;
@@ -275,24 +276,29 @@ public class AudioPlayerView extends LinearLayout implements
                         .duration(PULSE_ANIMATION_DURATION)
                         .playOn(btnPlay);
 
-                if (btnPlay.getTag().equals(R.drawable.icon_player_pause))
-                    pause();
-                else
-                    continueAudio();
+                if (NetworkUtils.isNetworkAvailable(parent)) {
+                    if (btnPlay.getTag().equals(R.drawable.icon_player_pause))
+                        pause();
+                    else
+                        continueAudio();
+                }
+
             }
 
         if (view.getId() == R.id.btn_next) {
             YoYo.with(Techniques.Pulse)
                     .duration(PULSE_ANIMATION_DURATION)
                     .playOn(btnNext);
-            next();
+            if (NetworkUtils.isNetworkAvailable(parent))
+                next();
         }
 
         if (view.getId() == R.id.btn_prev) {
             YoYo.with(Techniques.Pulse)
                     .duration(PULSE_ANIMATION_DURATION)
                     .playOn(btnPrev);
-            previous();
+            if (NetworkUtils.isNetworkAvailable(parent))
+                previous();
         }
     }
 
@@ -366,8 +372,9 @@ public class AudioPlayerView extends LinearLayout implements
         resetPlayerInfo();
         try {
             audioPlayer.nextAudio();
-            parent.updateNextUI();
-        } catch (Exception e) {
+            if (NetworkUtils.isNetworkAvailable(parent))
+                parent.updateNextUI();
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }

@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="0dip"
         android:layout_height="match_parent"
-        android:layout_weight="0.85"
+        android:layout_weight="0.87"
         android:orientation="horizontal"
         tools:ignore="UseCompoundDrawables">
 
@@ -22,27 +22,36 @@
             android:contentDescription="@string/txt_cd"
             android:src="@drawable/ic_menu_toggle" />
 
-
-        <TextView
-            android:id="@+id/tv_toolbar_title"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="center"
-            android:lines="1"
+            android:layout_marginLeft="@dimen/_5dp"
+            android:layout_marginRight="@dimen/_5dp"
+            android:background="@color/transparent"
+            android:hint="@string/txt_hint_search"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:padding="@dimen/_5dp"
             android:textColor="@color/white"
-            android:textSize="@dimen/txt_toolbar_title_size" />
+            android:textColorHint="@color/white">
+
+            <requestFocus />
+        </EditText>
+
 
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/iv_search"
+        android:id="@+id/iv_search_cancel"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|end"
-        android:layout_weight="0.15"
+        android:layout_gravity="center"
+        android:layout_weight="0.13"
         android:contentDescription="@string/txt_cd"
-        android:src="@drawable/ic_search" />
+        android:src="@drawable/icon_close"
+        android:visibility="gone" />
 
 
 </LinearLayout>

@@ -19,6 +19,7 @@ import com.justaudio.adapter.ViewPagerAdapter;
 import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.ToolbarUtils;
+import com.justaudio.utils.Utils;
 
 /**
  * Created by VIDYA
@@ -62,7 +63,7 @@ public class HomeNewFragment extends Fragment {
         /*TEXT_VIEW TITLE*/
         tv_title = (TextView) view.findViewById(R.id.tv_toolbar_title);
         tv_title.setTypeface(FontFamily.setHelveticaTypeface(parent), Typeface.BOLD);
-        tv_title.setText("" + title);
+        tv_title.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_toolbar_logo, 0, 0, 0);
 
 
         /*IMAGE_VIEW  TOGGLE*/
@@ -76,6 +77,16 @@ public class HomeNewFragment extends Fragment {
                 } else {
                     parent.drawer_layout.openDrawer(GravityCompat.START);
                 }
+            }
+        });
+
+
+        /*IMAGE VIEW SEARCH*/
+        ImageView iv_search = (ImageView) view.findViewById(R.id.iv_search);
+        iv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateSearchFragment();
             }
         });
 
@@ -94,7 +105,11 @@ public class HomeNewFragment extends Fragment {
         tabLayout.setupWithViewPager(mViewPager);
         ToolbarUtils.setViewPageTypeface(parent, tabLayout);
 
+    }
 
+    private void navigateSearchFragment() {
+        Bundle bundle = new Bundle();
+        Utils.navigateFragment(new SearchFragment(), SearchFragment.TAG, bundle, parent);
     }
 
 }

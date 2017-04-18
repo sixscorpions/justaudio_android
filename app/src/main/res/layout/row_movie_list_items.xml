@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.justaudio.views.SquaredFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:descendantFocusability="beforeDescendants"
     android:orientation="vertical">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/list_card_background_selector"
+        android:layout_height="wrap_content"
         android:descendantFocusability="afterDescendants"
-        android:orientation="vertical"
-        android:padding="@dimen/_5dp">
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/iv_movie"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/txt_cd" />
+            android:layout_height="150dp"
+            android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/iv_movie"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/txt_cd"
+                android:scaleType="centerCrop"
+                android:src="@drawable/icon_list_holder" />
+
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="false"
+                android:visibility="gone" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/list_bottom_strip_height"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:alpha="0.9"
-            android:background="@color/list_bottom_strip"
             android:orientation="horizontal"
             tools:ignore="UseCompoundDrawables">
 
@@ -45,21 +56,12 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:lines="2"
-                android:paddingLeft="@dimen/_10dp"
-                android:paddingRight="@dimen/_10dp"
+                android:paddingBottom="@dimen/_2dp"
+                android:paddingTop="@dimen/_2dp"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_13sp"
-                android:textColor="@color/white"
-                android:visibility="visible"
-                tools:ignore="RtlSymmetry" />
+                android:visibility="visible" />
         </LinearLayout>
+    </LinearLayout>
 
-    </FrameLayout>
-
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="false"
-        android:visibility="gone" />
-</com.justaudio.views.SquaredFrameLayout>
+</LinearLayout>

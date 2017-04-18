@@ -10,6 +10,7 @@ import java.util.HashMap;
  */
 
 public class ApiConfiguration {
+    public static final String LIST_COUNT = "20";
 
 
     final static String SERVER_NOT_RESPONDING = "We are unable to connect the internet. " + "Please check your connection and try again.";
@@ -50,6 +51,7 @@ public class ApiConfiguration {
     public static final int REST_GET_FEV_LIST_CODE = 5;
     public static final int REST_GET_MOVIES_LIST_CODE = 6;
     public static final int REST_GET_TV_SHOWS_LIST_CODE = 7;
+    public static final int REST_GET_MOVIE_SEARCH = 8;
 
 
 }

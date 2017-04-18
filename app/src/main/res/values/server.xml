@@ -14,5 +14,8 @@
     <string name="REST_GET_ALL_FAVORITE_LIST">audioapp/favorites/%s</string>
     <string name="REST_ADD_TO_FAVORITES">audioapp/favorites/%s/</string>
     <string name="REST_DELETE_FROM_FAVORITES">audioapp/favorites/%s/</string>
+    <string name="REST_GET_MOVIES_LIST_PAGINATION">audioapp/list/movie</string>
+    <string name="REST_GET_TV_SHOWS_LIST_PAGINATION">audioapp/list/tvshows</string>
+    <string name="REST_GET_MOVIES_SEARCH">audioapp/movies?name=%s</string>
 
 </resources>

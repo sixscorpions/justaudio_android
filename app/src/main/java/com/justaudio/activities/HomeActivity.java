@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -31,9 +32,11 @@ import com.justaudio.dto.TrackAudioModel;
 import com.justaudio.fragment.FavoritesFragment;
 import com.justaudio.fragment.HomeNewFragment;
 import com.justaudio.fragment.PlayerFragment;
+import com.justaudio.fragment.SearchFragment;
 import com.justaudio.services.ApiConfiguration;
 import com.justaudio.services.JSONFevTask;
 import com.justaudio.services.JSONResult;
+import com.justaudio.services.NetworkUtils;
 import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.AudioUtils;
 import com.justaudio.utils.CustomDialog;
@@ -143,6 +146,8 @@ public class HomeActivity extends BaseActivity implements JSONResult {
         lv_left_menu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Utils.hideSoftKeyPad(HomeActivity.this);
                 drawer_layout.closeDrawers();
                 LeftMenuModel item = (LeftMenuModel) parent.getAdapter().getItem(position);
 
@@ -177,17 +182,28 @@ public class HomeActivity extends BaseActivity implements JSONResult {
     }
 
     @Override
-    protected void onActivityResult(int arg0, int arg1, Intent arg2) {
-        super.onActivityResult(arg0, arg1, arg2);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager inputManager = (InputMethodManager) HomeActivity.this.
-                        getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(drawer_layout.getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+    protected void onActivityResult(int requestCode, int arg1, Intent arg2) {
+
+        if (requestCode == AppConstants.RESULT_WIFI_KEY) {
+            if (NetworkUtils.isNetworkAvailable(this)) {
+                Intent intent1 = getIntent();
+                finish();
+                startActivity(intent1);
             }
-        }, 300);
+        } else {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    InputMethodManager inputManager = (InputMethodManager) HomeActivity.this.
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(drawer_layout.getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+            }, 300);
+        }
+
+
+        super.onActivityResult(requestCode, arg1, arg2);
     }
 
     private void navigateHomeFragment(String currentTitle) {
@@ -375,6 +391,7 @@ public class HomeActivity extends BaseActivity implements JSONResult {
             player.kill();
     }
 
+
     private int closeCount;
 
     @Override
@@ -399,6 +416,9 @@ public class HomeActivity extends BaseActivity implements JSONResult {
                     super.onBackPressed();
                     break;
                 case FavoritesFragment.TAG:
+                    super.onBackPressed();
+                    break;
+                case SearchFragment.TAG:
                     super.onBackPressed();
                     break;
                 default:

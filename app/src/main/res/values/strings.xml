@@ -31,5 +31,6 @@
     <string name="txt_add_to_queue">Add to queue</string>
     <string name="txt_now_playing">Now Playing</string>
     <string name="txt_add_to_favorites">Add to Favorites</string>
+    <string name="txt_hint_search">Search</string>
 
 </resources>

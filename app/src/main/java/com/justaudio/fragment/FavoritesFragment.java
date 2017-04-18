@@ -103,6 +103,15 @@ public class FavoritesFragment extends Fragment implements JSONResult, IUpdateUi
             }
         });
 
+         /*IMAGE VIEW SEARCH*/
+        ImageView iv_search = (ImageView) view.findViewById(R.id.iv_search);
+        iv_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateSearchFragment();
+            }
+        });
+
         swipe_container = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipe_container.setColorSchemeResources(android.R.color.holo_red_light, android.
                 R.color.holo_blue_light, android.R.color.holo_purple);
@@ -230,6 +239,10 @@ public class FavoritesFragment extends Fragment implements JSONResult, IUpdateUi
                 adapter.notifyDataSetChanged();
         }
 
+    }
+    private void navigateSearchFragment() {
+        Bundle bundle = new Bundle();
+        Utils.navigateFragment(new SearchFragment(), SearchFragment.TAG, bundle, parent);
     }
 
     @Override

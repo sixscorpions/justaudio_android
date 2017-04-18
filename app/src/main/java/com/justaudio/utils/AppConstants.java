@@ -8,6 +8,7 @@ public class AppConstants {
 
 
     public static final int SPLASH_DELAY_TIME = 2000;
+    public static final int RESULT_WIFI_KEY = 2;
 
 
     /*INTENT KEYS*/

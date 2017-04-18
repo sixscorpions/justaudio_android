@@ -47,11 +47,11 @@
     <dimen name="icon_with">70dp</dimen>
     <dimen name="icon_small_with">64dp</dimen>
     <dimen name="icon_height">80dp</dimen>
-    <dimen name="text_size">12sp</dimen>
+    <dimen name="text_size">10sp</dimen>
     <dimen name="player_header_height">200dp</dimen>
     <dimen name="_25dp">25dp</dimen>
     <dimen name="_30dp">30dp</dimen>
-    <dimen name="tab_height">50dp</dimen>
+    <dimen name="tab_height">40dp</dimen>
     <dimen name="iv_next_prev_h_w">12dp</dimen>
     <dimen name="iv_play_h_w">40dp</dimen>
     <dimen name="iv_play_list_size">40dp</dimen>
@@ -65,4 +65,7 @@
     <dimen name="seekbar_cornor_radius">4dp</dimen>
     <dimen name="seekbar_width">4dp</dimen>
     <dimen name="_35dp">35dp</dimen>
+    <dimen name="cornor_padding">2dp</dimen>
+    <dimen name="corner_padding_negative">-2dp</dimen>
+    <dimen name="_2dp">2dp</dimen>
 </resources>

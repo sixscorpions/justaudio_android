@@ -1,32 +1,24 @@
 package com.justaudio.fragment;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.justaudio.R;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.adapter.MovieListAdapter;
 import com.justaudio.dto.MovieListModel;
 import com.justaudio.services.ApiConfiguration;
-import com.justaudio.services.JSONArrayTask;
 import com.justaudio.services.JSONResult;
+import com.justaudio.services.JSONTask;
 import com.justaudio.services.NetworkUtils;
-import com.justaudio.utils.AppConstants;
-import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.ToolbarUtils;
 import com.justaudio.utils.Utils;
 
@@ -39,17 +31,22 @@ import java.util.ArrayList;
 /**
  * Created by VIDYA
  */
-public class TvShowFragment extends Fragment implements JSONResult {
+public class TvShowFragment extends Fragment implements JSONResult,
+        AbsListView.OnScrollListener {
 
-    public static final String TAG = "TvShowFragment";
 
     private View view;
     private HomeActivity parent;
-    private JSONArrayTask getMoviesTask;
+    private JSONTask getMoviesTask;
 
     private GridView gv_movies;
-    private SwipeRefreshLayout swipe_container;
     private LinearLayout ll_no_data;
+
+    private int index = 0;
+    private int aaTotalCount;
+    private int aaVisibleCount;
+    private int aaFirstVisibleItem;
+    private boolean endScroll = false;
 
 
     private ArrayList<MovieListModel> movieList;
@@ -73,53 +70,19 @@ public class TvShowFragment extends Fragment implements JSONResult {
 
     private void initializeTheViews() {
 
-        swipe_container = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
-        swipe_container.setColorSchemeResources(android.R.color.holo_red_light, android.
-                R.color.holo_blue_light, android.R.color.holo_purple);
-        swipe_container.setOnRefreshListener(swipeRefreshListener);
 
         gv_movies = (GridView) view.findViewById(R.id.gv_movies);
-        gv_movies.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                swipe_container.setEnabled(false);
-            }
-        });
+        gv_movies.setOnScrollListener(this);
 
 
         ll_no_data = ToolbarUtils.initializeNoDataView(parent, view, "");
 
-        swipe_container.post(new Runnable() {
-            @Override
-            public void run() {
-                swipe_container.setRefreshing(true);
-                swipeRefreshListener.onRefresh();
-            }
-        });
+        if (NetworkUtils.isNetworkAvailable(parent)) {
+            movieList = null;
+            getMoviesData();
+        } else
+            NetworkUtils.showNetworkConnectDialog(parent, true);
     }
-
-    /*SWIPE TO REFRESH LISTENER*/
-    SwipeRefreshLayout.OnRefreshListener swipeRefreshListener =
-            new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (NetworkUtils.isNetworkAvailable(parent)) {
-                                movieList = null;
-                                getMoviesData();
-                            } else
-                                NetworkUtils.showNetworkConnectDialog(parent, true);
-                        }
-                    }, 2000);
-                }
-            };
 
 
     /*
@@ -130,10 +93,13 @@ public class TvShowFragment extends Fragment implements JSONResult {
         if (getMoviesTask != null)
             getMoviesTask.cancel(true);
 
-        getMoviesTask = new JSONArrayTask(this);
-        getMoviesTask.setMethod(JSONArrayTask.METHOD.GET);
+        String url = Utils.getServer(parent, R.string.REST_GET_TV_SHOWS_LIST_PAGINATION) +
+                "?page=" + index + "&size=" + ApiConfiguration.LIST_COUNT;
+
+        getMoviesTask = new JSONTask(this);
+        getMoviesTask.setMethod(JSONTask.METHOD.GET);
         getMoviesTask.setCode(ApiConfiguration.REST_GET_TV_SHOWS_LIST_CODE);
-        getMoviesTask.setServerUrl(Utils.getServer(parent, R.string.REST_GET_TV_SHOWS_LIST));
+        getMoviesTask.setServerUrl(url);
         getMoviesTask.setErrorMessage(ApiConfiguration.ERROR_RESPONSE_CODE);
         getMoviesTask.setConnectTimeout(15000);
         getMoviesTask.execute();
@@ -143,9 +109,9 @@ public class TvShowFragment extends Fragment implements JSONResult {
     @Override
     public void successJsonResult(int code, Object result) {
         if (code == ApiConfiguration.REST_GET_TV_SHOWS_LIST_CODE) {
-
             try {
-                JSONArray array = (JSONArray) result;
+                JSONObject object = (JSONObject) result;
+                JSONArray array = object.getJSONArray("content");
                 if (movieList == null)
                     movieList = new ArrayList<>();
                 for (int i = 0; i < array.length(); i++) {
@@ -153,21 +119,31 @@ public class TvShowFragment extends Fragment implements JSONResult {
                     MovieListModel dataItem = new MovieListModel(jObj);
                     movieList.add(dataItem);
                 }
+
+                /*UPDATE THE INDEX*/
+                int totalPages = Integer.parseInt(object.getString("totalPages"));
+                if (totalPages == index) {
+                    endScroll = true;
+                } else {
+                    endScroll = false;
+                    index++;
+                }
+                setData(movieList);
             } catch (JSONException e) {
                 e.printStackTrace();
                 NetworkUtils.showAlertDialog(parent, getMoviesTask.getResultMessage());
             }
-            setData(movieList);
+
         }
-        swipe_container.setRefreshing(false);
     }
 
     @Override
     public void failedJsonResult(int code) {
         if (code == ApiConfiguration.REST_GET_TV_SHOWS_LIST_CODE)
             NetworkUtils.showAlertDialog(parent, getMoviesTask.getResultMessage());
-        swipe_container.setRefreshing(false);
     }
+
+    MovieListAdapter adapter;
 
     private void setData(ArrayList<MovieListModel> data) {
 
@@ -175,8 +151,12 @@ public class TvShowFragment extends Fragment implements JSONResult {
             ll_no_data.setVisibility(View.GONE);
             gv_movies.setVisibility(View.VISIBLE);
 
-            MovieListAdapter adapter = new MovieListAdapter(parent, data);
-            gv_movies.setAdapter(adapter);
+            if (adapter == null) {
+                adapter = new MovieListAdapter(parent, data);
+                gv_movies.setAdapter(adapter);
+            } else
+                adapter.updateAdapter(data);
+
             gv_movies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -189,6 +169,27 @@ public class TvShowFragment extends Fragment implements JSONResult {
         } else {
             ll_no_data.setVisibility(View.VISIBLE);
             gv_movies.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        if (scrollState == SCROLL_STATE_IDLE) {
+            isScrollCompleted();
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        aaTotalCount = totalItemCount;
+        aaVisibleCount = visibleItemCount;
+        aaFirstVisibleItem = firstVisibleItem;
+        // int last_item = firstVisibleItem + visibleItemCount - 1;
+    }
+
+    private void isScrollCompleted() {
+        if (aaTotalCount == (aaFirstVisibleItem + aaVisibleCount) && !endScroll) {
+            getMoviesData();
         }
     }
 }

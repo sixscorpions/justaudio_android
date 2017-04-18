@@ -13,7 +13,7 @@
     <color name="toolBarColor">#4682B4</color>
 
     <color name="white">#FFFFFF</color>
-    <color name="background">#e7e7e7</color>
+    <color name="background">#FFFFFFFF</color>
     <color name="list_bottom_strip">#191919</color>
     <color name="status_bar_bg">#40000000</color>
 

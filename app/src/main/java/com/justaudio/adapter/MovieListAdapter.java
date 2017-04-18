@@ -19,7 +19,7 @@ import com.justaudio.utils.Utils;
 import java.util.ArrayList;
 
 /**
- * Created by Pavan
+ * Created by VIDYA
  */
 
 public class MovieListAdapter extends BaseAdapter {

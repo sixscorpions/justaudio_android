@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.justaudio.R;
 import com.justaudio.activities.BaseActivity;
+import com.justaudio.utils.AppConstants;
 import com.justaudio.utils.FontFamily;
 import com.justaudio.utils.Utils;
 
@@ -83,7 +85,6 @@ public class NetworkUtils {
             @Override
             public void onClick(View v) {
                 mDialog.dismiss();
-                context.finish();
             }
         });
 
@@ -96,8 +97,9 @@ public class NetworkUtils {
             btn_dialog_ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(new Intent(
-                            android.provider.Settings.ACTION_SETTINGS));
+                    context.startActivityForResult(new Intent(Settings.ACTION_WIFI_SETTINGS),
+                            AppConstants.RESULT_WIFI_KEY);
+                    //context.startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
                     mDialog.dismiss();
                 }
             });
