@@ -28,7 +28,7 @@
     <dimen name="txt_list_count_t_b_margin">8dp</dimen>
     <dimen name="txt_list_item_count_size">11sp</dimen>
     <dimen name="txt_list_no_result_size">20sp</dimen>
-    <dimen name="list_card_height">60dp</dimen>
+    <dimen name="list_card_height">65dp</dimen>
     <dimen name="list_divider_left_margin">5dp</dimen>
     <dimen name="list_title_left_margin">5dp</dimen>
     <dimen name="txt_list_title_size">14sp</dimen>

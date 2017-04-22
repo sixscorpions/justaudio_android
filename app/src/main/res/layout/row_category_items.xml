@@ -20,7 +20,7 @@
             <com.justaudio.views.SquaredFrameLayout
                 android:layout_width="@dimen/list_card_height"
                 android:layout_height="match_parent"
-                android:padding="@dimen/_5dp">
+                android:padding="@dimen/_8dp">
 
                 <com.justaudio.views.CircularImageView
                     android:id="@+id/iv_list"
