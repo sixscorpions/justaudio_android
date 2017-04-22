@@ -332,6 +332,7 @@ public class PlayerService extends Service implements
                 // Lower the volume while ducking.
                 if (mediaPlayer != null)
                     mediaPlayer.setVolume(0.2f, 0.2f);
+                pause(getCurrentAudio());
                 break;
             case (AudioManager.AUDIOFOCUS_LOSS_TRANSIENT):
                 pause(getCurrentAudio());

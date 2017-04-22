@@ -276,12 +276,12 @@ public class AudioPlayerView extends LinearLayout implements
                         .duration(PULSE_ANIMATION_DURATION)
                         .playOn(btnPlay);
 
-                if (NetworkUtils.isNetworkAvailable(parent)) {
-                    if (btnPlay.getTag().equals(R.drawable.icon_player_pause))
-                        pause();
-                    else
-                        continueAudio();
-                }
+
+                if (btnPlay.getTag().equals(R.drawable.icon_player_pause))
+                    pause();
+                else
+                    continueAudio();
+
 
             }
 

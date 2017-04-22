@@ -6,11 +6,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
-import android.support.annotation.RequiresApi;
-import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +20,7 @@ import com.justaudio.R;
 import com.justaudio.activities.BaseActivity;
 import com.justaudio.activities.HomeActivity;
 import com.justaudio.dto.TrackAudioModel;
-import com.justaudio.services.ApiConfiguration;
-import com.justaudio.services.JSONTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,7 +139,7 @@ public class CustomDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                shareContent(activity);
+                shareAudioContent(activity, mData);
             }
         });
 
@@ -198,7 +189,7 @@ public class CustomDialog {
 
         /*REMOVE*/
         TextView tv_dialog_add_que = (TextView) dialog.findViewById(R.id.tv_dialog_add_que);
-        tv_dialog_add_que.setText("Remove");
+        tv_dialog_add_que.setText("Remove from queue");
         tv_dialog_add_que.setTypeface(FontFamily.setHelveticaTypeface(activity));
         tv_dialog_add_que.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -221,7 +212,7 @@ public class CustomDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                shareContent(activity);
+                shareAudioContent(activity, mData);
             }
         });
 
@@ -305,12 +296,21 @@ public class CustomDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                shareContent(activity);
+                shareAudioContent(activity, mData);
             }
         });
 
 
         dialog.show();
+    }
+
+    private static void shareAudioContent(BaseActivity parent, TrackAudioModel mData) {
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "http://www.saavn.com/p/album/telugu/Baahubali-2---The-Conclusion-2017/Vm5jaOSkM7E";
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "http://justaudio.co/");
+        parent.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
 
@@ -320,7 +320,7 @@ public class CustomDialog {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         String shareBody = "Check out " + Utils.getStrings(parent, R.string.app_name) + " for your smartphone." +
-                "Download it today from " + "\n"+link;
+                "Download it today from " + "\n" + link;
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         parent.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
