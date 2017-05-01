@@ -230,23 +230,17 @@ public class HomeActivity extends BaseActivity implements JSONResult {
         }
     }
 
-    public void updateNextUI() {
+    public void updateNextUI(int newPosition) {
 
-        if (pause_button_position == playerList.size() - 1)
-            pause_button_position = 0;
-        else
-            pause_button_position = pause_button_position + 1;
+        pause_button_position = newPosition;
 
         if (adapter != null)
             adapter.notifyDataSetChanged();
     }
 
-    public void updatePreUI() {
+    public void updatePreUI(int newPosition) {
 
-        if (pause_button_position == 0)
-            pause_button_position = playerList.size() - 1;
-        else
-            pause_button_position = pause_button_position - 1;
+        pause_button_position = newPosition;
 
         if (adapter != null)
             adapter.notifyDataSetChanged();

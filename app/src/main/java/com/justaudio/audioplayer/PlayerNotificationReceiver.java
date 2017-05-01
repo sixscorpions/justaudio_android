@@ -46,13 +46,13 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
                     }
                 }
 
-                if (HomeActivity.pause_button_position == audioPlayer.getPlaylist().size() - 1)
+               /* if (HomeActivity.pause_button_position == audioPlayer.getPlaylist().size() - 1)
                     HomeActivity.pause_button_position = 0;
                 else
                     HomeActivity.pause_button_position = HomeActivity.pause_button_position + 1;
 
                 if (HomeActivity.adapter != null)
-                    HomeActivity.adapter.notifyDataSetChanged();
+                    HomeActivity.adapter.notifyDataSetChanged();*/
 
                 break;
 
@@ -67,13 +67,13 @@ public class PlayerNotificationReceiver extends BroadcastReceiver {
                     }
                 }
 
-                if (HomeActivity.pause_button_position == 0)
+               /* if (HomeActivity.pause_button_position == 0)
                     HomeActivity.pause_button_position = audioPlayer.getPlaylist().size() - 1;
                 else
                     HomeActivity.pause_button_position = HomeActivity.pause_button_position - 1;
 
                 if (HomeActivity.adapter != null)
-                    HomeActivity.adapter.notifyDataSetChanged();
+                    HomeActivity.adapter.notifyDataSetChanged();*/
                 break;
             case NotificationPlayer.CLOSE:
                 if (audioPlayer != null)

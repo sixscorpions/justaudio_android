@@ -149,7 +149,7 @@ public class AudioPlayerView extends LinearLayout implements
         if (favoritesFragment != null)
             favoritesFragment.updateNextUI();
 
-        parent.updateNextUI();
+        //parent.updateNextUI();
 
     }
 
@@ -188,7 +188,7 @@ public class AudioPlayerView extends LinearLayout implements
         if (favoritesFragment != null)
             favoritesFragment.updatePreUI();
 
-        parent.updatePreUI();
+        // parent.updatePreUI();
     }
 
     /**
@@ -372,8 +372,6 @@ public class AudioPlayerView extends LinearLayout implements
         resetPlayerInfo();
         try {
             audioPlayer.nextAudio();
-            if (NetworkUtils.isNetworkAvailable(parent))
-                parent.updateNextUI();
         } catch (NullPointerException e) {
             e.printStackTrace();
         }

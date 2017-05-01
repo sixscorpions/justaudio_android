@@ -95,16 +95,21 @@ class AudioPlayer {
 
         else {
             if (currentTrackAudioModel != null) {
+                int newPosition;
                 try {
-                    TrackAudioModel nextTrackAudioModel = playlist.get(currentPositionList + position);
+                    newPosition = currentPositionList + position;
+                    TrackAudioModel nextTrackAudioModel = playlist.get(newPosition);
                     this.currentTrackAudioModel = nextTrackAudioModel;
+
                     playerService.stop();
                     playerService.play(nextTrackAudioModel);
 
                 } catch (IndexOutOfBoundsException e) {
-                    playAudio(playlist.get(0));
+                    newPosition = 0;
+                    playAudio(playlist.get(newPosition));
                     e.printStackTrace();
                 }
+                context.updateNextUI(newPosition);
             }
             updatePositionAudioList();
             playing = true;
@@ -118,16 +123,21 @@ class AudioPlayer {
 
         else {
             if (currentTrackAudioModel != null) {
+                int newPosition;
                 try {
-                    TrackAudioModel previousTrackAudioModel = playlist.get(currentPositionList - position);
+                    newPosition = currentPositionList - position;
+                    TrackAudioModel previousTrackAudioModel = playlist.get(newPosition);
                     this.currentTrackAudioModel = previousTrackAudioModel;
                     playerService.stop();
                     playerService.play(previousTrackAudioModel);
 
+
                 } catch (IndexOutOfBoundsException e) {
-                    playAudio(playlist.get(0));
+                    newPosition = 0;
+                    playAudio(playlist.get(newPosition));
                     e.printStackTrace();
                 }
+                context.updatePreUI(newPosition);
             }
 
             updatePositionAudioList();

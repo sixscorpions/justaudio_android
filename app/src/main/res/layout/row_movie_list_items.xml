@@ -12,7 +12,7 @@
         android:descendantFocusability="afterDescendants"
         android:orientation="vertical">
 
-        <FrameLayout
+        <com.justaudio.views.SquaredFrameLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:orientation="vertical">
@@ -33,7 +33,7 @@
                 android:layout_gravity="center"
                 android:indeterminate="false"
                 android:visibility="gone" />
-        </FrameLayout>
+        </com.justaudio.views.SquaredFrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

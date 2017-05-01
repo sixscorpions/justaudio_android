@@ -49,7 +49,7 @@ public class MovieListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     public View getView(final int position, View convertView, ViewGroup view) {
