@@ -125,6 +125,10 @@ public class PlayerListFragment extends Fragment {
 
                 holder.ll_click = (LinearLayout) convertView.findViewById(R.id.ll_click);
 
+                //NUMBER
+                holder.tv_audio_number = (TextView) convertView.findViewById(R.id.tv_audio_number);
+                holder.tv_audio_number.setTypeface(FontFamily.setHelveticaTypeface(parent));
+
                 //IMAGE_VIEW AND PROGRESS BAR
                 holder.iv_list = (ImageView) convertView.findViewById(R.id.iv_list);
                 holder.pb_list = (ProgressBar) convertView.findViewById(R.id.pb_list);
@@ -146,6 +150,12 @@ public class PlayerListFragment extends Fragment {
 
 
             final TrackAudioModel mData = categoryList.get(position);
+
+            if (position == 0)
+                holder.tv_audio_number.setText("1.");
+            else
+                holder.tv_audio_number.setText(position + 1 + ".");
+
 
             holder.tv_list_title.setText(mData.getTitle());
 
@@ -190,6 +200,7 @@ public class PlayerListFragment extends Fragment {
 
             TextView tv_list_title;
             TextView tv_list_subtext;
+            TextView tv_audio_number;
 
             LinearLayout ll_click;
         }

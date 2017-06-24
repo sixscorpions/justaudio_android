@@ -308,8 +308,8 @@ public class CustomDialog {
 
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "http://www.saavn.com/p/album/telugu/Baahubali-2---The-Conclusion-2017/Vm5jaOSkM7E";
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "http://justaudio.co/");
+        String shareBody = "http://nas01.atnoc.com:81/cineaaudio/index.php?id=" + mData.getId();
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         parent.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
